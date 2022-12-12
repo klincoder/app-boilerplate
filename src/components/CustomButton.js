@@ -5,10 +5,9 @@ import { Button } from "@rneui/themed";
 import tw from "twrnc";
 
 // Import custom files
+import twStyles from "../config/twStyles";
 import CustomIcon from "./CustomIcon";
-import CustomText from "./CustomText";
-import { appColors, appFonts } from "../config/data";
-import { twStyles } from "../config/twStyles";
+import { appColors } from "../config/data";
 
 // Component
 const CustomButton = ({
@@ -21,10 +20,10 @@ const CustomButton = ({
   iconType,
   iconName,
   onPress,
-  styleText,
-  styleTouchable,
   styleNormalTitle,
   styleNormalButton,
+  styleTouchable,
+  styleTextTitle,
   children,
   ...rest
 }) => {
@@ -44,7 +43,7 @@ const CustomButton = ({
           titleStyle={[
             styleNormalTitle,
             tw`text-xl`,
-            { fontFamily: appFonts?.medium },
+            twStyles?.fontBold,
             isOutline ? tw`text-[${appColors?.primary}]` : tw`text-white`,
           ]}
           buttonStyle={[
@@ -74,24 +73,20 @@ const CustomButton = ({
         <CustomIcon
           {...rest}
           type={iconType}
-          icon={iconName}
+          name={iconName}
           onPress={onPress}
         />
       )}
 
       {/** isText */}
       {isText && (
-        <TouchableOpacity {...rest} activeOpacity={0.6} onPress={onPress}>
-          <CustomText
-            style={[
-              styleText,
-              { fontFamily: appFonts?.medium },
-              type === "button" ? twStyles?.linkBtn : twStyles?.linkText,
-            ]}
-          >
-            {children}
-          </CustomText>
-        </TouchableOpacity>
+        <Button
+          {...rest}
+          type="clear"
+          title={title || "Text Button"}
+          onPress={onPress}
+          titleStyle={styleTextTitle || twStyles?.fontBold}
+        />
       )}
     </>
   ); // close return component

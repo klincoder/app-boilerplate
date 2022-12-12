@@ -14,7 +14,7 @@ import {
 } from "@expo/vector-icons";
 
 // Component
-const CustomIcon = ({ type, name, ...rest }) => {
+const CustomIcon = ({ type, name, size, ...rest }) => {
   // Debug
   //console.log("Debug customIcon: ")
 
@@ -23,36 +23,52 @@ const CustomIcon = ({ type, name, ...rest }) => {
     <>
       {/** ICONS */}
       {/** MaterialIcons */}
-      {type === "materialIcons" && <MaterialIcons name={name} {...rest} />}
+      {type === "materialIcons" && (
+        <MaterialIcons {...rest} name={name} size={size || 24} />
+      )}
 
       {/** AntDesign */}
-      {type === "antDesign" && <AntDesign name={name} {...rest} />}
+      {type === "antDesign" && (
+        <AntDesign {...rest} name={name} size={size || 24} />
+      )}
 
       {/** FontAwesome5 */}
-      {type === "fontAwesome5" && <FontAwesome5 name={name} {...rest} />}
+      {type === "fontAwesome5" && (
+        <FontAwesome5 {...rest} name={name} size={size || 24} />
+      )}
 
       {/** Entypo */}
-      {type === "entypo" && <Entypo name={name} {...rest} />}
+      {type === "entypo" && <Entypo {...rest} name={name} size={size || 24} />}
 
       {/** Ionicons */}
-      {type === "ionIcons" && <Ionicons name={name} {...rest} />}
+      {type === "ionIcons" && (
+        <Ionicons {...rest} name={name} size={size || 24} />
+      )}
 
       {/** Evilicons */}
-      {type === "evilIcons" && <EvilIcons name={name} {...rest} />}
+      {type === "evilIcons" && (
+        <EvilIcons {...rest} name={name} size={size || 24} />
+      )}
 
       {/** Material community icons */}
       {type === "materialCommunityIcons" && (
-        <MaterialCommunityIcons name={name} {...rest} />
+        <MaterialCommunityIcons {...rest} name={name} size={size || 24} />
       )}
 
       {/** Feather */}
-      {type === "feather" && <Feather name={name} {...rest} />}
+      {type === "feather" && (
+        <Feather {...rest} name={name} size={size || 24} />
+      )}
 
       {/** Octicons */}
-      {type === "octIcons" && <Octicons name={name} {...rest} />}
+      {type === "octIcons" && (
+        <Octicons {...rest} name={name} size={size || 24} />
+      )}
 
       {/** FontAwesome */}
-      {type === "fontAwesome" && <FontAwesome name={name} {...rest} />}
+      {type === "fontAwesome" && (
+        <FontAwesome {...rest} name={name} size={size || 24} />
+      )}
     </>
   ); // return component
 }; // close component

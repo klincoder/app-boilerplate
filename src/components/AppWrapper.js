@@ -21,8 +21,7 @@ import {
 // Ccomponent
 const AppWrapper = () => {
   // Define auth context
-  const { user } = useAuthContext();
-  const userID = user?.id;
+  const { userID } = useAuthContext();
 
   // Define state
   const [appIsReady, setAppIsReady] = useState(false);
