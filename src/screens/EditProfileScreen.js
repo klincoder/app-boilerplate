@@ -8,15 +8,15 @@ import CustomSafeView from "../components/CustomSafeView";
 import CustomText from "../components/CustomText";
 import useAppSettings from "../hooks/useAppSettings";
 import FormEditProfile from "../components/FormEditProfile";
-import { useAuthContext } from "../context/AuthContext";
+import useAuthState from "../hooks/useAuthState";
 
 // Component
 const EditProfileScreen = () => {
-  // Define auth context
-  const { user } = useAuthContext();
+  // Define auth state
+  const { user } = useAuthState();
 
   // Define app settings
-  const { todaysDate, navigation, isMounted } = useAppSettings();
+  const { navigation, isMounted, todaysDate } = useAppSettings();
 
   // Debug
   //console.log("Debug editProfileScreen: ",);

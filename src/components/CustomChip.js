@@ -1,10 +1,11 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 import { Chip } from "@rneui/themed";
+import tw from "twrnc";
 
 // Import custom files
+import twStyles from "../config/twStyles";
 import { appColors, appFonts } from "../config/data";
 
 // Component
@@ -30,11 +31,7 @@ const CustomChip = ({
           title={title || "Title"}
           onPress={onPress}
           buttonStyle={tw`bg-[${appColors?.primary}]`}
-          titleStyle={[
-            styleTitle,
-            tw`text-white`,
-            { fontFamily: appFonts?.medium },
-          ]}
+          titleStyle={[styleTitle, tw`text-white`, twStyles?.fontBold]}
           containerStyle={[styleContainer, tw`border-[${appColors?.primary}]`]}
         />
       ) : (
@@ -45,12 +42,12 @@ const CustomChip = ({
           onPress={onPress}
           titleStyle={[
             styleTitle,
-            tw`text-[${appColors?.primary}]`,
-            { fontFamily: appFonts?.medium },
+            tw`text-[${appColors?.black}]`,
+            twStyles?.fontBold,
           ]}
           containerStyle={[
             styleContainer,
-            tw`border border-[${appColors?.lightPrimary}]`,
+            tw`border border-[${appColors?.lightGray}]`,
           ]}
         />
       )}

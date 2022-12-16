@@ -4,8 +4,14 @@ import { useSetRecoilState } from "recoil";
 
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
-import { useAuthContext } from "../context/AuthContext";
-import { appSettingsAtom, allUsersAtom } from "../recoil/atoms";
+import useAuthState from "../hooks/useAuthState";
+import { handleFilterUserId } from "../config/functions";
+import {
+  appSettingsAtom,
+  allUsersAtom,
+  allSavedAtom,
+  userSavedAtom,
+} from "../recoil/atoms";
 import {
   fireDB,
   doc,
@@ -22,14 +28,16 @@ import {
 // Component
 const GetDatabaseContent = () => {
   // Define auth context
-  const { userID } = useAuthContext();
+  const { userID } = useAuthState();
 
   // Define app settings
   const { isMounted } = useAppSettings();
 
   // Define state
-  const setAppSettingsAtom = useSetRecoilState(appSettingsAtom);
   const setAllUsersAtom = useSetRecoilState(allUsersAtom); // All
+  const setAllSavedAtom = useSetRecoilState(allSavedAtom);
+  const setUserSavedAtom = useSetRecoilState(userSavedAtom); // User
+  const setAppSettingsAtom = useSetRecoilState(appSettingsAtom); // Others
 
   // SIDE EFFECTS
   // API CALLS
@@ -52,30 +60,47 @@ const GetDatabaseContent = () => {
     isMounted.current = true;
 
     // LISTEN TO APP SETTINGS - GENERAL
-    const appSettingsRef = doc(fireDB, "appSettings", "generalSettings");
+    const appSettingsRef = doc(fireDB, "app_settings", "general_settings");
     onSnapshot(appSettingsRef, (snapshot) => {
-      // Define data
       const data = snapshot.exists() ? snapshot.data() : "";
-      // Set atom
       setAppSettingsAtom(data);
     });
 
     // LISTEN TO ALL USERS
     const allUsersRef = collection(fireDB, "users");
     onSnapshot(allUsersRef, (snapshot) => {
-      // Define data
       const data = snapshot.docs.map((doc) => {
         return doc.data();
-      });
-      // Set atom
+      }); // close data
       setAllUsersAtom(data);
+    });
+
+    // LISTEN TO ALL SAVED
+    const allSavedRef = query(
+      collectionGroup(fireDB, "saved"),
+      orderBy("date_created", "desc")
+    );
+    onSnapshot(allSavedRef, (snapshot) => {
+      const data = snapshot.docs.map((doc) => {
+        return doc.data();
+      }); // close data
+      const getUserInfo = handleFilterUserId(data, userID);
+      setAllSavedAtom(data);
+      setUserSavedAtom(getUserInfo);
     });
 
     // Clean up
     return () => {
       isMounted.current = false;
     };
-  }, [isMounted, userID, setAppSettingsAtom, setAllUsersAtom]);
+  }, [
+    isMounted,
+    userID,
+    setAllUsersAtom,
+    setAllSavedAtom,
+    setUserSavedAtom,
+    setAppSettingsAtom,
+  ]);
 
   // Return component
   return null;

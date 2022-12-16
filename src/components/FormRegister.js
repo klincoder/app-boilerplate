@@ -13,7 +13,7 @@ import CustomButton from "./CustomButton";
 import CustomTextInputForm from "./CustomTextInputForm";
 import CustomText from "./CustomText";
 import useCustomAlertState from "../hooks/useCustomAlertState";
-import { useAuthContext } from "../context/AuthContext";
+import useAuthState from "../hooks/useAuthState";
 import { alertMsg, apiRoutes, appColors, appRegex } from "../config/data";
 import { fireAuth, fireDB, setDoc, doc } from "../config/firebase";
 import {
@@ -21,11 +21,12 @@ import {
   handleSendEmail,
   handleGenUsername,
 } from "../config/functions";
+import twStyles from "../config/twStyles";
 
 // Component
 const FormRegister = () => {
   // Define auth context
-  const { handleEmailExist, handleRegister } = useAuthContext();
+  const { handleEmailExist, handleRegister } = useAuthState();
 
   // Define state
   const [hidePass, setHidePass] = useState(true);
@@ -93,16 +94,17 @@ const FormRegister = () => {
       // Add user to database
       const newUserRef = doc(fireDB, "users", currUserID);
       await setDoc(newUserRef, {
-        avatar: "",
-        regMethod: "app",
-        fullName: finalFullName,
-        emailAddress: finalEmail,
+        reg_platform: "app",
         role: "user",
-        phoneNumber: "",
-        pushStatus: true,
-        userID: currUserID,
+        avatar: "",
+        full_name: finalFullName,
+        email_address: finalEmail,
+        wallet_bal: 0,
+        phone_number: "",
+        push_status: { email: true, sms: true },
+        user_id: currUserID,
         username: finalUsername,
-        dateCreated: todaysDate,
+        date_created: todaysDate,
         dateUpdated: todaysDate,
       });
 
@@ -112,28 +114,30 @@ const FormRegister = () => {
       //   finalUsername,
       //   finalEmail,
       //   emailMsg,
-      //   apiRoutes?.welcome
+      //   apiRoutes?.welcome,
+      //  siteInfo?.name
       // );
 
       // Send admin new user email
-      await handleSendEmail(
-        "admin",
-        siteInfo?.adminName,
-        siteInfo?.adminEmail,
-        emailMsg,
-        apiRoutes?.newUser
-      );
+      // await handleSendEmail(
+      //   "admin",
+      //   siteInfo?.adminName,
+      //   siteInfo?.adminEmail,
+      //   emailMsg,
+      //   apiRoutes?.newUser,
+      //   siteInfo?.name
+      // );
 
       // Alert succ
       alert.showAlert(alertMsg?.linkSentSucc);
       resetForm();
+      setSubmitting(false);
     } catch (err) {
       // Alert err
       alert.showAlert(alertMsg?.generalErr);
-      //console.log("Debug submitForm: ", err.message);
+      setSubmitting(false);
+      console.log("Debug submitForm: ", err.message);
     } // close try catch
-    // Set submitting
-    setSubmitting(false);
   }; // close fxn
 
   // Return component
@@ -161,6 +165,7 @@ const FormRegister = () => {
               hideDialog={alert.hideAlert}
               cancelAction={alert.hideAlert}
               content={alert.message}
+              cancelText="Close"
             />
 
             {/** Full name */}
@@ -181,7 +186,7 @@ const FormRegister = () => {
               leftIconName="mail"
               autoCapitalize="none"
               keyboardType="email-address"
-              helperText="We'll send a confirmation link"
+              //helperText="We'll send a confirmation link"
             />
 
             {/** Password */}
@@ -206,13 +211,26 @@ const FormRegister = () => {
               disabled={!isValid || isSubmitting || alert?.loading}
             />
 
+            {/** Terms */}
+            <CustomText
+              style={[
+                tw`my-2 text-center text-[${appColors?.gray}]`,
+                twStyles?.fontRegular,
+              ]}
+            >
+              By creating an account, I accept the{" "}
+              <CustomButton
+                isText
+                title="terms of service & privacy policy"
+                styleTextTitle={tw`text-xs text-[${appColors?.gray}]`}
+              />
+            </CustomText>
+
             {/** TEST BUTTON */}
             {/* <CustomButton
-              isText
-              style={tw`mt-8`}
-              styleText={tw`bg-black text-white text-center px-2 py-3`}
-              icon="arrow-right"
-              mode="contained"
+              isNormal
+              title="TEST BUTTON"
+              type="outline"
               onPress={async () => {
                 // Try catch
                 try {
@@ -221,21 +239,14 @@ const FormRegister = () => {
                     "Klincoder",
                     "klincoder@gmail.com",
                     "123456",
-                    apiRoutes?.otp
+                    apiRoutes?.otp,
+                    siteInfo?.name
                   );
                 } catch (err) {
                   console.log("Debug formRegDetails: ", err.message);
-                }
-                //setShowOtpInput();
+                } // close try catch
               }}
-            >
-              TEST BUTTON
-            </CustomButton> */}
-
-            {/** Terms */}
-            <CustomText style={tw`mt-2 text-center text-[${appColors?.gray}]`}>
-              By creating an account, I accept the terms.
-            </CustomText>
+            /> */}
           </>
         )}
       </Formik>

@@ -1,20 +1,20 @@
 // Import resources
 import React from "react";
-import { StatusBar, View } from "react-native";
+import { View } from "react-native";
 import tw from "twrnc";
 import { useRecoilValue } from "recoil";
 
 // Import custom files
 import routes from "./routes";
+import twStyles from "../config/twStyles";
 import CustomSafeView from "../components/CustomSafeView";
 import CustomText from "../components/CustomText";
 import CustomButton from "../components/CustomButton";
 import CustomBgImage from "../components/CustomBgImage";
 import CustomImage from "../components/CustomImage";
-import CustomIcon from "../components/CustomIcon";
 import useAppSettings from "../hooks/useAppSettings";
 import { appOnboardingAtom } from "../recoil/atoms";
-import { appColors, appFonts, appImages } from "../config/data";
+import { appImages } from "../config/data";
 
 // Component
 const OnboardingScreen = () => {
@@ -34,7 +34,7 @@ const OnboardingScreen = () => {
       <CustomBgImage isLink image={appImages?.onboarding}>
         {/** Overlay */}
         <View
-          style={tw`absolute top-0 right-0 bottom-0 left-0 bg-white opacity-95`}
+          style={tw`absolute top-0 right-0 bottom-0 left-0 bg-white opacity-90`}
         />
 
         {/** MAIN CONTAINER */}
@@ -42,37 +42,33 @@ const OnboardingScreen = () => {
           {/**  Logo */}
           <CustomImage
             image={appImages?.logo}
-            style={tw`w-20 h-20 mb-30 rounded-full`}
+            resizeMode="contain"
+            style={tw`w-50 h-10 mb-25`}
           />
 
-          {/** COL 1 */}
+          {/** COL 1 - HEADING */}
           <View>
-            {/** Heading */}
-            <CustomText style={tw`text-4xl`}>
-              Rent & drive any car in minutes.
+            <CustomText style={[tw`text-4xl`, twStyles?.fontBold]}>
+              Get paid to predict football matches.
             </CustomText>
           </View>
 
-          {/** Button */}
+          {/** COL 2 - BUTTONS */}
           <View style={tw`mt-6`}>
             {/** Login */}
             <CustomButton
-              isText
-              type="button"
+              isNormal
+              title="Login"
               onPress={() => navigation.navigate(routes.LOGIN)}
-              styleText={tw`w-40`}
-            >
-              Login
-            </CustomButton>
+              styleNormalButton={tw`w-40 mb-2.5`}
+            />
 
             {/** Register */}
             <CustomButton
               isText
+              title="Not a member? Register"
               onPress={() => navigation.navigate(routes.REGISTER)}
-              styleText={tw`mt-6`}
-            >
-              Not a member? Register
-            </CustomButton>
+            />
           </View>
         </View>
       </CustomBgImage>

@@ -7,7 +7,7 @@ import { Overlay } from "@rneui/themed";
 // Import custom files
 
 // Component
-const CustomOverlay = ({ visible, children, ...rest }) => {
+const CustomOverlay = ({ visible, styleBg, children, ...rest }) => {
   // Debug
   //console.log("Debug CustomOverlay: ",)
 
@@ -16,8 +16,9 @@ const CustomOverlay = ({ visible, children, ...rest }) => {
     <Overlay
       {...rest}
       isVisible={visible}
-      backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
-      overlayStyle={tw`p-0 m-0 bg-white rounded-full`}
+      backdropStyle={styleBg || tw`bg-black opacity-90`}
+      //backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
+      overlayStyle={tw`p-0 m-0 bg-transparent rounded-full`}
     >
       {children}
     </Overlay>

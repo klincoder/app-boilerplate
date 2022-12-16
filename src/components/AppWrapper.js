@@ -10,18 +10,29 @@ import * as Font from "expo-font";
 import AppNavigator from "../screens/AppNavigator";
 import NoInternetScreen from "../screens/NoInternetScreen";
 import useAppSettings from "../hooks/useAppSettings";
-import { useAuthContext } from "../context/AuthContext";
-import { fireDB, doc, collection, getDoc, getDocs } from "../config/firebase";
+import { handleDayJsFormat } from "../config/functions";
 import {
   internetConnAtom,
   appOnboardingAtom,
   networkDataAtom,
+  userAtom,
 } from "../recoil/atoms";
+import {
+  fireDB,
+  doc,
+  collection,
+  getDoc,
+  getDocs,
+  fireAuth,
+  onAuthStateChanged,
+  onSnapshot,
+} from "../config/firebase";
 
 // Ccomponent
 const AppWrapper = () => {
-  // Define auth context
-  const { userID } = useAuthContext();
+  // Define user
+  const [user, setUser] = useRecoilState(userAtom);
+  const userID = user?.id;
 
   // Define state
   const [appIsReady, setAppIsReady] = useState(false);
@@ -33,7 +44,7 @@ const AppWrapper = () => {
   const { isMounted } = useAppSettings();
 
   // Debug
-  //console.log("Debug appWrapper: ", { userID, appIsReady });
+  //console.log("Debug appWrapper: ", userID);
 
   // FUNCTIONS
   // HANDLE GET CUSTOM FONTS
@@ -52,6 +63,42 @@ const AppWrapper = () => {
   }; // close fxn
 
   // SIDE EFFECTS
+  // LISTEN TO AUTH STATE
+  useEffect(() => {
+    // On mount
+    const unsubscribe = onAuthStateChanged(fireAuth, (currUser) => {
+      // If currUser
+      if (currUser?.emailVerified) {
+        const getUserRef = doc(fireDB, "users", currUser?.uid);
+        onSnapshot(getUserRef, (snapshot) => {
+          // Define variables
+          const dbUser = snapshot.data();
+          const currUserObj = {
+            id: currUser?.uid,
+            email: currUser?.email,
+            username: currUser?.displayName,
+            emailVerified: currUser?.emailVerified,
+            avatar: currUser?.photoURL,
+            lastLogin: handleDayJsFormat(currUser?.metadata?.lastSignInTime, 2),
+            fullName: dbUser?.full_name,
+            role: dbUser?.role,
+            phone: dbUser?.phone_number,
+            pushStatus: dbUser?.push_status,
+            walletBal: dbUser?.wallet_bal,
+          };
+          // Set user
+          setUser(currUserObj);
+        });
+      } else {
+        setUser(null);
+        //console.log("Debug appWrapper 1: ", currUser);
+      } // close if
+    }); // close unsubscribe
+    // Clean up
+    return () => unsubscribe();
+  }, [userID]);
+
+  // SIDE EFFECTS
   // LISTEN TO NETWORK STATUS
   useEffect(() => {
     // Check network status
@@ -61,14 +108,13 @@ const AppWrapper = () => {
       setInternetConn(status);
       setNetworkDataAtom(state);
       //console.log("Debug netInfoTEST 2: ", { status });
-    });
+    }); // close unsubscribe
     // Clean up
-    return unsubscribe();
+    return () => unsubscribe();
   }, []);
 
   // SIDE EFFECTS
-  // LISTEN TO USER ID AND,
-  // DELAY SPLASH SCREEN
+  // HANDLE SPLASH SCREEN DELAY
   useEffect(() => {
     // On mount
     isMounted.current = true;
@@ -79,14 +125,13 @@ const AppWrapper = () => {
       try {
         // Keep the splash screen visible while we fetch resources
         await SplashScreen.preventAutoHideAsync();
-        // Load custom fonts
+        // GET CUSTOM FONTS
         await handleGetCustomFonts();
-        // Gt app onboarding
-        const appOnboardingRef = collection(fireDB, "appOnboarding");
+        // GET APP ONBOARDING
+        const appOnboardingRef = collection(fireDB, "app_onboarding");
         const appOnboardingSnap = await getDocs(appOnboardingRef);
-        const appOnboardingSize = appOnboardingSnap.size;
         const appOnboardingData =
-          appOnboardingSize > 0
+          appOnboardingSnap.size > 0
             ? appOnboardingSnap.docs.map((doc) => {
                 return doc.data();
               })
@@ -94,7 +139,7 @@ const AppWrapper = () => {
         // Set atom
         setAppOnboardingAtom(appOnboardingData);
       } catch (err) {
-        console.log("Debug appWrapper: ", err.message);
+        //console.log("Debug appWrapper: ", err.message);
       } finally {
         // Tell the application to render
         setAppIsReady(true);

@@ -17,8 +17,7 @@ const StickyBottomView = ({ styleContainer, children, ...rest }) => {
       {...rest}
       style={[
         styleContainer,
-        tw`absolute bottom-0 z-1 px-2 py-3 w-full`,
-        { backgroundColor: "rgba(255, 255, 255, 0.7)" },
+        tw`absolute z-1 bottom-0 right-0 left-0 px-2 p-3 bg-white opacity-90`,
       ]}
     >
       {children}

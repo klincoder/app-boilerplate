@@ -10,13 +10,13 @@ import CustomListItem from "../components/CustomListItem";
 import LogoutBtn from "../components/LogoutBtn";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomImage from "../components/CustomImage";
-import { useAuthContext } from "../context/AuthContext";
+import useAuthState from "../hooks/useAuthState";
 import { accountList, appColors } from "../config/data";
 
 // Component
 const ProfileScreen = () => {
   // Define auth context
-  const { userID, username, userAvatar } = useAuthContext();
+  const { userID, username, userAvatar, usernameFormat } = useAuthState();
 
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
@@ -31,7 +31,7 @@ const ProfileScreen = () => {
     isMounted.current = true;
     // Set screen options
     navigation.setOptions({
-      headerTitle: "Account", //handleSliceString(username, 0, 12),
+      headerTitle: usernameFormat, //"Account",
       headerTitleAlign: "left",
       headerRight: () => <LogoutBtn styleContainer={tw`mr-4`} />,
     }); // close navigation

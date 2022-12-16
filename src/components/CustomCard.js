@@ -1,16 +1,14 @@
 // Import resources
 import React from "react";
-import { Card } from "react-native-paper";
+import { Card } from "@rneui/themed";
 
 // Component
-const CustomCard = ({ children, cardActions, ...rest }) => {
+const CustomCard = ({ styleContainer, styleWrapper, children, ...rest }) => {
   // Return component
   return (
-    <Card {...rest}>
-      {/** Card content */}
-      <Card.Content>{children}</Card.Content>
-      {/** Card actions */}
-      {cardActions && <Card.Actions>{cardActions}</Card.Actions>}
+    <Card containerStyle={styleContainer} wrapperStyle={styleWrapper} {...rest}>
+      {/** Content */}
+      {children}
     </Card>
   ); // close return
 }; // close component

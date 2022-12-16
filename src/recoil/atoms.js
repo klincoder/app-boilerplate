@@ -25,6 +25,12 @@ export const userAtom = atom({
   default: null,
 });
 
+// USER SAVED ATOM
+export const userSavedAtom = atom({
+  key: "userSavedAtom",
+  default: [],
+});
+
 /**********************
   OTHERS
 **********************/

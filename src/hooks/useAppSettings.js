@@ -29,16 +29,16 @@ const useAppSettings = () => {
 
   // Define site info
   const siteInfo = {
-    logo: appSettings?.appLogo,
-    name: appSettings?.appName,
-    email: appSettings?.supportEmail,
-    phone: appSettings?.supportPhone,
-    noReply: appSettings?.supportEmailNoReply,
-    copyrightName: appSettings?.copyrightName,
-    adminName: appSettings?.adminName,
-    adminEmail: appSettings?.adminEmail,
-    bank: appSettings?.bankInfo,
-    workingHours: appSettings?.workingHours,
+    logo: appSettings?.app_logo,
+    name: appSettings?.app_name,
+    email: appSettings?.support_email,
+    phone: appSettings?.support_phone,
+    noReply: appSettings?.support_email_reply,
+    copyrightName: appSettings?.copyright_name,
+    adminName: appSettings?.admin_name,
+    adminEmail: appSettings?.admin_email,
+    bank: appSettings?.bank_info,
+    workingHours: appSettings?.working_hours,
     location: appSettings?.location,
   };
 

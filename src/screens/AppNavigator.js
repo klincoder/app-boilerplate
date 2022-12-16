@@ -11,6 +11,7 @@ import RegisterScreen from "../screens/RegisterScreen";
 import PasswordRecoveryScreen from "../screens/PasswordRecoveryScreen";
 import HomeNavigator from "../screens/HomeNavigator";
 import EditProfileScreen from "../screens/EditProfileScreen";
+import NotificationsScreen from "./NotificationsScreen";
 
 // Create stack navigator object
 const Stack = createStackNavigator();
@@ -28,6 +29,11 @@ const AppNavigator = ({ userID }) => {
       name: "EditProfileScreen",
       component: EditProfileScreen,
       options: { headerTitle: "Edit Profile" },
+    },
+    {
+      name: "NotificationsScreen",
+      component: NotificationsScreen,
+      options: { headerTitle: "Notifications" },
     },
   ];
 
@@ -64,7 +70,7 @@ const AppNavigator = ({ userID }) => {
     >
       <>
         {/** If userID */}
-        {true ? (
+        {userID ? (
           <>
             {/** Loop appStackList */}
             {appStackList?.map((item, index) => (

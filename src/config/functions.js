@@ -1,6 +1,5 @@
 // Import resources
 import axios from "axios";
-import * as ImagePicker from "expo-image-picker";
 import dayjs from "dayjs";
 import dayjsUTC from "dayjs/plugin/utc";
 dayjs.extend(dayjsUTC);
@@ -22,12 +21,11 @@ export const handleSendEmail = async (
   toEmail,
   msg,
   api,
+  fromName,
   fromEmail
 ) => {
   // If empty args, return
-  if (!role || !toName || !toEmail || !msg || !api) return;
-  // Debug
-  //console.log("Debug handleSendEmail: ", `${baseUrl}/api/${api}`);
+  if (!role || !toName || !toEmail || !msg || !api || !fromName) return;
   // Return and await response
   return await axios({
     method: "POST",
@@ -37,24 +35,49 @@ export const handleSendEmail = async (
       toName: toName,
       toEmail: toEmail,
       msg: msg,
-      fromName: "RentDrive",
+      fromName: fromName || "Bulkahia",
       fromEmail: fromEmail || "support@bulkahia.com",
-      footerName: "RentDrive Team",
+      footerName: `${fromName} Team`,
     },
   }).then((apiRes) => {
-    // Define resData
-    const resData = apiRes;
-    //console.log("Debug handleSendEmail 1: ", resData);
-    return resData;
-  });
+    return apiRes;
+  }); // close return
 }; // close fxn
 
-// HANDLE GET INFO BY ID
-export const handleGetInfoById = (objArr, rowID) => {
+// HANDLE FIND ID
+export const handleFindId = (objArr, rowID) => {
   // If empty args, return
   if (!objArr || !rowID) return;
-  const result = objArr?.find((item) => item?.id === rowID);
-  return result;
+  const result = objArr?.find((i) => i?.id === rowID);
+  if (result) {
+    return result;
+  } else {
+    return {};
+  } // close if
+}; // close fxn
+
+// HANDLE FILTER ID
+export const handleFilterId = (objArr, rowID) => {
+  // If empty args, return
+  if (!objArr || !rowID) return;
+  const result = objArr?.filter((i) => i?.id === rowID);
+  if (result?.length > 0) {
+    return result;
+  } else {
+    return [];
+  } // close if
+}; // close fxn
+
+// HANDLE FILTER USER ID
+export const handleFilterUserId = (objArr, userID) => {
+  // If empty args, return
+  if (!objArr || !userID) return;
+  const result = objArr?.filter((i) => i?.user_id === userID);
+  if (result?.length > 0) {
+    return result;
+  } else {
+    return [];
+  } // close if
 }; // close fxn
 
 // HANDLE SLICE STRING
@@ -66,27 +89,12 @@ export const handleSliceString = (strInput, sliceFrom, sliceTo, holder) => {
   holder = holder || "...";
   // If strInput
   if (strInput?.length > sliceTo) {
-    result = strInput?.slice(sliceFrom, sliceTo) + holder;
+    result = `${strInput?.slice(sliceFrom, sliceTo)}${holder}`;
   } else {
     result = strInput;
   } // close if
   // Return
   return result;
-}; // close fxn
-
-// HANDLE PICK IMAGE
-export const handlePickImage = async () => {
-  // No permissions request is necessary for launching the image library
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: false,
-    aspect: [16, 9],
-    quality: 1,
-  });
-  // If !result cancelled
-  if (!result?.canceled) {
-    return result?.assets?.[0]?.uri;
-  } // close if cancelled
 }; // close fxn
 
 // HANDLE SELECT BULK ITEM
@@ -277,10 +285,11 @@ export const handleRemoveObjProp = (
 ) => rest;
 
 // HANDLE REMOVE OBJ PROP - BULK
-export const handleRemoveObjPropBulk = (obj, ...keys) =>
-  keys?.length
-    ? handleRemoveObjPropBulk(handleRemoveObjProp(keys?.pop(), obj), ...keys)
+export const handleBulkRemoveObjProp = (obj, ...keys) => {
+  return keys?.length
+    ? handleBulkRemoveObjProp(handleRemoveObjProp(keys?.pop(), obj), ...keys)
     : obj;
+}; // close fxn
 
 // HANDLE IS EMPTY FORM
 export const handleIsEmptyForm = (obj, propsToRemove) => {
@@ -314,72 +323,31 @@ export const handleTitleCase = (strVal) => {
   return finalStrVal?.join(" ");
 }; // close fxn
 
-// HANDLE FORMAT DATE
-// export const handleFormatDate = (dateVal, formatType) => {
-//   // If empty args, return
-//   if (!dateVal) return;
-//   // Define variables
-//   let result;
-//   // Switch formatType
-//   switch (formatType) {
-//     case 1:
-//       result = moment.utc(dateVal).format("MMM D, YYYY");
-//       break;
-//     case 2:
-//       result = moment.utc(dateVal).format("MMM D, YYYY h:mm A");
-//       break;
-//     case 3:
-//       result = moment.utc(dateVal).format("YYYY-MM-DD");
-//       break;
-//     case 4:
-//       result = moment.utc(dateVal).format("h:mm A");
-//       break;
-//     default:
-//       result = moment.utc(dateVal).format();
-//       break;
-//   } // close switch
-//   // Retuurn
-//   return result;
-// }; // close fxn
-
-// HANDLE GET SAVED CAR
-export const handleGetSavedCar = (objArr, carID) => {
-  // If empty args, return
-  if (!objArr || !carID) return false;
-  // Check item
-  const checkItem = objArr?.filter((i) => i?.carID === carID);
-  const isValid = checkItem?.length > 0;
-  const data = checkItem?.[0];
-  return { isValid, data };
+// HANDLE IS POSTIVE NUMBER
+export const handleIsPositiveNum = (val) => {
+  // Define variables
+  val = val || 0;
+  // Check balance
+  if (Math?.sign(val) !== -1) {
+    return true;
+  } else {
+    return false;
+  } // close if
 }; // close fxn
 
-// HANDLE DATE ADD DAYS
-export const handleDateAddDays = (dateVal, days) => {
+// HANDLE JAVASCRIPT DATE ADD DAYS
+export const handleJsDateAddDays = (dateVal, days) => {
   // If empty args, return
   if (!dateVal || typeof days !== "number") return null;
-  // Define variables
   let result = new Date(dateVal);
   result.setDate(result.getDate() + days);
   return result;
 }; // close fxn
 
-// HANDLE DATE FORMAT
-export const handleDateFormat = (dateVal) => {
-  // If empty args, return
-  if (!dateVal || typeof dateVal !== "object") return null;
-  return dateVal.toLocaleDateString("en-us", {
-    weekday: "long",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}; // close fxn
-
-// HANDLE DAYJS DATE DIFFERENCE
+// HANDLE DAYJS DIFFERENCE
 export const handleDayJsDiff = (date1, date2, unit) => {
   // If empty args, return
   if (!date1 || !date2) return null;
-  // Define variables
   date1 = dayjs(date1);
   date2 = dayjs(date2);
   unit = unit || "day";
@@ -407,10 +375,26 @@ export const handleDayJsFormat = (dateVal, formatType) => {
     case 4:
       result = dayjs.utc(dateVal).format("h:mm A");
       break;
+    case 5:
+      result = dayjs(dateVal).format("DD MMM");
+      break;
+    case 6:
+      result = dayjs(dateVal).format("HH:mm");
+      break;
     default:
       result = dayjs.utc(dateVal).format();
       break;
   } // close switch
   // Retuurn
   return result;
+}; // close fxn
+
+// HANDLE DAYSJS ADD DAYS
+export const handleDayJsAddDays = (val, units) => {
+  // If empty args, return
+  if (!val) return null;
+  units = units || "days";
+  const result = dayjs().add(val, units);
+  const resultFormat = handleDayJsFormat(result);
+  return resultFormat;
 }; // close fxn

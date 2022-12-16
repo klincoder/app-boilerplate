@@ -7,13 +7,11 @@ import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "@rneui/themed";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { StatusBar } from "expo-status-bar";
 
 // Import custom files
 import toastConfig from "./src/config/toastConfig";
 import AppWrapper from "./src/components/AppWrapper";
 import GetDatabaseContent from "./src/components/GetDatabaseContent";
-import { AuthContextProvider } from "./src/context/AuthContext";
 import { appTheme } from "./src/config/data";
 
 // Component
@@ -34,25 +32,16 @@ const App = () => {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ThemeProvider theme={appTheme}>
           <NavigationContainer>
-            <AuthContextProvider>
-              <BottomSheetModalProvider>
-                {/** Status bar */}
-                <StatusBar
-                  style="light"
-                  //barStyle={statusBg ? "light-content" : "dark-content"}
-                  //backgroundColor={statusBg || appColors?.white}
-                />
+            <BottomSheetModalProvider>
+              {/** App wrapper */}
+              <AppWrapper />
 
-                {/** App wrapper */}
-                <AppWrapper />
+              {/** Get database content */}
+              <GetDatabaseContent />
 
-                {/** Get database content */}
-                <GetDatabaseContent />
-
-                {/** Toast notifications */}
-                <Toast config={toastConfig} />
-              </BottomSheetModalProvider>
-            </AuthContextProvider>
+              {/** Toast notifications */}
+              <Toast config={toastConfig} />
+            </BottomSheetModalProvider>
           </NavigationContainer>
         </ThemeProvider>
       </GestureHandlerRootView>

@@ -12,10 +12,11 @@ import CustomHelperText from "./CustomHelperText";
 import { appColors } from "../config/data";
 
 // Component
-const CustomTextInput = ({
+const CustomInput = ({
   label,
   value,
   onChangeText,
+  placeholder,
   leftIconType,
   leftIconName,
   leftIconOnPress,
@@ -25,16 +26,17 @@ const CustomTextInput = ({
   errMsg,
   errTouched,
   helperText,
+  focused,
   styleContainer,
   styleInput,
   styleInputContainer,
   ...rest
 }) => {
   // Define state
-  const [focused, setFocused] = useState(false);
+  //const [focused, setFocused] = useState(false);
 
   // Debug
-  // console.log("Debug customTextInput: ",)
+  //console.log("Debug customInput: ", errMsg);
 
   // Return component
   return (
@@ -42,8 +44,7 @@ const CustomTextInput = ({
       {...rest}
       value={value}
       onChangeText={onChangeText}
-      //onFocus={() => setFocused(true)}
-      //onBlur={() => setFocused(false)}
+      placeholder={placeholder || "Enter value"}
       containerStyle={[tw`-mb-3`, styleContainer]}
       errorStyle={(errMsg || helperText) && tw`mb-6`}
       inputStyle={[
@@ -51,18 +52,23 @@ const CustomTextInput = ({
         focused ? tw`text-[${appColors?.secondary}]` : tw`text-black`,
       ]}
       label={
-        <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>{label}</CustomText>
+        label && (
+          <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>
+            {label}
+          </CustomText>
+        )
       }
       inputContainerStyle={[
         styleInputContainer,
         tw`px-2 border rounded-lg`,
         focused && tw`border-[${appColors?.secondary}]`,
+        errMsg && tw`border-[${appColors?.danger}]`,
       ]}
       errorMessage={
-        <>
+        <CustomText style={tw`flex flex-col`}>
           <CustomHelperText visible={helperText} title={helperText} />
           <CustomHelperText isError visible={errMsg} title={errMsg} />
-        </>
+        </CustomText>
       }
       leftIcon={
         <CustomIcon
@@ -87,4 +93,4 @@ const CustomTextInput = ({
 }; // close component
 
 // Export
-export default CustomTextInput;
+export default CustomInput;

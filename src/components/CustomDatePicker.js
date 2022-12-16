@@ -9,7 +9,7 @@ import CustomText from "./CustomText";
 import CustomListItem from "./CustomListItem";
 import CustomHelperText from "./CustomHelperText";
 import { appFonts, jsDate } from "../config/data";
-import { handleDateAddDays, handleFormatDate } from "../config/functions";
+import { handleDayJsFormat, handleJsDateAddDays } from "../config/functions";
 
 // Component
 const CustomDatePicker = ({
@@ -31,12 +31,12 @@ const CustomDatePicker = ({
   const [isSelected, setIsSelected] = useState(false);
 
   // Define variables
-  const tomorrow = handleDateAddDays(jsDate, 1);
-  const tomorrowMax = handleDateAddDays(jsDate, 30);
+  const tomorrow = handleJsDateAddDays(jsDate, 1);
+  const tomorrowMax = handleJsDateAddDays(jsDate, 30);
   const dateStr = isSelected
-    ? handleFormatDate(dateVal, 1)
+    ? handleDayJsFormat(dateVal, 1)
     : title
-    ? handleFormatDate(title, 1)
+    ? handleDayJsFormat(title, 1)
     : "Click to pick date";
 
   // Debug

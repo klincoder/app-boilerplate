@@ -3,8 +3,9 @@ import React from "react";
 import tw from "twrnc";
 
 // Import custom files
+import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
-import { appColors, appFonts } from "../config/data";
+import { appColors } from "../config/data";
 
 // Component
 const CustomHelperText = ({ title, visible, isError, styleText, ...rest }) => {
@@ -22,7 +23,7 @@ const CustomHelperText = ({ title, visible, isError, styleText, ...rest }) => {
       style={[
         styleText,
         tw`text-xs ml-4`,
-        { fontFamily: appFonts?.medium },
+        twStyles?.fontBold,
         isError
           ? tw`text-[${appColors?.danger}]`
           : tw`mt-0.5 text-[${appColors?.gray}]`,

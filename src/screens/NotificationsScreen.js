@@ -10,15 +10,15 @@ import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
 
 // Component
-const BlankScreen = () => {
+const NotificationsScreen = () => {
   // Define auth state
-  const { userID } = useAuthState();
+  const { user } = useAuthState();
 
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
 
   // Debug
-  //console.log("Debug blankScreen: ",);
+  //console.log("Debug notificationsScreen: ",);
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
@@ -45,11 +45,11 @@ const BlankScreen = () => {
     <CustomSafeView style={tw`px-4`}>
       {/** MAIN CONTAINER */}
       <View style={tw`flex-1 items-center justify-center`}>
-        <CustomText>BlankScreen</CustomText>
+        <CustomText>NotificationsScreen</CustomText>
       </View>
     </CustomSafeView>
   ); // close return
 }; // close component
 
 // Export
-export default BlankScreen;
+export default NotificationsScreen;

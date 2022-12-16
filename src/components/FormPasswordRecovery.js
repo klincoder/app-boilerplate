@@ -4,7 +4,6 @@ import tw from "twrnc";
 import { View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useNavigation } from "@react-navigation/native";
 
 // Import custom files
 import routes from "../screens/routes";
@@ -14,14 +13,14 @@ import CustomTextInputForm from "./CustomTextInputForm";
 import CustomButton from "./CustomButton";
 import useCustomAlertState from "../hooks/useCustomAlertState";
 import useAppSettings from "../hooks/useAppSettings";
-import { useAuthContext } from "../context/AuthContext";
+import useAuthState from "../hooks/useAuthState";
 import { alertMsg } from "../config/data";
 import { fireAuth } from "../config/firebase";
 
 // Component
 const FormPasswordRecovery = () => {
   // Define auth context
-  const { handleEmailExist, handleSendPassResetLink } = useAuthContext();
+  const { handleEmailExist, handleSendPassResetLink } = useAuthState();
 
   // Define app settings
   const { navigation } = useAppSettings();
@@ -66,12 +65,12 @@ const FormPasswordRecovery = () => {
       // Alert succ
       alert.showAlert(alertMsg?.linkSentSucc);
       resetForm();
+      setSubmitting(false);
     } catch (err) {
       alert.showAlert(err.message);
+      setSubmitting(false);
       //console.log("Debug submitForm: ", err.message);
     } // close try catch
-    // Set submitting
-    setSubmitting(false);
   }; // close submit form
 
   // Return component
@@ -99,6 +98,7 @@ const FormPasswordRecovery = () => {
               hideDialog={alert.hideAlert}
               cancelAction={alert.hideAlert}
               content={alert.message}
+              cancelText="Close"
             />
 
             {/** Email Address */}
@@ -114,23 +114,12 @@ const FormPasswordRecovery = () => {
 
             {/** Submit button */}
             <CustomButton
-              isPaper
-              stylePaper={tw`mt-3`}
-              disabled={!isValid || isSubmitting || alert.loading}
+              isNormal
+              title="Send recovery link"
               onPress={handleSubmit}
-            >
-              Send recovery link
-            </CustomButton>
-
-            {/** OTHER LINKS */}
-            {/* <View style={tw`flex items-center mt-6`}>
-              <CustomButton
-                isText
-                onPress={() => navigation.navigate(routes.LOGIN)}
-              >
-                Back to Login
-              </CustomButton>
-            </View> */}
+              styleNormalButton={tw`mt-3`}
+              disabled={!isValid || isSubmitting || alert.loading}
+            />
           </>
         )}
       </Formik>

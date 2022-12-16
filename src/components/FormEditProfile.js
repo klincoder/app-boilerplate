@@ -14,7 +14,7 @@ import CustomButton from "./CustomButton";
 import CustomTextInputForm from "./CustomTextInputForm";
 import useCustomAlertState from "../hooks/useCustomAlertState";
 import useCustomToastState from "../hooks/useCustomToastState";
-import { useAuthContext } from "../context/AuthContext";
+import useAuthState from "../hooks/useAuthState";
 import { alertMsg, apiRoutes, appRegex } from "../config/data";
 import { handleSendEmail, handleUppercaseFirst } from "../config/functions";
 import {
@@ -27,13 +27,9 @@ import {
 
 // Component
 const FormEditProfile = () => {
-  // Define auth context
-  const { user, handleUsernameExist } = useAuthContext();
-  const userID = user?.id;
-  const userFullName = user?.fullName;
-  const userEmail = user?.email;
-  const username = user?.username;
-  const userPhone = user?.phone;
+  // Define auth state
+  const { userFullName, userEmail, username, userPhone, handleUsernameExist } =
+    useAuthState();
 
   // Define app settings
   const { todaysDate, todaysDate2, navigation } = useAppSettings();

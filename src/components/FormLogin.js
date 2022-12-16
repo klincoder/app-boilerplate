@@ -14,21 +14,21 @@ import useAppSettings from "../hooks/useAppSettings";
 import CustomTextInputForm from "./CustomTextInputForm";
 import useCustomToastState from "../hooks/useCustomToastState";
 import useCustomAlertState from "../hooks/useCustomAlertState";
-import { useAuthContext } from "../context/AuthContext";
+import useAuthState from "../hooks/useAuthState";
 import { handleSendEmail } from "../config/functions";
 import { alertMsg, apiRoutes } from "../config/data";
 import { fireAuth } from "../config/firebase";
 
 // Component
 const FormLogin = () => {
-  // Define auth context
-  const { handleLogin, handleSendEmailVerifyLink } = useAuthContext();
+  // Define auth state
+  const { handleLogin, handleSendEmailVerifyLink } = useAuthState();
 
   // Define state
   const [hidePass, setHidePass] = useState(true);
 
   // Define app settings
-  const { todaysDate1, navigation } = useAppSettings();
+  const { navigation, siteInfo, todaysDate1 } = useAppSettings();
 
   // Define alert
   const alert = useCustomAlertState();
@@ -77,25 +77,26 @@ const FormLogin = () => {
         // Alert succ
         toast.success(alertMsg?.loginSucc);
         // Send login alert
-        await handleSendEmail(
-          "user",
-          currUser?.displayName,
-          currUser?.email,
-          todaysDate1,
-          apiRoutes?.login
-        );
+        // await handleSendEmail(
+        //   "user",
+        //   currUser?.displayName,
+        //   currUser?.email,
+        //   todaysDate1,
+        //   apiRoutes?.login,
+        //   siteInfo?.name
+        // );
       } else {
         // Send email verify link
         await handleSendEmailVerifyLink(currUser);
         alert.showAlert(alertMsg?.linkSentSucc);
         resetForm();
+        setSubmitting(false);
       } // close if
     } catch (err) {
       alert.showAlert(alertMsg?.loginErr);
+      setSubmitting(false);
       //console.error("Debug submitForm: ", err.message);
     } // close try catch
-    // Set submitting
-    setSubmitting(false);
   }; // close submit form
 
   // Return component
@@ -161,18 +162,15 @@ const FormLogin = () => {
               {/** Forgot password */}
               <CustomButton
                 isText
+                title="Forgot Password?"
                 onPress={() => navigation.navigate(routes.PASSWORD_RECOVERY)}
-              >
-                Forgot Password?
-              </CustomButton>
-
+              />
               {/** Register */}
               <CustomButton
                 isText
+                title="Register"
                 onPress={() => navigation.navigate(routes.REGISTER)}
-              >
-                Register
-              </CustomButton>
+              />
             </View>
 
             {/** TEST BUTTON */}

@@ -31,18 +31,21 @@ const CustomAlertModal = ({
       {/** If isSpinner */}
       {isSpinner ? (
         <CustomOverlay visible={visible} {...rest}>
-          <CustomImage
-            image={appImages?.logo}
-            resizeMode="cover"
-            style={tw`w-15 h-15 rounded-full`}
+          <Dialog.Loading
+            loadingStyle={tw`text-[${appColors?.primary}] p-0 m-0 rounded-full`}
           />
+          {/* <CustomImage
+            image={appImages?.logoIcon}
+            resizeMode="contain"
+            style={tw`w-15 h-15 rounded-full`}
+          /> */}
         </CustomOverlay>
       ) : (
         <Dialog
           {...rest}
           visible={visible}
           onBackdropPress={hideDialog}
-          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
+          backdropStyle={tw`bg-black opacity-90`}
           overlayStyle={tw`rounded-lg`}
         >
           {/** Title */}
@@ -70,19 +73,6 @@ const CustomAlertModal = ({
 
           {/** Actions */}
           <Dialog.Actions>
-            {/** Cancel button */}
-            {cancelAction && (
-              <Dialog.Button
-                title={cancelText || "Cancel"}
-                onPress={cancelAction}
-                buttonStyle={tw`py-1`}
-                titleStyle={[
-                  tw`text-base text-[${appColors?.danger}]`,
-                  { fontFamily: appFonts?.medium },
-                ]}
-              />
-            )}
-
             {/** Confirm button */}
             {confirmAction && (
               <Dialog.Button
@@ -91,6 +81,19 @@ const CustomAlertModal = ({
                 buttonStyle={tw`py-1`}
                 titleStyle={[
                   tw`text-base text-[${appColors?.success}]`,
+                  { fontFamily: appFonts?.medium },
+                ]}
+              />
+            )}
+
+            {/** Cancel button */}
+            {cancelAction && (
+              <Dialog.Button
+                title={cancelText || "Cancel"}
+                onPress={cancelAction}
+                buttonStyle={tw`py-1`}
+                titleStyle={[
+                  tw`text-base text-[${appColors?.danger}]`,
                   { fontFamily: appFonts?.medium },
                 ]}
               />

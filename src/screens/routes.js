@@ -9,4 +9,5 @@ export default Object.freeze({
   REGISTER: "RegisterScreen",
   PASSWORD_RECOVERY: "PasswordRecoveryScreen",
   EDIT_PROFILE: "EditProfileScreen",
+  NOTIFICATIONS: "NotificationsScreen",
 });

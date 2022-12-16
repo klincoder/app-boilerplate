@@ -4,10 +4,10 @@ import { View } from "react-native";
 import tw from "twrnc";
 
 // Import custom files
-import routes from "./routes";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomSafeView from "../components/CustomSafeView";
 import CustomText from "../components/CustomText";
+import FormTest from "../components/FormTest";
 
 // Component
 const HomeScreen = () => {
@@ -15,15 +15,18 @@ const HomeScreen = () => {
   const { navigation, isMounted } = useAppSettings();
 
   // Debug
-  //console.log("Debug homeScreen: ", withDriver);
+  //console.log("Debug homeScreen: ",);
 
   // Return component
   return (
-    <CustomSafeView>
+    <CustomSafeView style={tw`px-3 pt-3`}>
       {/** MAIN CONTAINER */}
-      <View style={tw`flex-1 items-center justify-center`}>
+      {/* <View style={tw`flex-1 items-center justify-center`}>
         <CustomText>HomeScreen</CustomText>
-      </View>
+      </View> */}
+
+      {/** FORM TEST */}
+      <FormTest />
     </CustomSafeView>
   ); // close return
 }; // close component

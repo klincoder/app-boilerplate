@@ -8,6 +8,7 @@ import tw from "twrnc";
 import twStyles from "../config/twStyles";
 import CustomIcon from "./CustomIcon";
 import { appColors } from "../config/data";
+import CustomText from "./CustomText";
 
 // Component
 const CustomButton = ({
@@ -24,6 +25,7 @@ const CustomButton = ({
   styleNormalButton,
   styleTouchable,
   styleTextTitle,
+  styleTextButton,
   children,
   ...rest
 }) => {
@@ -80,13 +82,22 @@ const CustomButton = ({
 
       {/** isText */}
       {isText && (
-        <Button
+        <TouchableOpacity
           {...rest}
-          type="clear"
-          title={title || "Text Button"}
+          activeOpacity={0.8}
           onPress={onPress}
-          titleStyle={styleTextTitle || twStyles?.fontBold}
-        />
+          style={styleTextButton}
+        >
+          <CustomText
+            style={[
+              tw`text-base underline`,
+              twStyles?.fontBold,
+              styleTextTitle,
+            ]}
+          >
+            {title || "Text Button"}
+          </CustomText>
+        </TouchableOpacity>
       )}
     </>
   ); // close return component
