@@ -7,18 +7,18 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 // Import custom files
 import CustomText from "./CustomText";
 import CustomListItem from "./CustomListItem";
-import { appColors, appFonts, newDate } from "../config/data";
-import { handleFormatDate } from "../config/functions";
+import { appColors, appFonts } from "../config/data";
+import { handleDayJsFormat } from "../config/functions";
 
 // Component
 const CustomTimePicker = ({
   label,
-  title,
+  value,
   leftIconType,
   leftIconName,
   minTime,
   maxTime,
-  onChangeTime,
+  onValueChange,
   sheetRef,
   snapPoints,
   styleContainer,
@@ -31,9 +31,9 @@ const CustomTimePicker = ({
 
   // Define variables
   const timeStr = isSelected
-    ? handleFormatDate(timeVal, 4)
-    : title
-    ? handleFormatDate(title, 4)
+    ? handleDayJsFormat(timeVal, 4)
+    : value
+    ? handleDayJsFormat(value, 4)
     : "Click to pick time";
 
   // Debug
@@ -49,7 +49,7 @@ const CustomTimePicker = ({
   const handleChangeTime = (e, selectedTime) => {
     setShowTime(false);
     setIsSelected(true);
-    onChangeTime(selectedTime);
+    onValueChange(selectedTime);
     setTimeVal(selectedTime);
   }; // close fxn
 
@@ -66,20 +66,19 @@ const CustomTimePicker = ({
       {/** Time picker */}
       <CustomListItem
         {...rest}
-        isLink
         hideDivider
         title={timeStr || "Pick time"}
-        onPressLink={handleShowTime}
+        onPress={handleShowTime}
         leftIconType={leftIconType}
         leftIconName={leftIconName || "clockcircleo"}
-        containerStyle={tw`mx-3 border rounded-lg`}
+        styleContainer={tw`mx-3 border`}
       />
 
       {/** MODAL */}
       {showTime && (
         <DateTimePicker
           mode="time"
-          value={dateVal}
+          value={timeVal}
           onChange={handleChangeTime}
         />
       )}

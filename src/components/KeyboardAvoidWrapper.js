@@ -16,12 +16,8 @@ const KeyboardAvoidWrapper = ({ children }) => {
       {/** Scroll view */}
       <ScrollView showsVerticalScrollIndicator={false}>
         <>
-          {/** Dismiss keyboard */}
-          {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
           {/** Form - children */}
           <View>{children}</View>
-          {/* </TouchableWithoutFeedback> */}
-
           {/** Bottom space */}
           <View style={{ height: 10 }} />
         </>

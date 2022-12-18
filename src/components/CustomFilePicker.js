@@ -4,10 +4,10 @@ import { View } from "react-native";
 import tw from "twrnc";
 
 // Import custom files
+import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomListItem from "./CustomListItem";
 import CustomHelperText from "./CustomHelperText";
-import { appFonts } from "../config/data";
 
 // Component
 const CustomFilePicker = ({
@@ -28,7 +28,7 @@ const CustomFilePicker = ({
     <View style={tw`mb-3`}>
       {/** Label */}
       {label && (
-        <CustomText style={[tw`mb-1 mx-3`, { fontFamily: appFonts?.medium }]}>
+        <CustomText style={[tw`mb-1 mx-3`, twStyles?.fontBold]}>
           {label}
         </CustomText>
       )}

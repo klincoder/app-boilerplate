@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import tw from "twrnc";
 import { View } from "react-native";
-import { Formik } from "formik";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Import custom files
@@ -11,7 +12,7 @@ import CustomButton from "./CustomButton";
 import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import CustomAlertModal from "./CustomAlertModal";
 import useAppSettings from "../hooks/useAppSettings";
-import CustomTextInputForm from "./CustomTextInputForm";
+import CustomInput from "./CustomInput";
 import useCustomToastState from "../hooks/useCustomToastState";
 import useCustomAlertState from "../hooks/useCustomAlertState";
 import useAuthState from "../hooks/useAuthState";
@@ -21,7 +22,7 @@ import { fireAuth } from "../config/firebase";
 
 // Component
 const FormLogin = () => {
-  // Define auth state
+  // Define auth
   const { handleLogin, handleSendEmailVerifyLink } = useAuthState();
 
   // Define state
@@ -35,9 +36,6 @@ const FormLogin = () => {
 
   // Define toast
   const toast = useCustomToastState();
-
-  // Debug
-  //console.log("Debug loginForm: ");
 
   // FORM CONFIG
   // Initial values
@@ -55,9 +53,24 @@ const FormLogin = () => {
     pass: Yup.string().required("Required").min(8, "Too short"),
   });
 
+  // Form state
+  const {
+    control,
+    formState: { isValid, isSubmitting },
+    handleSubmit,
+    reset,
+  } = useForm({
+    mode: "all",
+    defaultValues: initialValues,
+    resolver: yupResolver(validate),
+  }); // close form state
+
+  // Debug
+  //console.log("Debug loginForm: ");
+
   // FUNCTIONS
   // HANDLE SUBMIT FORM
-  const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmitForm = async (values) => {
     // Define variables
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalPass = values.pass?.trim();
@@ -89,12 +102,10 @@ const FormLogin = () => {
         // Send email verify link
         await handleSendEmailVerifyLink(currUser);
         alert.showAlert(alertMsg?.linkSentSucc);
-        resetForm();
-        setSubmitting(false);
+        reset();
       } // close if
     } catch (err) {
       alert.showAlert(alertMsg?.loginErr);
-      setSubmitting(false);
       //console.error("Debug submitForm: ", err.message);
     } // close try catch
   }; // close submit form
@@ -102,79 +113,72 @@ const FormLogin = () => {
   // Return component
   return (
     <KeyboardAvoidWrapper>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmitForm}
-        validationSchema={validate}
-      >
-        {({ values, isValid, isSubmitting, handleSubmit }) => (
-          <>
-            {/** Debug */}
-            {/* {console.log("Debug formLoginValues: ", values)} */}
+      {/** Debug */}
+      {/* {console.log("Debug formLoginValues: ", values)} */}
 
-            {/** Show spinner */}
-            <CustomAlertModal
-              isSpinner
-              visible={isSubmitting || alert.loading}
-            />
+      {/** Show spinner */}
+      <CustomAlertModal isSpinner visible={isSubmitting || alert.loading} />
 
-            {/** Alert modal */}
-            <CustomAlertModal
-              visible={alert.visible}
-              hideDialog={alert.hideAlert}
-              cancelAction={alert.hideAlert}
-              cancelText="Close"
-              content={alert.message}
-            />
+      {/** Alert modal */}
+      <CustomAlertModal
+        visible={alert.visible}
+        hideDialog={alert.hideAlert}
+        cancelAction={alert.hideAlert}
+        cancelText="Close"
+        content={alert.message}
+      />
 
-            {/** Email address */}
-            <CustomTextInputForm
-              name="emailAddr"
-              label="Email Address"
-              placeholder="Enter email address"
-              leftIconName="user"
-              autoCapitalize="none"
-            />
+      {/** Email Address */}
+      <CustomInput
+        name="emailAddr"
+        control={control}
+        label="Email Address"
+        placeholder="Enter email address"
+        leftIconType="feather"
+        leftIconName="mail"
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
 
-            {/** Pass */}
-            <CustomTextInputForm
-              isPass
-              name="pass"
-              label="Password"
-              placeholder="Enter password"
-              leftIconName="lock"
-              rightIconType="feather"
-              rightIconName={hidePass ? "eye" : "eye-off"}
-              rightIconOnPress={() => setHidePass(!hidePass)}
-              secureTextEntry={hidePass}
-              autoCapitalize="none"
-            />
+      {/** Password */}
+      <CustomInput
+        name="pass"
+        control={control}
+        label="Password"
+        placeholder="Password"
+        leftIconName="lock"
+        rightIconType="feather"
+        rightIconName={hidePass ? "eye" : "eye-off"}
+        rightIconOnPress={() => setHidePass(!hidePass)}
+        secureTextEntry={hidePass}
+        autoCapitalize="none"
+      />
 
-            {/** Submit button */}
-            <CustomButton
-              isNormal
-              onPress={handleSubmit}
-              disabled={!isValid || isSubmitting}
-            />
+      {/** Submit button */}
+      <CustomButton
+        isNormal
+        onPress={handleSubmit(handleSubmitForm)}
+        disabled={!isValid || isSubmitting}
+      />
 
-            {/** OTHER LINKS */}
-            <View style={tw`flex-row justify-between mt-6`}>
-              {/** Forgot password */}
-              <CustomButton
-                isText
-                title="Forgot Password?"
-                onPress={() => navigation.navigate(routes.PASSWORD_RECOVERY)}
-              />
-              {/** Register */}
-              <CustomButton
-                isText
-                title="Register"
-                onPress={() => navigation.navigate(routes.REGISTER)}
-              />
-            </View>
+      {/** OTHER LINKS */}
+      <View style={tw`flex-row justify-between mt-6`}>
+        {/** Forgot password */}
+        <CustomButton
+          isText
+          title="Forgot Password?"
+          onPress={() => navigation.navigate(routes.PASSWORD_RECOVERY)}
+        />
+        {/** Register */}
+        <CustomButton
+          isText
+          title="Register"
+          onPress={() => navigation.navigate(routes.REGISTER)}
+        />
+      </View>
 
-            {/** TEST BUTTON */}
-            {/* <CustomButton
+      {/** TEST BUTTON */}
+      {/* <CustomButton
               isText
               styleText={[tw`mt-12`, twStyles?.linkBtn]}
               onPress={() => {
@@ -187,9 +191,6 @@ const FormLogin = () => {
             >
               TEST BUTTON
             </CustomButton> */}
-          </>
-        )}
-      </Formik>
     </KeyboardAvoidWrapper>
   ); // close return
 }; // close component

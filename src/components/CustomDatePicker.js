@@ -8,21 +8,21 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import CustomText from "./CustomText";
 import CustomListItem from "./CustomListItem";
 import CustomHelperText from "./CustomHelperText";
-import { appFonts, jsDate } from "../config/data";
+import { appColors, appFonts, jsDate } from "../config/data";
 import { handleDayJsFormat, handleJsDateAddDays } from "../config/functions";
 
 // Component
 const CustomDatePicker = ({
   label,
-  title,
+  value,
+  onValueChange,
   leftIconType,
   leftIconName,
+  errMsg,
+  helperText,
   minDate,
   maxDate,
-  onChangeDate,
   styleContainer,
-  helperText,
-  errMsg,
   ...rest
 }) => {
   // Define state
@@ -35,8 +35,8 @@ const CustomDatePicker = ({
   const tomorrowMax = handleJsDateAddDays(jsDate, 30);
   const dateStr = isSelected
     ? handleDayJsFormat(dateVal, 1)
-    : title
-    ? handleDayJsFormat(title, 1)
+    : value
+    ? handleDayJsFormat(value, 1)
     : "Click to pick date";
 
   // Debug
@@ -52,7 +52,7 @@ const CustomDatePicker = ({
   const handleChangeDate = (e, selectedDate) => {
     setShowDate(false);
     setIsSelected(true);
-    onChangeDate(selectedDate);
+    onValueChange(selectedDate);
     setDateVal(selectedDate);
   }; // close fxn
 
@@ -69,13 +69,12 @@ const CustomDatePicker = ({
       {/** Date picker */}
       <CustomListItem
         {...rest}
-        isLink
         hideDivider
         title={dateStr}
-        onPressLink={handleShowDate}
+        onPress={handleShowDate}
         leftIconType={leftIconType}
         leftIconName={leftIconName || "calendar"}
-        containerStyle={tw`mx-3 border rounded-lg`}
+        styleContainer={tw`mx-3 border`}
       />
 
       {/** Helper text */}

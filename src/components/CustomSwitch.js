@@ -9,7 +9,7 @@ import { appColors } from "../config/data";
 
 // Component
 const CustomSwitch = ({
-  title,
+  label,
   value,
   leftImage,
   leftIconType,
@@ -25,11 +25,10 @@ const CustomSwitch = ({
   return (
     <CustomListItem
       {...rest}
-      isNormal
       hideDivider
-      title={title || "Switch"}
-      containerStyle={[tw`p-0`, styleContainer]}
-      rightIcon={
+      title={label || "Switch"}
+      styleContainer={[tw`mb-3 mx-3 p-0`, styleContainer]}
+      rightContent={
         <Switch
           value={value}
           onValueChange={onValueChange}

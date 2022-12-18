@@ -1,22 +1,56 @@
 // Import resources
 import React from "react";
-import { Chip, withTheme, lightColors } from "@rneui/themed";
+import { View } from "react-native";
+import tw from "twrnc";
 
 // Import custom files
-import CustomButton from "./CustomButton";
-import CustomListItem from "./CustomListItem";
-import { appColors } from "../config/data";
+import twStyles from "../config/twStyles";
+import CustomText from "./CustomText";
+import CustomHelperText from "./CustomHelperText";
+import CustomChip from "./CustomChip";
 
 // Component
-const CustomRadio = ({ title, value, onValueChange, onPress, ...rest }) => {
+const CustomRadio = ({
+  label,
+  value,
+  data,
+  onPress,
+  errMsg,
+  helperText,
+  ...rest
+}) => {
   // Debug
   //console.log("Debug customRadio: ",)
 
   // Return component
   return (
-    <CustomButton isTouchable onPress={onPress}>
-      <CustomListItem {...rest} title={title} />
-    </CustomButton>
+    <View style={tw`mb-3`}>
+      {/** Label */}
+      {label && (
+        <CustomText style={[tw`mb-1 mx-3`, twStyles?.fontBold]}>
+          {label}
+        </CustomText>
+      )}
+
+      {/** Data */}
+      <View style={tw`flex flex-row flex-wrap mx-2`}>
+        {data?.map((item, index) => (
+          <CustomChip
+            key={`${label}${index + 1}`}
+            title={item}
+            isSolid={value === item}
+            onPress={() => onPress(item)}
+            styleContainer={tw`m-1`}
+          />
+        ))}
+      </View>
+
+      {/** Helper text */}
+      <CustomHelperText visible={helperText} title={helperText} />
+
+      {/** Error message */}
+      <CustomHelperText isError visible={errMsg} title={errMsg} />
+    </View>
   ); // close return
 }; // close component
 

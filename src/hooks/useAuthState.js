@@ -71,8 +71,8 @@ const useAuthState = () => {
     const filterEmailAddr = allUsers?.filter(
       (item) => item?.emailAddress === emailAddr
     );
-    const isValid = filterEmailAddr?.length > 0;
     const data = filterEmailAddr[0];
+    const isValid = filterEmailAddr?.length > 0;
     return { isValid, data };
   }; // close fxn
 
@@ -84,8 +84,8 @@ const useAuthState = () => {
     const filterUsername = allUsers?.filter(
       (item) => item?.username === username
     );
-    const isValid = filterUsername?.length > 0;
     const data = filterUsername[0];
+    const isValid = filterUsername?.length > 0;
     return { isValid, data };
   }; // close fxn
 

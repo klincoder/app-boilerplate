@@ -398,3 +398,63 @@ export const handleDayJsAddDays = (val, units) => {
   const resultFormat = handleDayJsFormat(result);
   return resultFormat;
 }; // close fxn
+
+// HANDLE ITEM IS IN OBJECT ARRAY
+export const handleItemIsInObjArr = (objArr, id) => {
+  // If empty args, return
+  if (!objArr || !id) return false;
+  const checkIItem = objArr?.filter((i) => i?.id === id);
+  const isValid = checkIItem?.length > 0;
+  return isValid;
+}; // close fxn
+
+// HANDLE ITEM IS IN ARRAY
+export const handleItemIsInArr = (arr, val) => {
+  // If empty args, return
+  if (!arr || !val) return false;
+  return arr?.includes(val);
+}; // close fxn
+
+// HANDLE ADD ITEM TO OBJECT ARRAY
+export const handleAddItemToObjArr = (objArr, id, currItem) => {
+  // If empty args, return
+  if (!objArr || !id || !currItem) return [];
+  // Check if item in objArr
+  const objArrLen = objArr?.length;
+  const isInObjArr = handleItemIsInObjArr(objArr, id);
+  const newArr = isInObjArr
+    ? objArr?.filter((i) => i?.id !== id)
+    : [...objArr, currItem];
+  // If objArrLen
+  if (objArrLen > 0) {
+    if (isInObjArr) {
+      return newArr;
+    } else {
+      return newArr;
+    } // close if
+  } else {
+    return newArr;
+  } // close if
+}; // close fxn
+
+// HANDLE ADD ITEM TO ARRAY
+export const handleAddItemToArr = (arr, currItem) => {
+  // If empty args, return
+  if (!arr || !currItem) return [];
+  // Check if item in array
+  const arrLen = arr?.length;
+  const isInArr = handleItemIsInArr(arr, currItem);
+  const newArr = isInArr
+    ? arr?.filter((i) => i !== currItem)
+    : [...arr, currItem];
+  // If arrLen
+  if (arrLen > 0) {
+    if (isInArr) {
+      return newArr;
+    } else {
+      return newArr;
+    } // close if
+  } else {
+    return newArr;
+  } // close if
+}; // close fxn

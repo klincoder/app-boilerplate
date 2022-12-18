@@ -4,18 +4,18 @@ import { View } from "react-native";
 import tw from "twrnc";
 
 // Import custom files
+import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomListItem from "./CustomListItem";
 import CustomBottomSheet from "./CustomBottomSheet";
 import CustomHelperText from "./CustomHelperText";
-import { appColors, appFonts } from "../config/data";
 
 // Component
 const CustomSelect = ({
   label,
-  title,
+  value,
   leftIconName,
-  onPressSelect,
+  onPress,
   sheetRef,
   snapPoints,
   sheetContent,
@@ -31,7 +31,7 @@ const CustomSelect = ({
     <View style={tw`mb-3`}>
       {/** Label */}
       {label && (
-        <CustomText style={[tw`mb-1 mx-3`, { fontFamily: appFonts?.medium }]}>
+        <CustomText style={[tw`mb-1 mx-3`, twStyles?.fontBold]}>
           {label}
         </CustomText>
       )}
@@ -41,10 +41,10 @@ const CustomSelect = ({
         {...rest}
         isLink
         hideDivider
-        title={title || `Choose ${label?.toLowerCase()}`}
-        containerStyle={tw`mx-3 border rounded-lg`}
+        title={value || `Choose ${label?.toLowerCase()}`}
+        styleContainer={tw`mx-3 border`}
         leftIconName={leftIconName || "arrowright"}
-        onPressLink={onPressSelect}
+        onPress={onPress}
       />
 
       {/** Helper text */}

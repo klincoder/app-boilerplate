@@ -43,13 +43,13 @@ const OnboardingScreen = () => {
           <CustomImage
             image={appImages?.logo}
             resizeMode="contain"
-            style={tw`w-50 h-10 mb-25`}
+            style={tw`w-15 h-15 mb-25`}
           />
 
           {/** COL 1 - HEADING */}
           <View>
             <CustomText style={[tw`text-4xl`, twStyles?.fontBold]}>
-              Get paid to predict football matches.
+              The fastest way to launch your app in 48hrs.
             </CustomText>
           </View>
 

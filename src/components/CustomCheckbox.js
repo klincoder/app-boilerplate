@@ -1,42 +1,69 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import { CheckBox, ListItem } from "@rneui/themed";
 import tw from "twrnc";
 
 // Import custom files
-import CustomListItem from "./CustomListItem";
+import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
+import CustomHelperText from "./CustomHelperText";
+import CustomChip from "./CustomChip";
+import { handleItemIsInArr, handleItemIsInObjArr } from "../config/functions";
 
 // Component
-const CustomCheckbox = ({ isNormal, title, checked, onPress, ...rest }) => {
-  // Define variables
-  title = title || "Checkbox";
-
+const CustomCheckbox = ({
+  label,
+  value,
+  data,
+  onPress,
+  errMsg,
+  helperText,
+  isObjArr,
+  ...rest
+}) => {
   // Debug
   //console.log("Debug customCheckbox: ",)
 
   // Return component
   return (
-    <>
-      {/** IS NORMAL */}
-      {isNormal ? (
-        <CheckBox
-          {...rest}
-          checked={checked}
-          onPress={onPress}
-          title={<CustomText style={tw`pl-3`}>{title}</CustomText>}
-        />
-      ) : (
-        <CustomListItem
-          {...rest}
-          isNormal
-          hideDivider
-          title={title}
-          rightIcon={<ListItem.CheckBox checked={checked} onPress={onPress} />}
-        />
+    <View style={tw`mb-3`}>
+      {/** Label */}
+      {label && (
+        <CustomText style={[tw`mb-1 mx-3`, twStyles?.fontBold]}>
+          {label}
+        </CustomText>
       )}
-    </>
+
+      {/** Data */}
+      <View style={tw`flex flex-row flex-wrap mx-2`}>
+        {/** If isObjArr */}
+        {isObjArr
+          ? data?.map((item, index) => (
+              <CustomChip
+                key={`${label}${index + 1}`}
+                title={item?.title || "Title"}
+                isSolid={handleItemIsInObjArr(value, item?.id)}
+                onPress={() => onPress(item)}
+                styleContainer={tw`m-1`}
+              />
+            ))
+          : data?.map((item, index) => (
+              <CustomChip
+                key={`${label}${index + 1}`}
+                title={item}
+                isSolid={handleItemIsInArr(value, item)}
+                onPress={() => onPress(item)}
+                styleContainer={tw`m-1`}
+              />
+            ))}
+      </View>
+
+      {/** Helper text */}
+      <CustomHelperText visible={helperText} title={helperText} />
+
+      {/** Error message */}
+      <CustomHelperText isError visible={errMsg} title={errMsg} />
+    </View>
   ); // close return
 }; // close component
 

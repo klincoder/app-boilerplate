@@ -44,54 +44,39 @@ const ProfileScreen = () => {
   // Return component
   return (
     <CustomSafeView>
-      {/** MAIN CONTAINER */}
+      {/** SCROLL VIEWR */}
       <ScrollView showsVerticalScrollIndicator={false}>
-        <>
-          {/** Avatar color background */}
-          <View style={tw`p-15 bg-[${appColors?.primary}]`}></View>
+        {/** Avatar color background */}
+        <View style={tw`p-15 bg-[${appColors?.primary}]`}></View>
 
-          {/** AVATAR CONTAINER */}
-          <View style={tw`items-center mt-[-60]`}>
-            {/** Avatar */}
-            <CustomImage
-              isLink
-              image={userAvatar}
-              style={tw`w-25 h-25 rounded-full bg-white`}
+        {/** AVATAR CONTAINER */}
+        <View style={tw`items-center mt-[-60]`}>
+          {/** Avatar */}
+          <CustomImage
+            isLink
+            image={userAvatar}
+            style={tw`w-25 h-25 rounded-full bg-white`}
+          />
+        </View>
+
+        {/** ACCOUNT LIST CONTAINER */}
+        <View style={tw`pt-4 px-3`}>
+          {/** Loop data */}
+          {accountList?.map((item) => (
+            <CustomListItem
+              key={item?.id}
+              title={item?.title}
+              leftIconType={item?.leftIconType}
+              leftIconName={item?.leftIconName}
+              styleContainer={tw`py-5`}
+              onPress={() => {
+                if (item?.isLink) {
+                  navigation.navigate(item?.link);
+                } // close if
+              }}
             />
-          </View>
-
-          {/** ACCOUNT LIST CONTAINER */}
-          <View style={tw`pt-4 px-2`}>
-            {/** Loop data */}
-            {accountList?.map((item) => {
-              // If item isLink
-              if (item?.isLink) {
-                return (
-                  <CustomListItem
-                    isLink
-                    key={item?.id}
-                    title={item?.title}
-                    leftIconType={item?.leftIconType}
-                    leftIconName={item?.leftIconName}
-                    onPressLink={() => navigation.navigate(item?.link)}
-                    containerStyle={tw`py-5`}
-                  />
-                ); // close return
-              } else {
-                return (
-                  <CustomListItem
-                    isNormal
-                    key={item?.id}
-                    title={item?.title}
-                    leftIconType={item?.leftIconType}
-                    leftIconName={item?.leftIconName}
-                    containerStyle={tw`py-5`}
-                  />
-                ); // close return
-              } // close if
-            })}
-          </View>
-        </>
+          ))}
+        </View>
       </ScrollView>
     </CustomSafeView>
   ); // close return

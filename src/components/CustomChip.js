@@ -10,9 +10,9 @@ import { appColors, appFonts } from "../config/data";
 
 // Component
 const CustomChip = ({
-  isSolid,
   title,
   onPress,
+  isSolid,
   styleContainer,
   styleTitle,
   ...rest

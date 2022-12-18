@@ -41,8 +41,8 @@ const CustomBottomSheet = forwardRef(
         {children}
       </BottomSheetModal>
     ); // close return
-  }
-); // close component
+  } // close component
+); // close forward ref
 
 // Export
 export default CustomBottomSheet;

@@ -1,95 +1,262 @@
 // Import resources
-import React from "react";
+import React, { useCallback, useRef, useState, useMemo } from "react";
 import { View } from "react-native";
 import tw from "twrnc";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { BottomSheetView } from "@gorhom/bottom-sheet";
 
 // Import custom files
-import CustomText from "./CustomText";
+import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import useAppSettings from "../hooks/useAppSettings";
-import CustomTextInput from "./CustomTextInput";
-import CustomButton from "./CustomButton";
-import CustomInputForm from "./CustomInputForm";
 import CustomInput from "./CustomInput";
+import CustomButton from "./CustomButton";
+import CustomRadio from "./CustomRadio";
+import CustomSwitch from "./CustomSwitch";
+import CustomDatePicker from "./CustomDatePicker";
+import CustomSelect from "./CustomSelect";
+import CustomListItem from "./CustomListItem";
+import CustomTimePicker from "./CustomTimePicker";
+import CustomCheckbox from "./CustomCheckbox";
+import { courseList, genderList, paymentMethodList } from "../config/data";
+import { handleAddItemToArr } from "../config/functions";
 
 // Component
 const FormTest = () => {
+  // Define ref
+  const paymentMethodRef = useRef(null);
+
+  // Define state
+  const [hidePass, setHidePass] = useState(true);
+
   // Define app settings
   const { navigation } = useAppSettings();
 
   // FORM CONFIG
   // Initial values
   const initialValues = {
-    firstName: "",
-    lastName: "",
+    fullName: "",
+    emailAddr: "",
+    pass: "",
     gender: "",
+    courses: [],
     allowPush: false,
+    dateOfBirth: "",
+    timeOfBirth: "",
     paymentMethod: "",
-    dateofBirth: "",
   };
 
-  // Form state
-  const { control, formState, handleSubmit, getValues, setValue } = useForm({
-    mode: "onBlur",
-    defaultValues: initialValues,
+  // Validate
+  const validate = Yup.object().shape({
+    fullName: Yup.string().required("Required").min(3, "Too short"),
+    emailAddr: Yup.string().required("Required").email("Invalid email address"),
+    pass: Yup.string().required("Required").min(8, "Too short"),
+    gender: Yup.string().required("Required"),
+    allowPush: Yup.boolean().oneOf([true], "Must be selected"),
+    dateOfBirth: Yup.string().required("Required"),
+    paymentMethod: Yup.object().required("Required").nullable(),
+    courses: Yup.array()
+      .required("Required")
+      .min(1, "At least 1")
+      .max(3, "At most 3"),
   });
 
+  // Form state
+  const {
+    control,
+    formState: { errors, isValid, isSubmitting },
+    handleSubmit,
+    trigger,
+    setValue,
+    watch,
+    reset,
+  } = useForm({
+    mode: "all",
+    defaultValues: initialValues,
+    resolver: yupResolver(validate),
+  }); // close form state
+
   // Define variables
-  const formVal = getValues();
+  const formVal = watch();
+  const paymentMethodSnap = useMemo(() => ["30%"], []);
+  const coursesVal = formVal?.courses;
 
   // Debug
-  // console.log("Debug formTest: ", {
-  //   //form: formVal,
-  //   err: formState?.errors,
-  //   valid: formState?.isValid,
-  //   //values: formVal,
-  // });
+  //console.log("Debug formTest: ", errors?.paymentMethod?.message);
 
   // FUNCTIONS
+  // HANDLE PAYMENT METHOD SHEET
+  const handlePaymentMethodSheet = useCallback(
+    () => paymentMethodRef.current?.present(),
+    []
+  ); // close fxn
+
   // HANDLE SUBMIT FORM
-  const handleSubmitForm = (data) => {
-    console.log("Debug submitForm: ", data);
+  const handleSubmitForm = (values) => {
+    // Debug
+    console.log("Debug submitForm: ", values);
   }; // close fxn
 
   // Return component
   return (
-    <View>
-      {/* <CustomText>Content goes here</CustomText> */}
-      {/** First name */}
+    <KeyboardAvoidWrapper>
+      {/** Full name */}
       <CustomInput
-        name="firstName"
+        name="fullName"
         control={control}
-        label="First name"
-        rules={{ required: "Required" }}
-        helperText="A simple message"
-        // touched={formState?.touchedFields?.firstName}
-        // errMsg={formState?.errors.firstName}
+        label="Full Name"
+        placeholder="Full name"
+        leftIconName="user"
+        autoCapitalize="words"
       />
 
-      {/** Last name */}
+      {/** Email Address */}
       <CustomInput
-        name="lastName"
+        name="emailAddr"
         control={control}
-        label="Last name"
-        rules={{ required: { value: true, message: "Required" } }}
+        label="Email Address"
+        placeholder="Enter email address"
+        leftIconType="feather"
+        leftIconName="mail"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        helperText="We'll send a confirmation link"
       />
 
-      {/** Button */}
+      {/** Password */}
+      <CustomInput
+        name="pass"
+        control={control}
+        label="Password"
+        placeholder="Password"
+        leftIconName="lock"
+        rightIconType="feather"
+        rightIconName={hidePass ? "eye" : "eye-off"}
+        rightIconOnPress={() => setHidePass(!hidePass)}
+        secureTextEntry={hidePass}
+        autoCapitalize="none"
+      />
+
+      {/** Gender */}
+      <CustomRadio
+        name="gender"
+        label="Gender"
+        data={genderList}
+        value={formVal?.gender}
+        errMsg={errors?.gender?.message}
+        onPress={(val) => {
+          setValue("gender", val);
+          trigger("gender");
+        }}
+      />
+
+      {/** Courses */}
+      <CustomCheckbox
+        //isObjArr
+        name="courses"
+        label="Choose Courses"
+        data={courseList}
+        value={formVal?.courses}
+        errMsg={errors?.courses?.message}
+        onPress={(val) => {
+          const itemID = val?.id;
+          // const itemToAdd = handleAddItemToObjArr(coursesVal, itemID, val);
+          const itemToAdd = handleAddItemToArr(coursesVal, val);
+          setValue("courses", itemToAdd);
+          trigger("courses");
+        }}
+      />
+
+      {/** Allow push */}
+      <CustomSwitch
+        name="allowPush"
+        label="Allow Push?"
+        value={formVal?.allowPush}
+        errMsg={errors?.allowPush?.message}
+        onValueChange={(val) => {
+          setValue("allowPush", val);
+          trigger("allowPush");
+        }}
+      />
+
+      {/** Date of birth */}
+      <CustomDatePicker
+        name="dateOfBirth"
+        label="Date of Birth"
+        value={formVal?.dateOfBirth}
+        leftIconType="fontAwesome"
+        leftIconName="calendar-check-o"
+        errMsg={errors?.dateOfBirth?.message}
+        onValueChange={(val) => {
+          setValue("dateOfBirth", val);
+          trigger("dateOfBirth");
+        }}
+      />
+
+      {/** Time of birth */}
+      <CustomTimePicker
+        name="timeOfBirth"
+        label="Time of Birth"
+        value={formVal?.timeOfBirth}
+        leftIconType="fontAwesome"
+        leftIconName="calendar-check-o"
+        errMsg={errors?.timeOfBirth?.message}
+        onValueChange={(val) => {
+          setValue("timeOfBirth", val);
+          trigger("timeOfBirth");
+        }}
+      />
+
+      {/** Payment method */}
+      <CustomSelect
+        name="paymentMethod"
+        label="Payment Method"
+        value={formVal?.paymentMethod?.title}
+        leftIconType="antDesign"
+        leftIconName="creditcard"
+        onPress={handlePaymentMethodSheet}
+        errMsg={errors?.paymentMethod?.message}
+        sheetRef={paymentMethodRef}
+        snapPoints={paymentMethodSnap}
+        sheetContent={
+          <BottomSheetView>
+            {/** Loop data */}
+            {paymentMethodList?.map((item) => (
+              <CustomListItem
+                isLink
+                key={item?.id}
+                title={item?.title}
+                description={item?.description}
+                leftImage={item?.image}
+                isSelected={formVal?.paymentMethod?.slug === item?.slug}
+                onPress={() => {
+                  paymentMethodRef.current.close();
+                  setValue("paymentMethod", item);
+                  trigger("paymentMethod");
+                }}
+              />
+            ))}
+          </BottomSheetView>
+        }
+      />
+
+      {/** Submit futton */}
       <CustomButton
         isNormal
         title="Submit"
         onPress={handleSubmit(handleSubmitForm)}
-        disabled={!formState?.isValid || formState?.isSubmitting}
+        disabled={!isValid || isSubmitting}
       />
 
-      {/** Button - set value */}
+      {/** TEST BUTTON */}
       {/* <CustomButton
         isNormal
         title="Set Value"
         type="outline"
         onPress={() => setValue("allowPush", true)}
       /> */}
-    </View>
+    </KeyboardAvoidWrapper>
   ); // close return
 }; // close component
 

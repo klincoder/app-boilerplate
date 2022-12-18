@@ -21,12 +21,12 @@ const HomeScreen = () => {
   return (
     <CustomSafeView style={tw`px-3 pt-3`}>
       {/** MAIN CONTAINER */}
-      {/* <View style={tw`flex-1 items-center justify-center`}>
+      <View style={tw`flex-1 items-center justify-center`}>
         <CustomText>HomeScreen</CustomText>
-      </View> */}
+      </View>
 
-      {/** FORM TEST */}
-      <FormTest />
+      {/** TEST */}
+      {/* <FormTest /> */}
     </CustomSafeView>
   ); // close return
 }; // close component

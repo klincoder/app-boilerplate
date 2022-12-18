@@ -27,8 +27,8 @@ export const jsDate = new Date();
 
 // APP COLORS
 export const appColors = {
-  primary: "#bf211e",
-  secondary: "#6e1311",
+  primary: "#313bac",
+  secondary: "#11143c",
   accent: "#f9dc5c",
   danger: "#ff5252",
   success: "#198754",
@@ -71,9 +71,7 @@ export const appImages = {
   creditCard:
     "https://firebasestorage.googleapis.com/v0/b/bulkahia-dev.appspot.com/o/credit-card.png?alt=media&token=aa6bbc9b-37ee-413d-8150-649de975edef",
   onboarding:
-    "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/football-bg-1.png?alt=media&token=275fa523-40b8-4d5f-81b6-32655914276e",
-  onboarding2:
-    "https://firebasestorage.googleapis.com/v0/b/klin-courier-dev.appspot.com/o/pexels-mizuno-k-13432001.jpg?alt=media&token=f94e5b20-4a75-4dc3-b7b3-2bbce9ca26b3",
+    "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/onboarding-1.png?alt=media&token=a6162886-5a5d-4ca3-81f4-b00b9a49ca31",
   location:
     "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/location.png?alt=media&token=805e5f4c-2a44-4bc9-95b9-096c392707ef",
   payment:
@@ -219,4 +217,43 @@ export const accountList = [
     slug: "app-version",
     isLink: false,
   },
+];
+
+// PAYMENT METHOD LIST
+export const paymentMethodList = [
+  {
+    id: "123",
+    title: "Pay on Pickup",
+    description: "1hr reservation limit",
+    image: appImages?.creditCard,
+    slug: "pay-on-delivery",
+  },
+  {
+    id: "456",
+    title: "Pay Now",
+    description: "Reserved unitl end date expires",
+    image: appImages?.creditCard,
+    slug: "pay-now",
+  },
+];
+
+// GENDER LIST
+export const genderList = ["Male", "Female", "Prefer not to say"];
+
+// COURSE LIST
+export const courseList = [
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "React",
+  "Nextjs",
+  "React Native",
+  "Firebase",
+  // { id: "123", title: "HTML", slug: "html" },
+  // { id: "456", title: "CSS", slug: "css" },
+  // { id: "789", title: "JavaScript", slug: "js" },
+  // { id: "1011", title: "React", slug: "react" },
+  // { id: "1213", title: "Nextjs", slug: "nextjs" },
+  // { id: "1415", title: "React Native", slug: "react-native" },
+  // { id: "1617", title: "Firebase", slug: "firebase" },
 ];

@@ -1,7 +1,8 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import { Formik } from "formik";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import tw from "twrnc";
 
@@ -11,7 +12,7 @@ import useAppSettings from "../hooks/useAppSettings";
 import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import CustomAlertModal from "./CustomAlertModal";
 import CustomButton from "./CustomButton";
-import CustomTextInputForm from "./CustomTextInputForm";
+import CustomInput from "./CustomInput";
 import useCustomAlertState from "../hooks/useCustomAlertState";
 import useCustomToastState from "../hooks/useCustomToastState";
 import useAuthState from "../hooks/useAuthState";
@@ -40,9 +41,6 @@ const FormEditProfile = () => {
   // Define alert
   const alert = useCustomAlertState();
 
-  // Debug
-  //console.log("Debug formEditProfile: ", todaysDate2);
-
   // FORM CONFIG
   // Define initial values
   const initialValues = {
@@ -62,31 +60,45 @@ const FormEditProfile = () => {
     ),
   });
 
+  // Form state
+  const {
+    control,
+    formState: { isValid, isSubmitting, isDirty },
+    handleSubmit,
+  } = useForm({
+    mode: "all",
+    defaultValues: initialValues,
+    resolver: yupResolver(validate),
+  }); // close form state
+
+  // Debug
+  //console.log("Debug formEditProfile: ", todaysDate2);
+
   // FUNCTIONS
   // HANDLE SUBMIT FORM
-  const handleSubmitForm = async (values, { setSubmitting }) => {
+  const handleSubmitForm = async (values) => {
     // Define variables
     const finalFullName = handleUppercaseFirst(values.fullName);
     const finalEmail = values.emailAddr;
     const finalUsername = values.username?.trim()?.toLowerCase();
     const finalPhone = values.phoneNum?.trim();
+
+    // Define username exist
     const usernameExist =
       finalUsername === username ? false : handleUsernameExist(finalUsername);
-
-    // If username exist
     if (usernameExist?.isValid) {
       alert.showAlert(alertMsg?.usernameExistErr);
       return;
     } // close if
 
     // Debug
-    //console.log("Debug formRegisterSubmit: ", usernameExist);
-    setSubmitting(false);
+    //console.log("Debug submitForm: ", values);
 
     // Try catch
     // try {
     //   // Update fireAuth display name
     //   await updateProfile(fireAuth.currentUser, { displayName: finalUsername });
+
     //   // Edit user profile
     //   const editUserRef = doc(fireDB, "users", `${userID}`);
     //   await setDoc(
@@ -111,94 +123,80 @@ const FormEditProfile = () => {
 
     //   // Alert succ
     //   toast.success(alertMsg?.profileSucc);
-    //   setSubmitting(false);
     //   navigation.navigate(routes.ACCOUNT);
     // } catch (err) {
     //   alert.showAlert(alertMsg?.generalErr);
     //   //console.log("Debug submitForm", err.message);
-    //   setSubmitting(false);
     // } // close try catch
   }; // close submit form
 
   // Return component
   return (
     <KeyboardAvoidWrapper>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmitForm}
-        validationSchema={validate}
-        //enableReinitialize
-      >
-        {({ values, isValid, isSubmitting, dirty, handleSubmit }) => (
-          <View>
-            {/** Debug */}
-            {/* {console.log("Debug formEditProfValues: ", values)} */}
+      {/** Debug */}
+      {/* {console.log("Debug formEditProfValues: ", values)} */}
 
-            {/** Show spinner */}
-            <CustomAlertModal isSpinner visible={isSubmitting} />
+      {/** Show spinner */}
+      <CustomAlertModal isSpinner visible={isSubmitting} />
 
-            {/** Alert modal */}
-            <CustomAlertModal
-              visible={alert.visible}
-              content={alert.message}
-              hideDialog={alert.hideAlert}
-              cancelAction={alert.hideAlert}
-            />
+      {/** Alert modal */}
+      <CustomAlertModal
+        visible={alert.visible}
+        content={alert.message}
+        hideDialog={alert.hideAlert}
+        cancelAction={alert.hideAlert}
+      />
 
-            {/** Full name */}
-            <CustomTextInputForm
-              name="fullName"
-              label="Full Name"
-              placeholder="Enter full name"
-              leftIconName="user"
-              autoCapitalize="words"
-              defaultValue={userFullName}
-            />
+      {/** Full name */}
+      <CustomInput
+        name="fullName"
+        control={control}
+        label="Full Name"
+        leftIconName="user"
+        autoCapitalize="words"
+        defaultValue={userFullName}
+      />
 
-            {/** Email address */}
-            <CustomTextInputForm
-              name="emailAddr"
-              label="Email Address"
-              placeholder="Enter email address"
-              leftIconType="feather"
-              leftIconName="mail"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              defaultValue={userEmail}
-              disabled
-            />
+      {/** Email address */}
+      <CustomInput
+        name="emailAddr"
+        control={control}
+        label="Email Address"
+        leftIconType="feather"
+        leftIconName="mail"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        defaultValue={userEmail}
+        disabled
+      />
 
-            {/** Username */}
-            <CustomTextInputForm
-              name="username"
-              label="Username"
-              placeholder="Enter username"
-              leftIconName="user"
-              autoCapitalize="none"
-              defaultValue={username}
-            />
+      {/** Username */}
+      <CustomInput
+        name="username"
+        control={control}
+        label="Username"
+        leftIconName="user"
+        autoCapitalize="none"
+        defaultValue={username}
+      />
 
-            {/** Phone number */}
-            <CustomTextInputForm
-              name="phoneNum"
-              label="Phone Number"
-              placeholder="Phone Number"
-              leftIconType="feather"
-              leftIconName="phone"
-              keyboardType="numeric"
-              defaultValue={userPhone}
-            />
+      {/** Phone number */}
+      <CustomInput
+        name="phoneNum"
+        control={control}
+        label="Phone Number"
+        leftIconType="feather"
+        leftIconName="phone"
+        keyboardType="numeric"
+        defaultValue={userPhone}
+      />
 
-            {/** Submit button */}
-            <CustomButton
-              isNormal
-              onPress={handleSubmit}
-              style={tw`mt-3`}
-              disabled={!isValid || isSubmitting || !dirty}
-            />
-          </View>
-        )}
-      </Formik>
+      {/** Submit button */}
+      <CustomButton
+        isNormal
+        onPress={handleSubmit(handleSubmitForm)}
+        disabled={!isValid || isSubmitting || !isDirty}
+      />
     </KeyboardAvoidWrapper>
   ); // close return
 }; // close component
