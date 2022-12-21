@@ -35,8 +35,8 @@ export const handleSendEmail = async (
       toName: toName,
       toEmail: toEmail,
       msg: msg,
-      fromName: fromName || "Bulkahia",
-      fromEmail: fromEmail || "support@bulkahia.com",
+      fromName: fromName || "Klincoder",
+      fromEmail: fromEmail || "support@klincoder.com",
       footerName: `${fromName} Team`,
     },
   }).then((apiRes) => {
