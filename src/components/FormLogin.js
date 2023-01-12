@@ -13,8 +13,7 @@ import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import CustomAlertModal from "./CustomAlertModal";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomInput from "./CustomInput";
-import useCustomToastState from "../hooks/useCustomToastState";
-import useCustomAlertState from "../hooks/useCustomAlertState";
+import useAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
 import { handleSendEmail } from "../config/functions";
 import { alertMsg, apiRoutes } from "../config/data";
@@ -22,20 +21,16 @@ import { fireAuth } from "../config/firebase";
 
 // Component
 const FormLogin = () => {
-  // Define auth
-  const { handleLogin, handleSendEmailVerifyLink } = useAuthState();
-
-  // Define state
-  const [hidePass, setHidePass] = useState(true);
-
   // Define app settings
   const { navigation, siteInfo, todaysDate1 } = useAppSettings();
 
-  // Define alert
-  const alert = useCustomAlertState();
+  // Define state
+  const { handleLogin, handleUserExist, handleSendVerifyEmailLink } =
+    useAuthState();
+  const [hidePass, setHidePass] = useState(true);
 
-  // Define toast
-  const toast = useCustomToastState();
+  // Define alert
+  const alert = useAlertState();
 
   // FORM CONFIG
   // Initial values
@@ -49,7 +44,7 @@ const FormLogin = () => {
     emailAddr: Yup.string()
       .required("Required")
       .email("Invalid email address")
-      .max(50, "Too long"),
+      .max(150, "Too long"),
     pass: Yup.string().required("Required").min(8, "Too short"),
   });
 
@@ -74,6 +69,16 @@ const FormLogin = () => {
     // Define variables
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalPass = values.pass?.trim();
+    const userExist = handleUserExist(finalEmail);
+    const userInfo = userExist?.data;
+    const username = userInfo?.username;
+    const userEmail = userInfo?.email_address;
+
+    // If !userExist
+    if (!userExist?.isValid) {
+      alert.showAlert(alertMsg?.inValidCred);
+      return;
+    } // close if
 
     // Debug
     //console.log("Debug submitForm: ",);
@@ -82,31 +87,25 @@ const FormLogin = () => {
     try {
       // Login user
       await handleLogin(finalEmail, finalPass);
-      // Define variables
       const currUser = fireAuth.currentUser;
-      const isEmailVerified = currUser.emailVerified === true;
-      // If isEmailVerified
-      if (isEmailVerified) {
+
+      // If email verified
+      if (currUser?.emailVerified) {
         // Alert succ
-        toast.success(alertMsg?.loginSucc);
-        // Send login alert
-        // await handleSendEmail(
-        //   "user",
-        //   currUser?.displayName,
-        //   currUser?.email,
-        //   todaysDate1,
-        //   apiRoutes?.login,
-        //   siteInfo?.name
-        // );
+        alert.success(alertMsg?.loginSucc);
+
+        // Send email
+        const emailMsg = { toName: username, toEmail: userEmail };
+        await handleSendEmail(emailMsg, apiRoutes?.login);
       } else {
-        // Send email verify link
-        await handleSendEmailVerifyLink(currUser);
+        // Send verify email link
+        await handleSendVerifyEmailLink(username, userEmail);
         alert.showAlert(alertMsg?.linkSentSucc);
         reset();
       } // close if
     } catch (err) {
-      alert.showAlert(alertMsg?.loginErr);
-      //console.error("Debug submitForm: ", err.message);
+      alert.showAlert(alertMsg?.inValidCred);
+      console.error("Debug submitForm: ", err.message);
     } // close try catch
   }; // close submit form
 

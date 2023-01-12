@@ -5,12 +5,11 @@ import { useSetRecoilState } from "recoil";
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
-import { handleFilterUserId } from "../config/functions";
 import {
-  appSettingsAtom,
   allUsersAtom,
-  allSavedAtom,
   userSavedAtom,
+  appSettingsAtom,
+  userOrdersAtom,
 } from "../recoil/atoms";
 import {
   fireDB,
@@ -35,8 +34,8 @@ const GetDatabaseContent = () => {
 
   // Define state
   const setAllUsersAtom = useSetRecoilState(allUsersAtom); // All
-  const setAllSavedAtom = useSetRecoilState(allSavedAtom);
   const setUserSavedAtom = useSetRecoilState(userSavedAtom); // User
+  const setUserOrdersAtom = useSetRecoilState(userOrdersAtom);
   const setAppSettingsAtom = useSetRecoilState(appSettingsAtom); // Others
 
   // SIDE EFFECTS
@@ -59,10 +58,12 @@ const GetDatabaseContent = () => {
     // On mount
     isMounted.current = true;
 
-    // LISTEN TO APP SETTINGS - GENERAL
-    const appSettingsRef = doc(fireDB, "app_settings", "general_settings");
+    // LISTEN TO APP SETTINGS
+    const appSettingsRef = collection(fireDB, "app_settings");
     onSnapshot(appSettingsRef, (snapshot) => {
-      const data = snapshot.exists() ? snapshot.data() : "";
+      const data = snapshot.docs.map((doc) => {
+        return doc.data();
+      }); // close data
       setAppSettingsAtom(data);
     });
 
@@ -75,19 +76,32 @@ const GetDatabaseContent = () => {
       setAllUsersAtom(data);
     });
 
-    // LISTEN TO ALL SAVED
-    const allSavedRef = query(
-      collectionGroup(fireDB, "saved"),
-      orderBy("date_created", "desc")
-    );
-    onSnapshot(allSavedRef, (snapshot) => {
-      const data = snapshot.docs.map((doc) => {
-        return doc.data();
-      }); // close data
-      const getUserInfo = handleFilterUserId(data, userID);
-      setAllSavedAtom(data);
-      setUserSavedAtom(getUserInfo);
-    });
+    // IF USERID
+    if (userID) {
+      // LISTEN TO USER SAVED
+      const userSavedRef = query(
+        collection(fireDB, "users", userID, "saved"),
+        orderBy("date_created", "desc")
+      );
+      onSnapshot(userSavedRef, (snapshot) => {
+        const data = snapshot.docs.map((doc) => {
+          return doc.data();
+        }); // close data
+        setUserSavedAtom(data);
+      });
+
+      // LISTEN TO USER ORDERS
+      const userOrdersRef = query(
+        collection(fireDB, "users", userID, "orders"),
+        orderBy("date_created", "desc")
+      );
+      onSnapshot(userOrdersRef, (snapshot) => {
+        const data = snapshot.docs.map((doc) => {
+          return doc.data();
+        }); // close data
+        setUserOrdersAtom(data);
+      });
+    } // close if
 
     // Clean up
     return () => {
@@ -97,8 +111,8 @@ const GetDatabaseContent = () => {
     isMounted,
     userID,
     setAllUsersAtom,
-    setAllSavedAtom,
     setUserSavedAtom,
+    setUserOrdersAtom,
     setAppSettingsAtom,
   ]);
 

@@ -13,27 +13,21 @@ import useAppSettings from "../hooks/useAppSettings";
 import CustomAlertModal from "./CustomAlertModal";
 import CustomButton from "./CustomButton";
 import CustomText from "./CustomText";
-import useCustomAlertState from "../hooks/useCustomAlertState";
+import useCustomAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
 import CustomInput from "./CustomInput";
 import { alertMsg, apiRoutes, appColors, appRegex } from "../config/data";
 import { fireAuth, fireDB, setDoc, doc } from "../config/firebase";
-import {
-  handleTitleCase,
-  handleSendEmail,
-  handleGenUsername,
-} from "../config/functions";
+import { handleSendEmail, handleHashVal } from "../config/functions";
 
 // Component
 const FormRegister = () => {
-  // Define auth
-  const { handleEmailExist, handleRegister } = useAuthState();
-
-  // Define state
-  const [hidePass, setHidePass] = useState(true);
-
   // Define app settings
   const { todaysDate, todaysDate1, siteInfo } = useAppSettings();
+
+  // Define state
+  const { handleUserExist, handleRegister } = useAuthState();
+  const [hidePass, setHidePass] = useState(true);
 
   // Define alert
   const alert = useCustomAlertState();
@@ -41,18 +35,18 @@ const FormRegister = () => {
   // FORM CONFIG
   // Initial values
   const initialValues = {
-    fullName: "",
+    username: "",
     emailAddr: "",
     pass: "",
   };
 
   // Validate
   const validate = Yup.object().shape({
-    fullName: Yup.string().required("Required").min(3, "Too short"),
+    username: Yup.string().required("Required").min(3, "Too short"),
     emailAddr: Yup.string()
       .required("Required")
       .email("Invalid email address")
-      .max(50, "Too long"),
+      .max(150, "Too long"),
     pass: Yup.string().required("Required").min(8, "Too short"),
   });
 
@@ -75,20 +69,15 @@ const FormRegister = () => {
   // HANDLE SUBMIT FORM
   const handleSubmitForm = async (values) => {
     // Define variables
-    const finalFullName = handleTitleCase(values.fullName?.trim());
-    const finalEmail = values.emailAddr?.trim()?.toLowerCase();
-    const finalPass = values.pass?.trim();
-    const finalUsername = handleGenUsername(finalEmail);
-    const emailMsg = {
-      username: finalUsername,
-      email: finalEmail,
-      date: todaysDate1,
-    };
+    const finalUsername = values?.username?.trim()?.toLowerCase();
+    const finalEmail = values?.emailAddr?.trim()?.toLowerCase();
+    const finalPass = values?.pass?.trim();
+    const passHash = await handleHashVal(finalPass, "hash");
+    const userExist = handleUserExist(finalEmail);
 
-    // Define email exist
-    const emailExist = handleEmailExist(finalEmail);
-    if (emailExist?.isValid) {
-      alert.showAlert("Email address already exist");
+    // If userExist
+    if (userExist?.isValid) {
+      alert.showAlert(alertMsg?.inValidCred);
       return;
     } // close if
 
@@ -99,45 +88,42 @@ const FormRegister = () => {
     try {
       // Create user
       await handleRegister(finalUsername, finalEmail, finalPass);
+
       // Define variables
       const currUser = fireAuth.currentUser;
       const currUserID = currUser.uid;
 
-      // Add user to database
+      // Add user to db
       const newUserRef = doc(fireDB, "users", currUserID);
       await setDoc(newUserRef, {
         reg_method: "app",
         role: "user",
         avatar: "",
-        full_name: finalFullName,
-        email_address: finalEmail,
+        full_name: "",
         phone_number: "",
-        push_status: { email: true, sms: true },
+        email_address: finalEmail,
+        password: passHash,
+        push_status: { app: true, email: true, sms: true },
         user_id: currUserID,
         username: finalUsername,
         date_created: todaysDate,
         dateUpdated: todaysDate,
       });
 
-      // Send user welcome email
-      // await handleSendEmail(
-      //   "user",
-      //   finalUsername,
-      //   finalEmail,
-      //   emailMsg,
-      //   apiRoutes?.welcome,
-      //  siteInfo?.name
-      // );
-
-      // Send admin new user email
-      // await handleSendEmail(
-      //   "admin",
-      //   siteInfo?.adminName,
-      //   siteInfo?.adminEmail,
-      //   emailMsg,
-      //   apiRoutes?.newUser,
-      //   siteInfo?.name
-      // );
+      // Send email
+      const userEmailMsg = {
+        role: "user",
+        toName: finalUsername,
+        toEmail: finalEmail,
+      };
+      const adminEmailMsg = {
+        role: "admin",
+        toName: siteInfo?.adminName,
+        toEmail: siteInfo?.adminEmail,
+        username: finalUsername,
+      };
+      await handleSendEmail(userEmailMsg, apiRoutes?.welcome);
+      await handleSendEmail(adminEmailMsg, apiRoutes?.newUser);
 
       // Alert succ
       alert.showAlert(alertMsg?.linkSentSucc);
@@ -154,7 +140,7 @@ const FormRegister = () => {
       {/** Debug */}
       {/* {console.log("Debug formValues: ", values)} */}
 
-      {/** Show spinner */}
+      {/** Spinner */}
       <CustomAlertModal isSpinner visible={alert.loading || isSubmitting} />
 
       {/** Alert modal */}
@@ -166,14 +152,14 @@ const FormRegister = () => {
         cancelText="Close"
       />
 
-      {/** Full name */}
+      {/** Username */}
       <CustomInput
-        name="fullName"
+        name="username"
         control={control}
-        label="Full Name"
-        placeholder="Full name"
+        label="Username"
+        placeholder="Username"
         leftIconName="user"
-        autoCapitalize="words"
+        autoCapitalize="none"
       />
 
       {/** Email Address */}
@@ -228,25 +214,26 @@ const FormRegister = () => {
 
       {/** TEST BUTTON */}
       {/* <CustomButton
-          isNormal
-          title="TEST BUTTON"
-          type="outline"
-          onPress={async () => {
-            // Try catch
-            try {
-              await handleSendEmail(
-                "user",
-                "Klincoder",
-                "klincoder@gmail.com",
-                "123456",
-                apiRoutes?.otp,
-                siteInfo?.name
-              );
-            } catch (err) {
-              console.log("Debug formRegDetails: ", err.message);
-            } // close try catch
-          }}
-        /> */}
+        isNormal
+        title="TEST BUTTON"
+        type="outline"
+        onPress={async () => {
+          // Try catch
+          try {
+            //const result = await handleHashVal("incorr3t", "hash");
+            const hashedVal =
+              "$2a$10$/2UigxcFwJQ2gW9q4H7wH.53clkyBS/B1EZ5zvYlTJgIfOll5IHpS";
+            const result = await handleHashVal(
+              "incorr3t",
+              "compare",
+              hashedVal
+            );
+            console.log("Debug testBtn 1: ", result);
+          } catch (err) {
+            console.log("Debug testBtn 2: ", err.message);
+          } // close try catch
+        }}
+      /> */}
     </KeyboardAvoidWrapper>
   ); // close return
 }; // close component

@@ -7,17 +7,17 @@ import CustomButton from "./CustomButton";
 import CustomAlertModal from "./CustomAlertModal";
 import CustomText from "./CustomText";
 import CustomIcon from "./CustomIcon";
-import useCustomAlertState from "../hooks/useCustomAlertState";
+import useAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
 import { alertMsg, appColors, appFonts } from "../config/data";
 
 // Component
 function LogoutBtn({ title, styleTitle, styleIcon, styleContainer }) {
-  // Define auth state
+  // Define state
   const { handleLogout } = useAuthState();
 
   // Define alert
-  const alert = useCustomAlertState();
+  const alert = useAlertState();
 
   // Debug
   //console.log("Debug logoutBtn: ")

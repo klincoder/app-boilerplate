@@ -4,23 +4,14 @@ import { View, Share } from "react-native";
 import tw from "twrnc";
 
 // Import custom files
-import CustomText from "./CustomText";
-import useAppSettings from "../hooks/useAppSettings";
 import CustomButton from "./CustomButton";
 import CustomIcon from "./CustomIcon";
-import { useAuthContext } from "../context/AuthContext";
 import { baseUrl } from "../config/data";
 
 // Component
-const ShareIcon = ({ title, slug }) => {
-  // Define auth context
-  const { user } = useAuthContext();
-
-  // Define app settings
-  const { isMounted } = useAppSettings();
-
+const ShareBtn = ({ title, slug, styleIcon, ...rest }) => {
   // Debug
-  //console.log("Debug shareIcon: ",)
+  //console.log("Debug shareBtn: ",)
 
   // FUNCTIONS
   // HANDLE SHARE CONTENT
@@ -46,17 +37,21 @@ const ShareIcon = ({ title, slug }) => {
         console.log("dismissed!");
       } // close if
     } catch (err) {
-      console.log("Debug shareIcon: ", err.message);
+      console.log("Debug shareBtn: ", err.message);
     } // close try catch
   }; // close fxn
 
   // Return component
   return (
-    <CustomButton isTouchable onPress={handleShareContent}>
-      <CustomIcon type="antDesign" icon="sharealt" size={24} />
+    <CustomButton {...rest} isTouchable onPress={handleShareContent}>
+      <CustomIcon
+        type="antDesign"
+        name="sharealt"
+        style={[tw`p-3 rounded-full`, styleIcon]}
+      />
     </CustomButton>
   ); // close return
 }; // close component
 
 // Export
-export default ShareIcon;
+export default ShareBtn;

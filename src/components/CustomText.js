@@ -3,13 +3,13 @@ import React from "react";
 import { Text } from "@rneui/themed";
 
 // Import custom files
-import { appFonts } from "../config/data";
+import twStyles from "../config/twStyles";
 
 // Component
 const CustomText = ({ children, style, ...rest }) => {
   // Return component
   return (
-    <Text style={style || { fontFamily: appFonts?.regular }} {...rest}>
+    <Text {...rest} style={style || twStyles?.fontRegular}>
       {children}
     </Text>
   ); // close return

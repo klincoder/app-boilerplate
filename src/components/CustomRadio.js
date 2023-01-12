@@ -8,9 +8,11 @@ import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomHelperText from "./CustomHelperText";
 import CustomChip from "./CustomChip";
+import { handleItemIsInArr, handleItemIsInObjArr } from "../config/functions";
 
 // Component
 const CustomRadio = ({
+  isObjArr,
   label,
   value,
   data,
@@ -34,15 +36,26 @@ const CustomRadio = ({
 
       {/** Data */}
       <View style={tw`flex flex-row flex-wrap mx-2`}>
-        {data?.map((item, index) => (
-          <CustomChip
-            key={`${label}${index + 1}`}
-            title={item}
-            isSolid={value === item}
-            onPress={() => onPress(item)}
-            styleContainer={tw`m-1`}
-          />
-        ))}
+        {/** If isObjArr */}
+        {isObjArr
+          ? data?.map((item, index) => (
+              <CustomChip
+                key={`${label}${index + 1}`}
+                title={item?.title || "Title"}
+                isSolid={handleItemIsInObjArr(value, item?.id)}
+                onPress={() => onPress(item)}
+                styleContainer={tw`m-1`}
+              />
+            ))
+          : data?.map((item, index) => (
+              <CustomChip
+                key={`${label}${index + 1}`}
+                title={item || "Title"}
+                isSolid={handleItemIsInArr(value, item)}
+                onPress={() => onPress(item)}
+                styleContainer={tw`m-1`}
+              />
+            ))}
       </View>
 
       {/** Helper text */}

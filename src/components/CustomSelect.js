@@ -28,12 +28,10 @@ const CustomSelect = ({
 
   // Return component
   return (
-    <View style={tw`mb-3`}>
+    <View style={tw`mb-3 mx-3`}>
       {/** Label */}
       {label && (
-        <CustomText style={[tw`mb-1 mx-3`, twStyles?.fontBold]}>
-          {label}
-        </CustomText>
+        <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>{label}</CustomText>
       )}
 
       {/** Input */}
@@ -42,7 +40,7 @@ const CustomSelect = ({
         isLink
         hideDivider
         title={value || `Choose ${label?.toLowerCase()}`}
-        styleContainer={tw`mx-3 border`}
+        styleContainer={tw`border`}
         leftIconName={leftIconName || "arrowright"}
         onPress={onPress}
       />

@@ -13,8 +13,7 @@ import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import CustomAlertModal from "./CustomAlertModal";
 import CustomButton from "./CustomButton";
 import CustomInput from "./CustomInput";
-import useCustomAlertState from "../hooks/useCustomAlertState";
-import useCustomToastState from "../hooks/useCustomToastState";
+import useAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
 import { alertMsg, apiRoutes, appRegex } from "../config/data";
 import { handleSendEmail, handleUppercaseFirst } from "../config/functions";
@@ -28,18 +27,14 @@ import {
 
 // Component
 const FormEditProfile = () => {
-  // Define auth state
-  const { userFullName, userEmail, username, userPhone, handleUsernameExist } =
-    useAuthState();
-
   // Define app settings
   const { todaysDate, todaysDate2, navigation } = useAppSettings();
 
-  // Define toast
-  const toast = useCustomToastState();
+  // Define state
+  const { user, handleUserExist } = useAuthState();
 
   // Define alert
-  const alert = useCustomAlertState();
+  const alert = useAlertState();
 
   // FORM CONFIG
   // Define initial values
@@ -78,16 +73,15 @@ const FormEditProfile = () => {
   // HANDLE SUBMIT FORM
   const handleSubmitForm = async (values) => {
     // Define variables
-    const finalFullName = handleUppercaseFirst(values.fullName);
-    const finalEmail = values.emailAddr;
-    const finalUsername = values.username?.trim()?.toLowerCase();
-    const finalPhone = values.phoneNum?.trim();
+    const finalFullName = handleUppercaseFirst(values?.fullName);
+    const finalUsername = values?.username?.trim()?.toLowerCase();
+    const finalPhone = values?.phoneNum?.trim();
+    const userExist =
+      finalUsername === user?.username ? false : handleUserExist(finalUsername);
 
-    // Define username exist
-    const usernameExist =
-      finalUsername === username ? false : handleUsernameExist(finalUsername);
-    if (usernameExist?.isValid) {
-      alert.showAlert(alertMsg?.usernameExistErr);
+    // If user exist
+    if (userExist?.isValid) {
+      alert.showAlert(alertMsg?.userExistErr);
       return;
     } // close if
 
@@ -95,39 +89,34 @@ const FormEditProfile = () => {
     //console.log("Debug submitForm: ", values);
 
     // Try catch
-    // try {
-    //   // Update fireAuth display name
-    //   await updateProfile(fireAuth.currentUser, { displayName: finalUsername });
+    try {
+      // Update fireAuth display name
+      await updateProfile(fireAuth.currentUser, { displayName: finalUsername });
 
-    //   // Edit user profile
-    //   const editUserRef = doc(fireDB, "users", `${userID}`);
-    //   await setDoc(
-    //     editUserRef,
-    //     {
-    //       fullName: finalFullName,
-    //       username: finalUsername,
-    //       phoneNumber: finalPhone,
-    //       dateUpdated: todaysDate,
-    //     },
-    //     { merge: true }
-    //   ); // close set doc
+      // Edit user profile
+      const editUserRef = doc(fireDB, "users", user?.id);
+      await setDoc(
+        editUserRef,
+        {
+          fullName: finalFullName,
+          username: finalUsername,
+          phoneNumber: finalPhone,
+          dateUpdated: todaysDate,
+        },
+        { merge: true }
+      ); // close set doc
 
-    //   // Send email
-    //   await handleSendEmail(
-    //     "user",
-    //     finalUsername,
-    //     finalEmail,
-    //     todaysDate2,
-    //     apiRoutes?.profileChange
-    //   );
+      // Send email
+      const emailMsg = { toName: user?.username, toEmail: user?.email };
+      await handleSendEmail(emailMsg, apiRoutes?.profileChange);
 
-    //   // Alert succ
-    //   toast.success(alertMsg?.profileSucc);
-    //   navigation.navigate(routes.ACCOUNT);
-    // } catch (err) {
-    //   alert.showAlert(alertMsg?.generalErr);
-    //   //console.log("Debug submitForm", err.message);
-    // } // close try catch
+      // Alert succ
+      alert.success(alertMsg?.profileSucc);
+      navigation.navigate(routes.ACCOUNT);
+    } catch (err) {
+      alert.showAlert(alertMsg?.generalErr);
+      //console.log("Debug submitForm", err.message);
+    } // close try catch
   }; // close submit form
 
   // Return component

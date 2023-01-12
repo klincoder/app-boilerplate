@@ -12,7 +12,7 @@ import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import CustomAlertModal from "./CustomAlertModal";
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
-import useCustomAlertState from "../hooks/useCustomAlertState";
+import useAlertState from "../hooks/useAlertState";
 import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
 import { alertMsg } from "../config/data";
@@ -20,14 +20,14 @@ import { fireAuth } from "../config/firebase";
 
 // Component
 const FormPasswordRecovery = () => {
-  // Define auth
-  const { handleEmailExist, handleSendPassResetLink } = useAuthState();
-
   // Define app settings
   const { navigation } = useAppSettings();
 
+  // Define state
+  const { handleUserExist, handleSendPasswordResetLink } = useAuthState();
+
   // Define alert
-  const alert = useCustomAlertState();
+  const alert = useAlertState();
 
   // Debug
   //console.log("Debug formPassRecovery: ",);
@@ -60,11 +60,14 @@ const FormPasswordRecovery = () => {
   const handleSubmitForm = async (values) => {
     // Define variables
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
+    const userExist = handleUserExist(finalEmail);
+    const userInfo = userExist?.data;
+    const username = userInfo?.username;
+    const userEmail = userInfo?.email_address;
 
-    // Define email exist
-    const emailExist = handleEmailExist(finalEmail);
-    if (!emailExist?.isValid) {
-      alert.showAlert("User not found");
+    // If user exit
+    if (!userExist?.isValid) {
+      alert.showAlert(alertMsg?.inValidCred);
       return;
     } // close if
 
@@ -74,7 +77,7 @@ const FormPasswordRecovery = () => {
     // Try catch
     try {
       // Send password reset link
-      await handleSendPassResetLink(fireAuth, finalEmail);
+      await handleSendPasswordResetLink(username, userEmail);
       // Alert succ
       alert.showAlert(alertMsg?.linkSentSucc);
       reset();

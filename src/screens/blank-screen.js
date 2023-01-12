@@ -11,11 +11,11 @@ import useAuthState from "../hooks/useAuthState";
 
 // Component
 const BlankScreen = () => {
-  // Define auth state
-  const { userID } = useAuthState();
-
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
+
+  // Define state
+  const { user } = useAuthState();
 
   // Debug
   //console.log("Debug blankScreen: ",);
@@ -25,15 +25,17 @@ const BlankScreen = () => {
   useLayoutEffect(() => {
     // On mount
     isMounted.current = true;
+
     // Set screen options
     navigation.setOptions({
       headerTitleAlign: "left",
       headerRight: () => (
-        <View style={tw`flex-1 flex-row items-center pr-5`}>
+        <View style={tw`flex flex-row pr-5`}>
           <CustomText>Right Text</CustomText>
         </View>
       ), // close header right
     }); // close navigation
+
     // Clean up
     return () => {
       isMounted.current = false;
@@ -42,7 +44,7 @@ const BlankScreen = () => {
 
   // Return component
   return (
-    <CustomSafeView style={tw`px-4`}>
+    <CustomSafeView style={tw`px-3`}>
       {/** MAIN CONTAINER */}
       <View style={tw`flex-1 items-center justify-center`}>
         <CustomText>BlankScreen</CustomText>

@@ -19,19 +19,34 @@ import CustomSelect from "./CustomSelect";
 import CustomListItem from "./CustomListItem";
 import CustomTimePicker from "./CustomTimePicker";
 import CustomCheckbox from "./CustomCheckbox";
-import { courseList, genderList, paymentMethodList } from "../config/data";
+import { genderList, paymentMethodList } from "../config/data";
 import { handleAddItemToArr } from "../config/functions";
+import CustomAlertModal from "./CustomAlertModal";
+import useAlertState from "../hooks/useAlertState";
 
 // Component
 const FormTest = () => {
-  // Define ref
-  const paymentMethodRef = useRef(null);
+  // Define app settings
+  const { navigation } = useAppSettings();
 
   // Define state
   const [hidePass, setHidePass] = useState(true);
 
-  // Define app settings
-  const { navigation } = useAppSettings();
+  // Define ref
+  const paymentMethodRef = useRef(null);
+
+  // Define useMemo
+  const snaps = useMemo(
+    () => ({
+      full: ["75%"],
+      half: ["50%"],
+      small: ["35%"],
+    }),
+    []
+  );
+
+  // Define alert
+  const alert = useAlertState();
 
   // FORM CONFIG
   // Initial values
@@ -81,16 +96,29 @@ const FormTest = () => {
   const formVal = watch();
   const paymentMethodSnap = useMemo(() => ["30%"], []);
   const coursesVal = formVal?.courses;
+  const courseList = [
+    { id: "123", title: "HTML", slug: "html" },
+    { id: "456", title: "CSS", slug: "css" },
+    { id: "789", title: "JavaScript", slug: "js" },
+    { id: "1011", title: "React", slug: "react" },
+    { id: "1213", title: "Nextjs", slug: "nextjs" },
+    { id: "1415", title: "React Native", slug: "react-native" },
+    { id: "1617", title: "Firebase", slug: "firebase" },
+  ];
 
   // Debug
   //console.log("Debug formTest: ", errors?.paymentMethod?.message);
 
   // FUNCTIONS
-  // HANDLE PAYMENT METHOD SHEET
-  const handlePaymentMethodSheet = useCallback(
-    () => paymentMethodRef.current?.present(),
-    []
-  ); // close fxn
+  // HANDLE OPEN SHEET
+  const handleOpenSheet = useCallback((val) => {
+    // Switch val
+    switch (val) {
+      case "brand":
+        paymentMethodRef.current?.present();
+        break;
+    } // close switch
+  }, []); // close fxn
 
   // HANDLE SUBMIT FORM
   const handleSubmitForm = (values) => {
@@ -101,6 +129,18 @@ const FormTest = () => {
   // Return component
   return (
     <KeyboardAvoidWrapper>
+      {/** Spinner */}
+      <CustomAlertModal isSpinner visible={alert.loading || isSubmitting} />
+
+      {/** Alert modal */}
+      <CustomAlertModal
+        visible={alert.visible}
+        hideDialog={alert.hideAlert}
+        cancelAction={alert.hideAlert}
+        content={alert.message}
+        cancelText="Close"
+      />
+
       {/** Full name */}
       <CustomInput
         name="fullName"
@@ -153,7 +193,7 @@ const FormTest = () => {
 
       {/** Courses */}
       <CustomCheckbox
-        //isObjArr
+        isObjArr
         name="courses"
         label="Choose Courses"
         data={courseList}
@@ -161,8 +201,8 @@ const FormTest = () => {
         errMsg={errors?.courses?.message}
         onPress={(val) => {
           const itemID = val?.id;
-          // const itemToAdd = handleAddItemToObjArr(coursesVal, itemID, val);
-          const itemToAdd = handleAddItemToArr(coursesVal, val);
+          const itemToAdd = handleAddItemToObjArr(coursesVal, itemID, val);
+          //const itemToAdd = handleAddItemToArr(coursesVal, val);
           setValue("courses", itemToAdd);
           trigger("courses");
         }}
@@ -221,10 +261,8 @@ const FormTest = () => {
         snapPoints={paymentMethodSnap}
         sheetContent={
           <BottomSheetView>
-            {/** Loop data */}
             {paymentMethodList?.map((item) => (
               <CustomListItem
-                isLink
                 key={item?.id}
                 title={item?.title}
                 description={item?.description}

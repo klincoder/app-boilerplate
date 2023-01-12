@@ -31,8 +31,8 @@ import {
 // Ccomponent
 const AppWrapper = () => {
   // Define user
-  const [user, setUser] = useRecoilState(userAtom);
-  const userID = user?.id;
+  const [currSession, setCurrSession] = useRecoilState(userAtom);
+  const userID = currSession?.id;
 
   // Define state
   const [appIsReady, setAppIsReady] = useState(false);
@@ -84,19 +84,18 @@ const AppWrapper = () => {
             role: dbUser?.role,
             phone: dbUser?.phone_number,
             pushStatus: dbUser?.push_status,
-            walletBal: dbUser?.wallet_bal,
           };
           // Set user
-          setUser(currUserObj);
+          setCurrSession(currUserObj);
         });
       } else {
-        setUser(null);
+        setCurrSession(null);
         //console.log("Debug appWrapper 1: ", currUser);
       } // close if
     }); // close unsubscribe
     // Clean up
     return () => unsubscribe();
-  }, [userID]);
+  }, [userID, setCurrSession]);
 
   // SIDE EFFECTS
   // LISTEN TO NETWORK STATUS
@@ -127,16 +126,12 @@ const AppWrapper = () => {
         await SplashScreen.preventAutoHideAsync();
         // GET CUSTOM FONTS
         await handleGetCustomFonts();
-        // GET APP ONBOARDING
-        const appOnboardingRef = collection(fireDB, "app_onboarding");
-        const appOnboardingSnap = await getDocs(appOnboardingRef);
-        const appOnboardingData =
-          appOnboardingSnap.size > 0
-            ? appOnboardingSnap.docs.map((doc) => {
-                return doc.data();
-              })
-            : [];
-        // Set atom
+        // GET APP ONBOARDING SLIDES
+        const appOnboardingRef = doc(fireDB, "app_settings", "slides");
+        const appOnboardingSnap = await getDoc(appOnboardingRef);
+        const appOnboardingData = appOnboardingSnap.exists()
+          ? appOnboardingSnap.data()
+          : null;
         setAppOnboardingAtom(appOnboardingData);
       } catch (err) {
         //console.log("Debug appWrapper: ", err.message);

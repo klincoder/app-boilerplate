@@ -18,7 +18,6 @@ const CustomCarousel = ({ data, height, styleContainer }) => {
     wrap: {
       width: screenInfo?.width,
       height: screenInfo?.height * Number(height || 0.25),
-      borderRadius: 5,
     },
   });
 
@@ -52,19 +51,24 @@ const CustomCarousel = ({ data, height, styleContainer }) => {
       >
         {/** Loop data */}
         {data?.map((item) => (
-          <CustomImage isLink key={item} image={item} style={styles.wrap} />
+          <CustomImage
+            isLink
+            key={item}
+            image={item}
+            style={[tw``, styles.wrap]}
+          />
         ))}
       </ScrollView>
 
       {/** Indicators */}
-      {data?.length > 1 && (
-        <View style={tw`absolute bottom-0 flex flex-row self-center`}>
-          {/** Loop data */}
-          {data?.map((item, index) => (
+      <View style={tw`absolute bottom-0 flex flex-row self-center`}>
+        {/** Loop data */}
+        {data?.length > 1 &&
+          data?.map((item, index) => (
             <CustomIcon
               key={item}
               type="octIcons"
-              icon="dot-fill"
+              name="dot-fill"
               size={20}
               style={[
                 tw`mx-2 mb-1`,
@@ -74,8 +78,7 @@ const CustomCarousel = ({ data, height, styleContainer }) => {
               ]}
             />
           ))}
-        </View>
-      )}
+      </View>
     </View>
   ); // close return
 }; // close component

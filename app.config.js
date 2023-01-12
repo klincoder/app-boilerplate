@@ -4,13 +4,13 @@ import "dotenv/config";
 // Export
 export default {
   expo: {
-    name: "App Boilerplate",
-    slug: "app-boilerplate",
+    name: "KlinStore",
+    slug: "klinstore-app",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./src/assets/icon.png",
     userInterfaceStyle: "light",
-    description: "A faster way to start any app project.",
+    description: "A better buy to shop online.",
     splash: {
       image: "./src/assets/splash.png",
       resizeMode: "cover",
@@ -44,7 +44,7 @@ export default {
       ],
     ],
     extra: {
-      // Dev
+      // Firebase dev
       fireDevApiKey: process.env.FIREBASE_DEV_API_KEY,
       fireDevAuthDomain: process.env.FIREBASE_DEV_AUTH_DOMAIN,
       fireDevProjectId: process.env.FIREBASE_DEV_PROJECT_ID,
@@ -52,7 +52,7 @@ export default {
       fireDevMsgSenderId: process.env.FIREBASE_DEV_MESSAGING_SENDER_ID,
       fireDevAppId: process.env.FIREBASE_DEV_APP_ID,
       fireDevMeasurementId: process.env.FIREBASE_DEV_MEASUREMENT_ID,
-      // Prod
+      // Firebase prod
       fireProdApiKey: process.env.FIREBASE_PROD_API_KEY,
       fireProdAuthDomain: process.env.FIREBASE_PROD_AUTH_DOMAIN,
       fireProdProjectId: process.env.FIREBASE_PROD_PROJECT_ID,
@@ -60,6 +60,11 @@ export default {
       fireProdMsgSenderId: process.env.FIREBASE_PROD_MESSAGING_SENDER_ID,
       fireProdAppId: process.env.FIREBASE_PROD_APP_ID,
       fireProdMeasurementId: process.env.FIREBASE_PROD_MEASUREMENT_ID,
+      // Paystack
+      paystackDevPublic: process.env.PAYSTACK_DEV_PUBLIC_KEY,
+      paystackDevSecret: process.env.PAYSTACK_DEV_SECRET_KEY,
+      paystackProdPublic: process.env.PAYSTACK_PROD_PUBLIC_KEY,
+      paystackProdSecret: process.env.PAYSTACK_PROD_SECRET_KEY,
     },
   },
 };

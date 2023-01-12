@@ -1,23 +1,24 @@
 // Import resources
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import Toast from "react-native-toast-message";
 
 // Import custom files
 import routes from "../screens/routes";
+import useAppSettings from "./useAppSettings";
 
 // Component
-const useCustomAlertState = () => {
+const useAlertState = () => {
+  // Define app settings
+  const { navigation } = useAppSettings();
+
   // Define state
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState();
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Define navigation
-  const navigation = useNavigation();
-
   // Debug
-  //console.log("Debug useCustomAlertState: ")
+  //console.log("Debug useAlertState: ")
 
   // FUNCTIONS
   // HANDLE SHOW ALERT
@@ -34,6 +35,48 @@ const useCustomAlertState = () => {
 
   // HIDE LOADING
   const hideLoading = () => setLoading(false);
+
+  // HANDLE TOAST SUCCESS
+  const success = (msg) => {
+    Toast.show({
+      type: "success",
+      position: "top",
+      text1: "Success",
+      text2: msg,
+      visibilityTime: 5000,
+      autoHide: true,
+      topOffset: 20,
+      bottomOffset: 50,
+    });
+  }; // close fxn
+
+  // HANDLE TOAST ERROR
+  const error = (msg) => {
+    Toast.show({
+      type: "error",
+      position: "top",
+      text1: "Error",
+      text2: msg,
+      visibilityTime: 8000,
+      autoHide: true,
+      topOffset: 20,
+      bottomOffset: 50,
+    });
+  }; // close fxn
+
+  // HANDLE TOAST INFO
+  const info = (msg) => {
+    Toast.show({
+      type: "info",
+      position: "top",
+      text1: "Info",
+      text2: msg,
+      visibilityTime: 8000,
+      autoHide: true,
+      topOffset: 20,
+      bottomOffset: 50,
+    });
+  }; // close fxn
 
   // HANDLE GO TO LOGIN SCREEN
   const goToLogin = () => {
@@ -77,6 +120,9 @@ const useCustomAlertState = () => {
     hideAlert,
     showLoading,
     hideLoading,
+    success,
+    error,
+    info,
     goToLogin,
     setHasError,
     handleErrorCode,
@@ -85,4 +131,4 @@ const useCustomAlertState = () => {
 }; // close component
 
 // Export
-export default useCustomAlertState;
+export default useAlertState;

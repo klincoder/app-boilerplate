@@ -21,13 +21,13 @@ const LoginScreen = () => {
   // Return component
   return (
     <CustomSafeView statusBg={appColors?.primary}>
-      {/** MAIN CONTAINER */}
+      {/** SECTION */}
       <View style={tw`flex-1 bg-[${appColors?.primary}]`}>
         {/** COL 1 - TITLE */}
         <AuthHeader title="Login" />
 
         {/** COL 2 - FORM */}
-        <View style={tw`flex-1 p-5 rounded-t-3xl bg-white`}>
+        <View style={tw`flex-1 px-3 py-5 rounded-t-3xl bg-white`}>
           <FormLogin />
         </View>
       </View>

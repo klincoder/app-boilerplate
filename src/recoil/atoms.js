@@ -10,12 +10,6 @@ export const allUsersAtom = atom({
   default: [],
 });
 
-// ALL SAVED ATOM
-export const allSavedAtom = atom({
-  key: "allSavedAtom",
-  default: [],
-});
-
 /**********************
   USER
 **********************/
@@ -31,13 +25,19 @@ export const userSavedAtom = atom({
   default: [],
 });
 
+// USER ORDERS ATOM
+export const userOrdersAtom = atom({
+  key: "userOrdersAtom",
+  default: [],
+});
+
 /**********************
   OTHERS
 **********************/
 // APP SETTINGS ATOM
 export const appSettingsAtom = atom({
   key: "appSettingsAtom",
-  default: null,
+  default: [],
 });
 
 // APP ONBOARDING ATOM

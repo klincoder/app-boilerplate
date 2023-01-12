@@ -5,43 +5,72 @@ import dayjsUTC from "dayjs/plugin/utc";
 dayjs.extend(dayjsUTC);
 
 // Import custom files
-import { baseUrl } from "./data";
+import { appColors, baseUrl } from "./data";
+import { doc, fireDB, getDoc } from "./firebase";
 
 // VARIABLES
-export const randomCode4 = Math.floor(1000 + Math.random() * 9000);
-export const randomCode6 = Math.floor(Math.random() * 999999 + 1);
-export const randomCode10 = Math.floor(1000 + Math.random() * 9000000000);
-export const randomStr6 = Math.random().toString(36).slice(2, 3);
-
 // FUNCTIONS
+// HANDLE GET SITE INFO
+export const handleGetSiteInfo = async () => {
+  // Define ref
+  const docRef = doc(fireDB, "app_settings", "general_settings");
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.exists() ? docSnap.data() : null;
+  return { name: docData?.app_name, noReply: docData?.support_email_reply };
+}; // close fxn
+
 // HANDLE SEND EMAIL
-export const handleSendEmail = async (
-  role,
-  toName,
-  toEmail,
-  msg,
-  api,
-  fromName,
-  fromEmail
-) => {
+export const handleSendEmail = async (newMsg, api) => {
   // If empty args, return
-  if (!role || !toName || !toEmail || !msg || !api || !fromName) return;
+  if (!newMsg || !api?.api || !api?.tempID) return null;
+  // Define variables
+  const siteInfo = await handleGetSiteInfo();
+  let defaultMsg = {
+    role: "user",
+    toName: "",
+    toEmail: "",
+    fromName: siteInfo?.name || "Klincoder",
+    fromEmail: siteInfo?.noReply || "noreply@klincoder.com",
+    year: handleDayJsFormat(null, 3),
+    date: handleDayJsFormat(null, 1),
+  };
+  const finalMsg = { ...defaultMsg, ...newMsg };
   // Return and await response
   return await axios({
     method: "POST",
-    url: `${baseUrl}/api/${api}`,
-    data: {
-      role: role,
-      toName: toName,
-      toEmail: toEmail,
-      msg: msg,
-      fromName: fromName || "Klincoder",
-      fromEmail: fromEmail || "support@klincoder.com",
-      footerName: `${fromName} Team`,
-    },
-  }).then((apiRes) => {
-    return apiRes;
+    url: `${baseUrl}/api/${api?.api}`,
+    data: { msg: finalMsg, tempID: api?.tempID },
+  }).then((res) => {
+    return res?.data;
   }); // close return
+}; // close fxn
+
+// HANDLE RANDOM CODE
+export const handleRandomCode = (val) => {
+  val = Number(val);
+  // Switch
+  switch (val) {
+    case 6:
+      return Math.floor(Math.random() * 999999 + 1);
+    case 10:
+      return Math.floor(1000 + Math.random() * 9000000000);
+    default:
+      return Math.floor(1000 + Math.random() * 9000);
+  } // close switch
+}; // close fxn
+
+// HANDLE RANDOM STRING
+export const handleRandomString = (val) => {
+  val = Number(val);
+  // Switch
+  switch (val) {
+    case 6:
+      return Math.random().toString(36).slice(2, 3);
+    case 10:
+      return Math.random().toString(36).slice(2, 3);
+    default:
+      return Math.random().toString(36).slice(2, 3);
+  } // close switch
 }; // close fxn
 
 // HANDLE FIND ID
@@ -68,11 +97,66 @@ export const handleFilterId = (objArr, rowID) => {
   } // close if
 }; // close fxn
 
+// HANDLE FILTER STATUS
+export const handleFilterStatus = (objArr, status) => {
+  // If empty args, return
+  if (!objArr) return;
+  status = status || "active";
+  const result = objArr?.filter((i) => i?.status === status);
+  if (result?.length > 0) {
+    return result;
+  } else {
+    return [];
+  } // close if
+}; // close fxn
+
 // HANDLE FILTER USER ID
 export const handleFilterUserId = (objArr, userID) => {
   // If empty args, return
   if (!objArr || !userID) return;
   const result = objArr?.filter((i) => i?.user_id === userID);
+  if (result?.length > 0) {
+    return result;
+  } else {
+    return [];
+  } // close if
+}; // close fxn
+
+// HANDLE FILTER SELLER ID
+export const handleFilterSellerId = (objArr, sellerID) => {
+  // If empty args, return
+  if (!objArr || !sellerID) return;
+  const result = objArr?.filter((i) => i?.seller_id === sellerID);
+  if (result?.length > 0) {
+    return result;
+  } else {
+    return [];
+  } // close if
+}; // close fxn
+
+// HANDLE FILTER CATEGORY & STATUS
+export const handleFilterCategory = (objArr, category, status) => {
+  // If empty args, return
+  if (!objArr || !category) return;
+  status = status || "active";
+  const result = objArr?.filter(
+    (i) => i?.category === category && i?.status === status
+  );
+  if (result?.length > 0) {
+    return result;
+  } else {
+    return [];
+  } // close if
+}; // close fxn
+
+// HANDLE FILTER KYC
+export const handleFilterKyc = (objArr, category, status) => {
+  // If empty args, return
+  if (!objArr || !category) return [];
+  status = status || "pending";
+  const result = objArr?.filter(
+    (i) => i?.category === category && i?.status === status
+  );
   if (result?.length > 0) {
     return result;
   } else {
@@ -195,7 +279,8 @@ export const handleGenUsername = (email) => {
 // HANDLE GENERATE OTP CODE
 export const handleGenOtpCode = () => {
   // Define code - random 6 digit numbers
-  return randomCode6?.toString();
+  const randomCode = handleRandomCode(6);
+  return randomCode?.toString();
 }; // close fxn
 
 // SAMPLE - HANDLE FORM SELECT ITEMS
@@ -221,7 +306,9 @@ export const handleFormSelectItems = (objArr) => {
 export const handleGenTranxRef = (prefix) => {
   // Define variables
   const prefixFinal = prefix || "BA";
-  const result = prefixFinal + randomStr6.toUpperCase() + randomCode6;
+  const randomCode = handleRandomCode(6);
+  const randomStr = handleRandomString(6);
+  const result = prefixFinal + randomStr.toUpperCase() + randomCode;
   return result;
 }; // close fxn
 
@@ -234,28 +321,28 @@ export const handleStatusColor = (status) => {
   // Switch status
   switch (status) {
     case "active":
-      color = "bg-success";
+      color = `bg-[${appColors?.success}]`;
       break;
     case "success":
-      color = "bg-success";
+      color = `bg-[${appColors?.success}]`;
       break;
     case "approved":
-      color = "bg-success";
+      color = `bg-[${appColors?.success}]`;
       break;
     case "paid":
-      color = "bg-success";
+      color = `bg-[${appColors?.success}]`;
       break;
     case "pending":
-      color = "bg-secondary";
+      color = `bg-[${appColors?.warning}]`;
       break;
     case "processing":
-      color = "bg-secondary";
+      color = `bg-[${appColors?.warning}]`;
       break;
     case "completed":
-      color = "bg-dark";
+      color = `bg-[${appColors?.black}]`;
       break;
     default:
-      color = "bg-danger";
+      color = `bg-[${appColors?.danger}]`;
       break;
   } // close switch
   // Return
@@ -347,7 +434,7 @@ export const handleJsDateAddDays = (dateVal, days) => {
 // HANDLE DAYJS DIFFERENCE
 export const handleDayJsDiff = (date1, date2, unit) => {
   // If empty args, return
-  if (!date1 || !date2) return null;
+  if (!date1 || !date2) return 0;
   date1 = dayjs(date1);
   date2 = dayjs(date2);
   unit = unit || "day";
@@ -356,37 +443,21 @@ export const handleDayJsDiff = (date1, date2, unit) => {
 }; // close fxn
 
 // HANDLE DAYJS FORMAT
-export const handleDayJsFormat = (dateVal, formatType) => {
-  // If empty args, return
-  if (!dateVal) return;
+export const handleDayJsFormat = (dateVal, num, formatVal) => {
   // Define variables
-  let result;
-  // Switch formatType
-  switch (formatType) {
+  dateVal = dateVal || undefined;
+  formatVal = formatVal || "YYYY";
+  // Switch num
+  switch (num) {
     case 1:
-      result = dayjs.utc(dateVal).format("MMM D, YYYY");
-      break;
+      return dayjs.utc(dateVal).format("MMM D, YYYY");
     case 2:
-      result = dayjs.utc(dateVal).format("MMM D, YYYY h:mm A");
-      break;
+      return dayjs.utc(dateVal).format("MMM D, YYYY h:mm A");
     case 3:
-      result = dayjs.utc(dateVal).format("YYYY-MM-DD");
-      break;
-    case 4:
-      result = dayjs.utc(dateVal).format("h:mm A");
-      break;
-    case 5:
-      result = dayjs(dateVal).format("DD MMM");
-      break;
-    case 6:
-      result = dayjs(dateVal).format("HH:mm");
-      break;
+      return dayjs.utc(dateVal).format(formatVal);
     default:
-      result = dayjs.utc(dateVal).format();
-      break;
+      return dayjs.utc(dateVal).format();
   } // close switch
-  // Retuurn
-  return result;
 }; // close fxn
 
 // HANDLE DAYSJS ADD DAYS
@@ -457,4 +528,57 @@ export const handleAddItemToArr = (arr, currItem) => {
   } else {
     return newArr;
   } // close if
+}; // close fxn
+
+// HANDLE GET SAVED ITEM
+export const handleGetSavedItem = (objArr, id) => {
+  // If empty args, return
+  if (!objArr || !id) return null;
+  const getData = objArr?.filter((i) => i?.data?.id === id);
+  const isValid = getData?.length > 0;
+  const data = getData?.[0];
+  return { isValid, data };
+}; // close fxn
+
+// HANDLE GET INFO BY ID
+export const handleGetInfoById = (objArr, id) => {
+  // If empty args, return
+  if (!objArr || !id) return null;
+  const getData = objArr?.filter((i) => i?.id === id);
+  const isValid = getData?.length > 0;
+  const data = getData?.[0];
+  return { isValid, data };
+}; // close fxn
+
+// HANDLE FIREADMIN ACTIONS
+export const handleFireAdminAction = async (email, action) => {
+  // If empty args, return
+  if (!email || !action) return null;
+  return await axios({
+    method: "POST",
+    url: `${baseUrl}/api/fireadmin`,
+    data: { action, email },
+  }).then((res) => {
+    return res?.data;
+  }); // close return
+}; // close fxn
+
+// HANDLE IS SUPER ADMIN
+export const handleIsSuperAdmin = (username) => {
+  // If empty args, return
+  if (!username) return;
+  return username?.toLowerCase() === "klincoder";
+}; // close fxn
+
+// HANDLE HASH VAL
+export const handleHashVal = async (val, action, hashedVal) => {
+  // If empty args, return
+  if (!val || !action) return null;
+  return await axios({
+    method: "POST",
+    url: `${baseUrl}/api/hash-val`,
+    data: { val, action, hashedVal },
+  }).then((res) => {
+    return res?.data;
+  }); // close return
 }; // close fxn

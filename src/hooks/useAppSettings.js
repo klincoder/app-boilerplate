@@ -2,47 +2,50 @@
 import { useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { useNavigation } from "@react-navigation/native";
-import dayjs from "dayjs";
-import dayjsUTC from "dayjs/plugin/utc";
-dayjs.extend(dayjsUTC);
 
 // Import custom files
-import { handleDayJsFormat } from "../config/functions";
 import { appSettingsAtom, networkDataAtom } from "../recoil/atoms";
+import { handleDayJsFormat, handleGetInfoById } from "../config/functions";
 
 // Component
 const useAppSettings = () => {
-  // Define isMounted
-  const isMounted = useRef();
-
   // Define state
   const appSettings = useRecoilValue(appSettingsAtom);
   const networkState = useRecoilValue(networkDataAtom);
 
+  // Define ref
+  const isMounted = useRef(false);
+
   // Define navigaion
   const navigation = useNavigation();
 
-  // Define todays date
-  const todaysDate = dayjs().utc().format();
+  // Define settings
+  const general = handleGetInfoById(appSettings, "general")?.data;
+  const links = handleGetInfoById(appSettings, "links")?.data;
+  const bank = handleGetInfoById(appSettings, "bank")?.data;
+  const slides = handleGetInfoById(appSettings, "slides")?.data;
+
+  // Define variables
+  const todaysDate = handleDayJsFormat();
   const todaysDate1 = handleDayJsFormat(todaysDate, 1);
   const todaysDate2 = handleDayJsFormat(todaysDate, 2);
-
-  // Define site info
   const siteInfo = {
-    logo: appSettings?.app_logo,
-    name: appSettings?.app_name,
-    email: appSettings?.support_email,
-    phone: appSettings?.support_phone,
-    noReply: appSettings?.support_email_reply,
-    copyrightName: appSettings?.copyright_name,
-    adminName: appSettings?.admin_name,
-    adminEmail: appSettings?.admin_email,
-    bank: appSettings?.bank_info,
-    workingHours: appSettings?.working_hours,
-    location: appSettings?.location,
+    logo: general?.app_logo, // General
+    name: general?.app_name,
+    email: general?.support_email,
+    phone: general?.support_phone,
+    noReply: general?.support_email_reply,
+    copyrightName: general?.copyright_name,
+    adminName: general?.admin_name,
+    adminEmail: general?.admin_email,
+    workingHours: general?.working_hours,
+    location: general?.location,
+    android: links?.android, // Links
+    ios: links?.ios,
+    github: links?.github,
+    instagram: links?.instagram,
+    tiktok: links?.tiktok,
   };
-
-  // Define network info
   const networkInfo = {
     bssID: networkState?.details?.bssid,
     frequency: networkState?.details?.frequency,

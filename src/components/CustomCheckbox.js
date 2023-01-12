@@ -12,13 +12,13 @@ import { handleItemIsInArr, handleItemIsInObjArr } from "../config/functions";
 
 // Component
 const CustomCheckbox = ({
+  isObjArr,
   label,
   value,
   data,
   onPress,
   errMsg,
   helperText,
-  isObjArr,
   ...rest
 }) => {
   // Debug
@@ -50,7 +50,7 @@ const CustomCheckbox = ({
           : data?.map((item, index) => (
               <CustomChip
                 key={`${label}${index + 1}`}
-                title={item}
+                title={item || "Title"}
                 isSolid={handleItemIsInArr(value, item)}
                 onPress={() => onPress(item)}
                 styleContainer={tw`m-1`}

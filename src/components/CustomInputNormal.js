@@ -48,6 +48,12 @@ const CustomInputNormal = forwardRef(
         containerStyle={[tw`-mb-3`, styleContainer]}
         errorStyle={(errMsg || helperText) && tw`mb-6`}
         inputStyle={[twStyles?.fontRegular]}
+        leftIconContainerStyle={tw`pr-3`}
+        inputContainerStyle={[
+          styleInputContainer,
+          tw`px-2 border rounded-lg`,
+          errMsg && tw`border-[${appColors?.danger}]`,
+        ]}
         label={
           label && (
             <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>
@@ -55,11 +61,6 @@ const CustomInputNormal = forwardRef(
             </CustomText>
           )
         }
-        inputContainerStyle={[
-          styleInputContainer,
-          tw`px-2 border rounded-lg`,
-          errMsg && tw`border-[${appColors?.danger}]`,
-        ]}
         errorMessage={
           <>
             <CustomHelperText visible={helperText} title={helperText} />{" "}

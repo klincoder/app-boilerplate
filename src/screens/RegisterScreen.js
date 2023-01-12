@@ -21,13 +21,15 @@ const RegisterScreen = () => {
   // Return component
   return (
     <CustomSafeView statusBg={appColors?.primary}>
-      {/** MAIN CONTAINER */}
+      {/** SECTION */}
       <View style={tw`flex-1 bg-[${appColors?.primary}]`}>
         {/** COL 1 - TITLE */}
         <AuthHeader title="Register" />
 
         {/** COL 2 - FORM */}
-        <View style={tw`flex-1 p-5 rounded-t-3xl bg-[${appColors?.white}]`}>
+        <View
+          style={tw`flex-1 px-3 py-5 rounded-t-3xl bg-[${appColors?.white}]`}
+        >
           <FormRegister />
         </View>
       </View>

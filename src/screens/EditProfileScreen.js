@@ -12,11 +12,11 @@ import useAuthState from "../hooks/useAuthState";
 
 // Component
 const EditProfileScreen = () => {
-  // Define auth state
-  const { user } = useAuthState();
-
   // Define app settings
   const { navigation, isMounted, todaysDate } = useAppSettings();
+
+  // Define auth state
+  const { user } = useAuthState();
 
   // Debug
   //console.log("Debug editProfileScreen: ",);
@@ -45,7 +45,7 @@ const EditProfileScreen = () => {
   // Return component
   return (
     <CustomSafeView style={tw`px-4 pt-3`}>
-      {/** MAIN CONTAINER */}
+      {/** SECTION */}
       <View>
         {/** Form */}
         <FormEditProfile />

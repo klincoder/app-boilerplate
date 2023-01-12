@@ -5,7 +5,7 @@ import tw from "twrnc";
 
 // Import custom files
 import CustomSafeView from "../components/CustomSafeView";
-import NoResultMsg from "../components/NoResultMsg";
+import CustomAlertMsg from "../components/CustomAlertMsg";
 import { appColors, appFonts } from "../config/data";
 
 // Component
@@ -13,9 +13,10 @@ const NoInternetScreen = () => {
   // Return component
   return (
     <CustomSafeView>
-      {/** No result msg */}
-      <NoResultMsg
+      {/** Alert msg */}
+      <CustomAlertMsg
         title="No Internet Connection"
+        description="Please connect to a wifi or cellular data network to continue."
         iconType="materialIcons"
         iconName="wifi-off"
       />

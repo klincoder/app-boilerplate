@@ -58,7 +58,7 @@ const CustomTimePicker = ({
     <View style={[tw`mb-3`, styleContainer]}>
       {/** Label */}
       {label && (
-        <CustomText style={[tw`mb-1 mx-3`, { fontFamily: appFonts?.medium }]}>
+        <CustomText style={[tw`mb-1 mx-1`, { fontFamily: appFonts?.medium }]}>
           {label}
         </CustomText>
       )}
@@ -71,7 +71,7 @@ const CustomTimePicker = ({
         onPress={handleShowTime}
         leftIconType={leftIconType}
         leftIconName={leftIconName || "clockcircleo"}
-        styleContainer={tw`mx-3 border`}
+        styleContainer={tw`mx-1 border`}
       />
 
       {/** MODAL */}

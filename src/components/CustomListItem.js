@@ -22,6 +22,7 @@ const CustomListItem = ({
   hideDivider,
   isSelected,
   styleContainer,
+  styleLeftImage,
   ...rest
 }) => {
   // Define variables
@@ -48,7 +49,7 @@ const CustomListItem = ({
         <CustomImage
           isLink
           image={leftImage}
-          style={tw`w-10 h-10 rounded-full`}
+          style={styleLeftImage || tw`w-5 h-5 rounded-full`}
         />
       )}
 

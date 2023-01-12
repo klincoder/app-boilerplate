@@ -6,11 +6,15 @@ import tw from "twrnc";
 // Import custom files
 import CustomText from "./CustomText";
 import useAppSettings from "../hooks/useAppSettings";
+import useAuthState from "../hooks/useAuthState";
 
 // Component
 const BlankComponent = () => {
   // Define app settings
   const { navigation } = useAppSettings();
+
+  // Define state
+  const { user } = useAuthState();
 
   // Debug
   //console.log("Debug blankComponent: ",)

@@ -55,7 +55,13 @@ const CustomInput = ({
           placeholder={placeholder || `Enter ${label?.toLowerCase()}`}
           containerStyle={[tw`-mb-3`, styleContainer]}
           errorStyle={(error?.message || helperText) && tw`mb-6`}
-          inputStyle={[twStyles?.fontRegular]}
+          inputStyle={[tw`w-full`, twStyles?.fontRegular]}
+          leftIconContainerStyle={tw`pr-3`}
+          inputContainerStyle={[
+            styleInputContainer,
+            tw`px-2 border rounded-lg`,
+            error && tw`border-[${appColors?.danger}]`,
+          ]}
           label={
             label && (
               <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>
@@ -63,11 +69,6 @@ const CustomInput = ({
               </CustomText>
             )
           }
-          inputContainerStyle={[
-            styleInputContainer,
-            tw`px-2 border rounded-lg`,
-            error && tw`border-[${appColors?.danger}]`,
-          ]}
           errorMessage={
             <>
               <CustomHelperText visible={helperText} title={helperText} />{" "}

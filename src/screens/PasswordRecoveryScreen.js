@@ -21,7 +21,7 @@ const PasswordRecoveryScreen = () => {
   // Return component
   return (
     <CustomSafeView statusBg={appColors?.primary}>
-      {/** MAIN CONTAINER */}
+      {/** SECTION */}
       <View style={tw`flex-1 bg-[${appColors?.primary}]`}>
         {/** COL 1 - TITLE */}
         <AuthHeader title="Recovery" />

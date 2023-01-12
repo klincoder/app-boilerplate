@@ -5,10 +5,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import tw from "twrnc";
 
 // Import custom files
-import HomeScreen from "../screens/HomeScreen";
-import AccountNavigator from "./AccountNavigator";
+import twStyles from "../config/twStyles";
 import CustomIcon from "../components/CustomIcon";
 import CustomText from "../components/CustomText";
+import HomeScreen from "../screens/HomeScreen";
+import SearchScreen from "./SearchScreen";
+import CartScreen from "./CartScreen";
+import SavedScreen from "./SavedScreen";
+import AccountScreen from "./AccountScreen";
 import { appColors, appFonts } from "../config/data";
 
 // Create bottom nav object
@@ -23,15 +27,39 @@ const HomeNavigator = () => {
       component: HomeScreen,
       iconType: "ionIcons",
       iconName: "home-outline",
-      activeIcon: "home",
+      iconNameActive: "home",
       label: "Home",
     },
     {
-      name: "AccountNavigator",
-      component: AccountNavigator,
+      name: "SearchScreen",
+      component: SearchScreen,
+      iconType: "feather",
+      iconName: "search",
+      iconNameActive: "search",
+      label: "Search",
+    },
+    {
+      name: "CartScreen",
+      component: CartScreen,
+      iconType: "materialCommunityIcons",
+      iconName: "cart-outline",
+      iconNameActive: "cart",
+      label: "Cart",
+    },
+    {
+      name: "SavedScreen",
+      component: SavedScreen,
+      iconType: "ionIcons",
+      iconName: "bookmark-outline",
+      iconNameActive: "bookmark",
+      label: "Saved",
+    },
+    {
+      name: "AccountScreen",
+      component: AccountScreen,
       iconType: "fontAwesome5",
       iconName: "user",
-      activeIcon: "user-alt",
+      iconNameActive: "user-alt",
       label: "Account",
     },
   ];
@@ -42,8 +70,10 @@ const HomeNavigator = () => {
     <Tab.Navigator
       initialRouteName="HomeScreen"
       screenOptions={{
-        headerShown: false,
-        tabBarStyle: tw`pb-1`,
+        headerShown: false, // Header
+        headerTitleStyle: { color: "black", fontFamily: appFonts?.medium },
+        tabBarStyle: tw`pb-1`, // Tab
+        tabBarShowLabel: false,
       }}
     >
       {/** Loop tabScreenList */}
@@ -57,7 +87,7 @@ const HomeNavigator = () => {
               <CustomText
                 style={[
                   tw`text-xs`,
-                  { fontFamily: appFonts?.regular },
+                  twStyles?.fontRegular,
                   focused
                     ? tw`text-[${appColors?.primary}]`
                     : `text-[${color}]`,
@@ -70,7 +100,7 @@ const HomeNavigator = () => {
               <CustomIcon
                 size={size}
                 type={item?.iconType}
-                name={focused ? item?.activeIcon : item?.iconName}
+                name={focused ? item?.iconNameActive : item?.iconName}
                 color={focused ? appColors?.primary : color}
                 style={tw`mt-1`}
               />

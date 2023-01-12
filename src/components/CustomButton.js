@@ -82,13 +82,15 @@ const CustomButton = ({
 
       {/** isText */}
       {isText && (
-        <TouchableOpacity
+        <>
+          {/* <TouchableOpacity
           {...rest}
           activeOpacity={0.8}
           onPress={onPress}
           style={styleTextButton}
-        >
+        > */}
           <CustomText
+            onPress={onPress}
             style={[
               tw`text-base underline`,
               twStyles?.fontBold,
@@ -97,7 +99,8 @@ const CustomButton = ({
           >
             {title || "Text Button"}
           </CustomText>
-        </TouchableOpacity>
+          {/* </TouchableOpacity> */}
+        </>
       )}
     </>
   ); // close return component

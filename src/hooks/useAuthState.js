@@ -1,23 +1,21 @@
 // Import resources
-import React from "react";
+import { useMemo } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 // Import custom files
 import routes from "../screens/routes";
 import useAppSettings from "./useAppSettings";
-import useCustomToastState from "./useCustomToastState";
+import useAlertState from "./useAlertState";
 import { allUsersAtom, userAtom } from "../recoil/atoms";
-import { alertMsg, appImages, baseUrl, currSymbol } from "../config/data";
+import { alertMsg, apiRoutes, appImages, baseUrl } from "../config/data";
 import {
-  handleFormatNumber,
-  handleIsPositiveNum,
+  handleFireAdminAction,
+  handleSendEmail,
   handleSliceString,
 } from "../config/functions";
 import {
   createUserWithEmailAndPassword,
   fireAuth,
-  sendEmailVerification,
-  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -26,80 +24,62 @@ import {
 // Component
 const useAuthState = () => {
   // Define state
-  const [user, setUser] = useRecoilState(userAtom);
+  const [currSession, setCurrSession] = useRecoilState(userAtom);
   const allUsers = useRecoilValue(allUsersAtom);
 
   // Define app settings
   const { navigation } = useAppSettings();
 
-  // Define toast
-  const toast = useCustomToastState();
+  // Define alert
+  const alert = useAlertState();
 
   // Define variables
-  const userID = user?.id;
-  const username = user?.username;
-  const userFullName = user?.fullName;
-  const userEmail = user?.email;
-  const userPhone = user?.phone;
-  const usernameFormat = handleSliceString(username, 0, 12);
-  const userAvatar = user?.avatar || appImages?.avatar;
-  const userPushStatus = user?.pushStatus;
-  const userWalletBal = user?.walletBal;
-  const userWalletBalFormat = handleFormatNumber(userWalletBal);
-  const isPositiveWallet = handleIsPositiveNum(userWalletBal);
-  const walletBalFormat = `${currSymbol?.ng}${
-    userWalletBal > 0 ? userWalletBalFormat : "0.00"
-  }`;
-  const userEarningsBal = 0;
-  const userEarningsBalFormat = handleFormatNumber(userEarningsBal);
-  const earningsBalFormat = `${currSymbol?.ng}${
-    userEarningsBal > 0 ? userEarningsBalFormat : "0.00"
-  }`;
-  const actionCodeSettings = {
-    url: baseUrl,
+  const userID = currSession?.id;
+  const user = {
+    id: currSession?.id,
+    name: currSession?.fullName,
+    username: currSession?.username,
+    email: currSession?.email,
+    phone: currSession?.phone,
+    avatar: currSession?.avatar || appImages?.avatar,
+    pushStatus: currSession?.pushStatus,
+    usernameFormat: handleSliceString(currSession?.username, 0, 12),
   };
 
   // Debug
-  //console.log("Debug useAuthState: ", );
+  //console.log("Debug useAuthState: ", allUsers?.length);
 
   // FUNCTIONS
-  // HANDLE EMAIL EXIST
-  const handleEmailExist = (emailAddr) => {
+  // HANDLE USER EXIST
+  const handleUserExist = (val) => {
     // If empty args, return
-    if (!emailAddr) return;
-    // Filter emailAddr
-    const filterEmailAddr = allUsers?.filter(
-      (item) => item?.emailAddress === emailAddr
+    if (!val) return;
+    // Filter users
+    const filterData = allUsers?.filter(
+      (i) => i?.email_address === val || i?.username === val
     );
-    const data = filterEmailAddr[0];
-    const isValid = filterEmailAddr?.length > 0;
+    const isValid = filterData?.length > 0;
+    const data = filterData?.[0];
     return { isValid, data };
   }; // close fxn
 
-  // HANDLE USERNAME EXIST
-  const handleUsernameExist = (username) => {
-    // If empty args, return
-    if (!username) return;
-    // Filter username
-    const filterUsername = allUsers?.filter(
-      (item) => item?.username === username
-    );
-    const data = filterUsername[0];
-    const isValid = filterUsername?.length > 0;
-    return { isValid, data };
-  }; // close fxn
-
-  // HANDLE REGISTER
-  const handleRegister = async (username, email, pass) => {
+  // HANDLE SEND VERIFY EMAIL LINK
+  const handleSendVerifyEmailLink = async (username, email) => {
     // If empty arg, return
-    if (!username || !email || !pass) return;
-    return await createUserWithEmailAndPassword(fireAuth, email, pass).then(
-      async (res) => {
-        // Send verification link
-        await sendEmailVerification(res.user, actionCodeSettings);
-        await updateProfile(res.user, { displayName: username });
-      }
-    ); // close return
+    if (!username || !email) return;
+    const verifyLink = await handleFireAdminAction(email, "verify-email");
+    const emailMsg = { toName: username, toEmail: email, link: verifyLink };
+    return await handleSendEmail(emailMsg, apiRoutes?.verifyEmail);
+  }; // close fxn
+
+  // HANDLE SEND PASSWORD RESET LINK
+  const handleSendPasswordResetLink = async (username, email) => {
+    // If empty args, return
+    if (!username || !email) return;
+    // Send password reset email
+    const verifyLink = await handleFireAdminAction(email, "pass-reset");
+    const emailMsg = { toName: username, toEmail: email, link: verifyLink };
+    return await handleSendEmail(emailMsg, apiRoutes?.passRecovery);
   }; // close fxn
 
   // HANDLE LOGIN
@@ -109,74 +89,40 @@ const useAuthState = () => {
     return await signInWithEmailAndPassword(fireAuth, email, pass);
   }; // close fxn
 
+  // HANDLE REGISTER
+  const handleRegister = async (username, email, pass) => {
+    // If empty arg, return
+    if (!username || !email || !pass) return;
+    return await createUserWithEmailAndPassword(fireAuth, email, pass).then(
+      async (res) => {
+        // Send verify pass email
+        await handleSendVerifyEmailLink(username, email);
+        await updateProfile(res.user, { displayName: username });
+      }
+    ); // close return
+  }; // close fxn
+
   // HANDLE LOGOUT
   const handleLogout = async () => {
     // Return await response
     return await signOut(fireAuth).then(() => {
-      // Set user
-      setUser(null);
-      toast.success(alertMsg?.logoutSucc);
+      setCurrSession(null);
+      alert.success(alertMsg?.logoutSucc);
       navigation.replace(routes.ONBOARDING);
     }); // close return
   }; // close fxn
 
-  // HANDLE SEND EMAIL VERIFY LINK
-  const handleSendEmailVerifyLink = async (currUser) => {
-    // If empty args, return
-    if (!currUser) return;
-    return await sendEmailVerification(currUser, actionCodeSettings);
-  }; // close fxn
-
-  // HANDLE SEND PASSWORD RESET LINK
-  const handleSendPassResetLink = async (currUser, emailAddr) => {
-    // If empty args, return
-    if (!currUser || !emailAddr) return;
-    return await sendPasswordResetEmail(
-      currUser,
-      emailAddr,
-      actionCodeSettings
-    ); // close return
-  }; // close fxn
-
-  // HANDLE IS SUPER ADMIN
-  const handleIsSuperAdmin = (username) => {
-    // If empty args, return
-    if (!username) return;
-    return username?.toLowerCase() === "klincoder";
-  }; // close fxn
-
-  // HANDLE VERIFY WALLET TRANSACTION
-  const handleVerifyWalletTranx = (amt) => {
-    // If empty args, return
-    if (typeof amt !== "number") return;
-    const isValidAmt = userWalletBal > amt ? true : false;
-    const result = isPositiveWallet && isValidAmt ? true : false;
-    return result;
-  }; // close fxn
-
   // Return component
   return {
+    user,
     userID,
-    username,
-    userFullName,
-    userEmail,
-    userPhone,
-    usernameFormat,
-    userAvatar,
-    userPushStatus,
-    userWalletBal,
-    walletBalFormat,
-    earningsBalFormat,
-    setUser,
-    handleRegister,
+    setCurrSession,
+    handleUserExist,
+    handleSendVerifyEmailLink,
+    handleSendPasswordResetLink,
     handleLogin,
+    handleRegister,
     handleLogout,
-    handleEmailExist,
-    handleUsernameExist,
-    handleIsSuperAdmin,
-    handleSendEmailVerifyLink,
-    handleSendPassResetLink,
-    handleVerifyWalletTranx,
   }; // close return
 }; // close component
 

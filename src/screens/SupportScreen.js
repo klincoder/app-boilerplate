@@ -10,7 +10,7 @@ import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
 
 // Component
-const NotificationsScreen = () => {
+const SupportScreen = () => {
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
 
@@ -18,22 +18,24 @@ const NotificationsScreen = () => {
   const { user } = useAuthState();
 
   // Debug
-  //console.log("Debug notificationsScreen: ",);
+  //console.log("Debug supportScreen: ",);
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
   useLayoutEffect(() => {
     // On mount
     isMounted.current = true;
+
     // Set screen options
     navigation.setOptions({
       headerTitleAlign: "left",
       headerRight: () => (
-        <View style={tw`flex-1 flex-row items-center pr-5`}>
+        <View style={tw`flex flex-row pr-5`}>
           <CustomText>Right Text</CustomText>
         </View>
       ), // close header right
     }); // close navigation
+
     // Clean up
     return () => {
       isMounted.current = false;
@@ -45,11 +47,11 @@ const NotificationsScreen = () => {
     <CustomSafeView style={tw`px-4`}>
       {/** MAIN CONTAINER */}
       <View style={tw`flex-1 items-center justify-center`}>
-        <CustomText>NotificationsScreen</CustomText>
+        <CustomText>SupportScreen</CustomText>
       </View>
     </CustomSafeView>
   ); // close return
 }; // close component
 
 // Export
-export default NotificationsScreen;
+export default SupportScreen;

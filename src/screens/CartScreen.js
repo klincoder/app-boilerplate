@@ -10,7 +10,7 @@ import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
 
 // Component
-const NotificationsScreen = () => {
+const CartScreen = () => {
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
 
@@ -18,22 +18,26 @@ const NotificationsScreen = () => {
   const { user } = useAuthState();
 
   // Debug
-  //console.log("Debug notificationsScreen: ",);
+  //console.log("Debug CartScreen: ",);
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
   useLayoutEffect(() => {
     // On mount
     isMounted.current = true;
+
     // Set screen options
     navigation.setOptions({
       headerTitleAlign: "left",
+      headerShown: true,
+      headerTitle: "Cart",
       headerRight: () => (
-        <View style={tw`flex-1 flex-row items-center pr-5`}>
+        <View style={tw`flex flex-row pr-5`}>
           <CustomText>Right Text</CustomText>
         </View>
       ), // close header right
     }); // close navigation
+
     // Clean up
     return () => {
       isMounted.current = false;
@@ -42,14 +46,14 @@ const NotificationsScreen = () => {
 
   // Return component
   return (
-    <CustomSafeView style={tw`px-4`}>
+    <CustomSafeView style={tw`px-3`}>
       {/** MAIN CONTAINER */}
       <View style={tw`flex-1 items-center justify-center`}>
-        <CustomText>NotificationsScreen</CustomText>
+        <CustomText>CartScreen</CustomText>
       </View>
     </CustomSafeView>
   ); // close return
 }; // close component
 
 // Export
-export default NotificationsScreen;
+export default CartScreen;

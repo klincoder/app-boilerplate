@@ -12,6 +12,8 @@ import PasswordRecoveryScreen from "../screens/PasswordRecoveryScreen";
 import HomeNavigator from "../screens/HomeNavigator";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationsScreen from "./NotificationsScreen";
+import SupportScreen from "./SupportScreen";
+import SettingsScreen from "./SettingsScreen";
 
 // Create stack navigator object
 const Stack = createStackNavigator();
@@ -34,6 +36,16 @@ const AppNavigator = ({ userID }) => {
       name: "NotificationsScreen",
       component: NotificationsScreen,
       options: { headerTitle: "Notifications" },
+    },
+    {
+      name: "SupportScreen",
+      component: SupportScreen,
+      options: { headerTitle: "Support" },
+    },
+    {
+      name: "SettingsScreen",
+      component: SettingsScreen,
+      options: { headerTitle: "Settings" },
     },
   ];
 

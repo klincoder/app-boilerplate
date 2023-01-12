@@ -22,7 +22,7 @@ const CustomHelperText = ({ title, visible, isError, styleText, ...rest }) => {
       visible={visible}
       style={[
         styleText,
-        tw`text-xs ml-4`,
+        tw`text-xs`,
         twStyles?.fontBold,
         isError
           ? tw`text-[${appColors?.danger}]`

@@ -1,4 +1,5 @@
 // Import resources
+import Constants from "expo-constants";
 import { Dimensions } from "react-native";
 import { createTheme } from "@rneui/themed";
 import tw from "twrnc";
@@ -6,12 +7,16 @@ import * as Application from "expo-application";
 
 // Import custom files
 import routes from "../screens/routes";
-import logoImage from "../assets/logo.png";
-import logoIconImage from "../assets/icon.png";
+import logo from "../assets/logo.png";
+import logoIcon from "../assets/icon.png";
+import visa from "../assets/images/visa.png";
+import mastercard from "../assets/images/mastercard.png";
+import verve from "../assets/images/verve.png";
+import mtnMomo from "../assets/images/mtn-momo.jpg";
+import bankTransfer from "../assets/images/bank-transfer.jpg";
 
 // BASE URL
-export const baseUrl = "https://klincoder.netlify.app";
-//https://klincoder.com
+export const baseUrl = "https://klincoder.com";
 
 // CURRENCY SYMBOL
 export const currSymbol = { ng: "₦", btc: "₿", usd: "$", gh: "₵" };
@@ -25,27 +30,42 @@ export const otpDefaultTimer = 59;
 // JAVASCRIPT DATE
 export const jsDate = new Date();
 
+// ACTION SETTINGS
+export const actionSettings = {
+  url: `${baseUrl}/login`,
+  // iOS: {
+  //   bundleId: "com.example.klincoder",
+  // },
+  // android: {
+  //   packageName: "com.example.klincoder",
+  //   installApp: true,
+  //   minimumVersion: "12",
+  // },
+  //handleCodeInApp: false,
+  //dynamicLinkDomain: 'custom.page.link'
+};
+
 // APP COLORS
 export const appColors = {
   primary: "#313bac",
   secondary: "#11143c",
-  accent: "#f9dc5c",
-  danger: "#ff5252",
+  accent: "#f9f871",
   success: "#198754",
-  error: "#dc3545",
+  danger: "#ff5252",
   info: "#0dcaf0",
-  warning: "#FFC107",
+  error: "#dc3545",
   white: "#ffffff",
   black: "#000000",
-  gray: "#808080",
-  lightPrimary: "#dd2622",
-  veryLightPrimary: "#e3514f",
-  lightSecondary: "#841715",
-  veryLightSecondary: "#9a1a18",
-  lightDanger: "#FF8080",
-  veryLightDanger: "#FFB3B3",
-  lightSuccess: "#24C278",
-  veryLightSuccess: "#68E3AA",
+  gray: "#888888",
+  warning: "#ffc107",
+  lightPrimary: "#6069d2", //"#4c57cd",
+  veryLightPrimary: "#afb4e9", //"#747cd8",
+  lightSecondary: "#1c2163", //"#222777",
+  veryLightSecondary: "#272e8b", //"#218ec4",
+  lightDanger: "#ff8080",
+  veryLightDanger: "#ffb3b3",
+  lightSuccess: "#24c278",
+  veryLightSuccess: "#68e3aa",
   lightGray: "#dddddd",
   veryLightGray: "#f4f4f4",
   lightBlack: "#333333",
@@ -61,8 +81,8 @@ export const appFonts = {
 
 // APP IMAGES
 export const appImages = {
-  logo: logoImage,
-  logoIcon: logoIconImage,
+  logo: logo,
+  logoIcon: logoIcon,
   general: "https://placehold.co/600x400.png",
   avatar:
     "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/avatar-default.png?alt=media&token=589b5b52-2bf3-42e1-994c-e89d1d203f9f",
@@ -71,7 +91,7 @@ export const appImages = {
   creditCard:
     "https://firebasestorage.googleapis.com/v0/b/bulkahia-dev.appspot.com/o/credit-card.png?alt=media&token=aa6bbc9b-37ee-413d-8150-649de975edef",
   onboarding:
-    "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/onboarding-1.png?alt=media&token=a6162886-5a5d-4ca3-81f4-b00b9a49ca31",
+    "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/app-onboarding-default.png?alt=media&token=c51ac96f-cdec-47a6-bc21-1a9b0c989fb2",
   location:
     "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/location.png?alt=media&token=805e5f4c-2a44-4bc9-95b9-096c392707ef",
   payment:
@@ -128,35 +148,49 @@ export const appRegex = {
 
 // ALERT MESSAGE
 export const alertMsg = {
-  generalErr: "Internal error. Please contact support 😔",
-  generalSucc: "Action successful 👍",
-  loginSucc: "Login successful 👍",
-  loginErr: "Invalid credentials 😔",
-  regSucc: "Registration successful 👍",
-  isRequired: "All fields are required 😔",
-  isValidUser: "User already exist 😔",
-  inValidUser: "User not found 😔",
-  otpSent: "Otp sent successfully 👍",
-  otpErr: "Invalid code 😔",
-  profileSucc: "Profile updated 👍",
-  passRecoverySucc: "Password recovery successful 👍",
-  logoutConfirm: "Confirm logout",
-  logoutSucc: "Logout successful 👍",
-  paymentSucc: "Payment successful 👍",
-  paymentErr: "Payment failed 😔",
-  emailExistErr: "Email address already exist 😔",
-  usernameExistErr: "Username not available 😔",
+  generalSucc: "Action successful 👍", // Success
   linkSentSucc: "We sent your verification link. Check your inbox or spam 👍",
+  otpSentSucc: "We sent your OTP code. Check your inbox or spam 👍",
+  loginSucc: "Login successful 👍",
+  registerSucc: "Account created. Login 👍",
+  passRecoverySucc: "Password recovery successful 👍",
+  passResetSucc: "Password reset successful. Login 👍",
+  logoutSucc: "Logout successful 👍",
+  verifyEmailSucc: "Email address verified 👍",
+  userExistSucc: "User already exist 👍",
+  paymentSucc: "Payment successful 👍",
+  logoutConfirm: "Are you sure you want to logout? 🤔",
+  generalErr: "internal error. Please contact support 😔", // Error
+  isRequiredAll: "All fields are required 😔",
+  inValidCred: "Invalid credentials 😔",
+  otpSentErr: "Failed to send OTP. Try again 😔",
+  otpVerifyErr: "Invalid code 😔",
+  authActionErr: "Authentication failed 😔",
+  userExistErr: "User not found 😔",
+  paymentErr: "Payment failed 😔",
+};
+
+// APP ENV VARIABLES
+export const appEnv = {
+  paystackDevPublic: Constants.manifest?.extra?.paystackDevPublic,
+  paystackDevSecret: Constants.manifest?.extra?.paystackDevSecret,
+  paystackProdPublic: Constants.manifest?.extra?.paystackProdPublic,
+  paystackProdSecret: Constants.manifest?.extra?.paystackProdSecret,
 };
 
 // API ROUTES
 export const apiRoutes = {
-  otp: "mailjet-otp",
-  welcome: "mailjet-welcome",
-  login: "mailjet-login",
-  newUser: "mailjet-new-user",
-  passChange: "mailjet-pass-change",
-  profileChange: "mailjet-profile-change",
+  otpEmail: { api: "mailjet-email", tempID: 4468134 },
+  verifyEmail: { api: "mailjet-email", tempID: 4469644 },
+  passRecovery: { api: "mailjet-email", tempID: 4470092 },
+  profileChange: { api: "mailjet-email", tempID: 4471756 },
+  welcome: { api: "mailjet-email", tempID: 4471793 },
+  login: { api: "mailjet-email", tempID: 4471814 },
+  newUser: { api: "mailjet-email", tempID: 4471824 },
+  contactForm: { api: "mailjet-email", tempID: 1 }, // Empty
+  newsletter: { api: "mailjet-email", tempID: 1 },
+  tranx: { api: "mailjet-email", tempID: 1 },
+  order: { api: "mailjet-email", tempID: 1 },
 };
 
 // GLOBAL SCREEN OPTIONS
@@ -185,37 +219,30 @@ export const screenInfo = {
 // ACCOUNT LIST
 export const accountList = [
   {
-    id: "123",
-    title: "Edit Profile",
-    leftIconType: "antDesign",
-    leftIconName: "edit",
-    slug: "edit-profile",
+    title: "Settings",
+    leftIconType: "materialCommunityIcons",
+    leftIconName: "cog-outline",
     isLink: true,
-    link: routes.EDIT_PROFILE,
+    link: routes.SETTINGS,
   },
   {
-    id: "456",
-    title: "Notifications",
-    leftIconType: "feather",
-    leftIconName: "bell",
-    slug: "notifications",
-    isLink: false,
-  },
-  {
-    id: "789",
-    title: "Customer Support",
+    title: "Contact Support",
     leftIconType: "fontAwesome",
     leftIconName: "support",
-    slug: "customer-support",
-    isLink: false,
+    isLink: true,
+    link: routes.SUPPORT,
   },
   {
-    id: "1011",
     title: `Version (${Application.nativeApplicationVersion})`,
+    slug: "app-version",
     leftIconType: "octIcons",
     leftIconName: "versions",
-    slug: "app-version",
-    isLink: false,
+  },
+  {
+    title: "Logout",
+    leftIconType: "materialIcons",
+    leftIconName: "logout",
+    isLogout: true,
   },
 ];
 
@@ -223,37 +250,22 @@ export const accountList = [
 export const paymentMethodList = [
   {
     id: "123",
-    title: "Pay on Pickup",
-    description: "1hr reservation limit",
-    image: appImages?.creditCard,
-    slug: "pay-on-delivery",
-  },
-  {
-    id: "456",
     title: "Pay Now",
     description: "Reserved unitl end date expires",
     image: appImages?.creditCard,
     slug: "pay-now",
+  },
+  {
+    id: "456",
+    title: "Pay on Pickup",
+    description: "1hr reservation limit",
+    image: appImages?.creditCard,
+    slug: "pay-on-delivery",
   },
 ];
 
 // GENDER LIST
 export const genderList = ["Male", "Female", "Prefer not to say"];
 
-// COURSE LIST
-export const courseList = [
-  "HTML",
-  "CSS",
-  "JavaScript",
-  "React",
-  "Nextjs",
-  "React Native",
-  "Firebase",
-  // { id: "123", title: "HTML", slug: "html" },
-  // { id: "456", title: "CSS", slug: "css" },
-  // { id: "789", title: "JavaScript", slug: "js" },
-  // { id: "1011", title: "React", slug: "react" },
-  // { id: "1213", title: "Nextjs", slug: "nextjs" },
-  // { id: "1415", title: "React Native", slug: "react-native" },
-  // { id: "1617", title: "Firebase", slug: "firebase" },
-];
+// PAYMENT LOGOS
+export const paymentLogos = [visa, mastercard, verve, mtnMomo, bankTransfer];
