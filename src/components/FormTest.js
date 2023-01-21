@@ -19,10 +19,10 @@ import CustomSelect from "./CustomSelect";
 import CustomListItem from "./CustomListItem";
 import CustomTimePicker from "./CustomTimePicker";
 import CustomCheckbox from "./CustomCheckbox";
-import { genderList, paymentMethodList } from "../config/data";
-import { handleAddItemToArr } from "../config/functions";
 import CustomAlertModal from "./CustomAlertModal";
 import useAlertState from "../hooks/useAlertState";
+import { genderList, paymentMethodList } from "../config/data";
+import { handleAddItemToArr } from "../config/functions";
 
 // Component
 const FormTest = () => {
@@ -35,7 +35,7 @@ const FormTest = () => {
   // Define ref
   const paymentMethodRef = useRef(null);
 
-  // Define useMemo
+  // Define snaps
   const snaps = useMemo(
     () => ({
       full: ["75%"],

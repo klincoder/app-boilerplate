@@ -4,7 +4,8 @@ import { View } from "react-native";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import NetInfo from "@react-native-community/netinfo";
 import * as SplashScreen from "expo-splash-screen";
-import * as Font from "expo-font";
+import { useFonts } from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Import custom files
 import AppNavigator from "../screens/AppNavigator";
@@ -16,6 +17,7 @@ import {
   appOnboardingAtom,
   networkDataAtom,
   userAtom,
+  userSavedAtom,
 } from "../recoil/atoms";
 import {
   fireDB,
@@ -26,41 +28,39 @@ import {
   fireAuth,
   onAuthStateChanged,
   onSnapshot,
+  handleGetDoc,
+  handleGetDocs,
+  query,
+  where,
+  orderBy,
 } from "../config/firebase";
 
 // Ccomponent
 const AppWrapper = () => {
-  // Define user
-  const [currSession, setCurrSession] = useRecoilState(userAtom);
-  const userID = currSession?.id;
-
-  // Define state
-  const [appIsReady, setAppIsReady] = useState(false);
-  const [internetConn, setInternetConn] = useRecoilState(internetConnAtom);
-  const setNetworkDataAtom = useSetRecoilState(networkDataAtom);
-  const setAppOnboardingAtom = useSetRecoilState(appOnboardingAtom);
-
   // Define app settings
   const { isMounted } = useAppSettings();
 
-  // Debug
-  //console.log("Debug appWrapper: ", userID);
+  // Define auth
+  const [user, setUser] = useRecoilState(userAtom);
+  const userID = user?.id;
 
-  // FUNCTIONS
-  // HANDLE GET CUSTOM FONTS
-  const handleGetCustomFonts = async () => {
-    await Font.loadAsync({
-      // Load from a static resource
-      "Montserrat-Regular": require("../assets/fonts/Montserrat-Regular.ttf"),
-      "Montserrat-Medium": require("../assets/fonts/Montserrat-Medium.ttf"),
-      "Montserrat-Light": require("../assets/fonts/Montserrat-Light.ttf"),
-      "Montserrat-Thin": require("../assets/fonts/Montserrat-Thin.ttf"),
-      "Lato-Regular": require("../assets/fonts/Lato-Regular.ttf"),
-      "Lato-Bold": require("../assets/fonts/Lato-Bold.ttf"),
-      "Lato-Light": require("../assets/fonts/Lato-Light.ttf"),
-      "Lato-Thin": require("../assets/fonts/Lato-Thin.ttf"),
-    }); // close loadSync
-  }; // close fxn
+  // Define fonts
+  const [fontsLoaded] = useFonts({
+    "Montserrat-Regular": require("../assets/fonts/Montserrat-Regular.ttf"),
+    "Montserrat-Medium": require("../assets/fonts/Montserrat-Medium.ttf"),
+    "Montserrat-Light": require("../assets/fonts/Montserrat-Light.ttf"),
+    "Montserrat-Thin": require("../assets/fonts/Montserrat-Thin.ttf"),
+  });
+
+  // Define state
+  const [appIsReady, setAppIsReady] = useState(false); // Normal
+  const [internetConn, setInternetConn] = useRecoilState(internetConnAtom); // Atoms
+  const setNetworkDataAtom = useSetRecoilState(networkDataAtom);
+  const setAppOnboardingAtom = useSetRecoilState(appOnboardingAtom);
+  const setUserSavedAtom = useSetRecoilState(userSavedAtom);
+
+  // Debug
+  //console.log("Debug appWrapperTOP: ",);
 
   // SIDE EFFECTS
   // LISTEN TO AUTH STATE
@@ -86,16 +86,16 @@ const AppWrapper = () => {
             pushStatus: dbUser?.push_status,
           };
           // Set user
-          setCurrSession(currUserObj);
+          setUser(currUserObj);
         });
       } else {
-        setCurrSession(null);
+        setUser(null);
         //console.log("Debug appWrapper 1: ", currUser);
       } // close if
     }); // close unsubscribe
     // Clean up
     return () => unsubscribe();
-  }, [userID, setCurrSession]);
+  }, [userID, setUser]);
 
   // SIDE EFFECTS
   // LISTEN TO NETWORK STATUS
@@ -124,19 +124,27 @@ const AppWrapper = () => {
       try {
         // Keep the splash screen visible while we fetch resources
         await SplashScreen.preventAutoHideAsync();
-        // GET CUSTOM FONTS
-        await handleGetCustomFonts();
-        // GET APP ONBOARDING SLIDES
-        const appOnboardingRef = doc(fireDB, "app_settings", "slides");
-        const appOnboardingSnap = await getDoc(appOnboardingRef);
-        const appOnboardingData = appOnboardingSnap.exists()
-          ? appOnboardingSnap.data()
-          : null;
-        setAppOnboardingAtom(appOnboardingData);
+
+        // GET DATA
+        // Get slides
+        const slidesRef = doc(fireDB, "app_settings", "slides");
+        const slidesData = await handleGetDoc(slidesRef);
+        setAppOnboardingAtom(slidesData?.app_onboarding);
+
+        // IF USERID
+        if (userID) {
+          // Get user saved
+          const userSavedRef = query(
+            collection(fireDB, "users", userID, "saved"),
+            orderBy("date_created", "desc")
+          );
+          const userSavedData = await handleGetDocs(userSavedRef);
+          setUserSavedAtom(userSavedData);
+        } // close if
       } catch (err) {
         //console.log("Debug appWrapper: ", err.message);
       } finally {
-        // Tell the application to render
+        // Set appIsReady
         setAppIsReady(true);
       } // close try catch
     })(); // close fxn
@@ -144,17 +152,17 @@ const AppWrapper = () => {
     return () => {
       isMounted.current = false;
     };
-  }, [isMounted, internetConn, userID]);
+  }, [isMounted, internetConn]);
 
   // HIDE SPLASH SCREEN ON LAYOUT ROOT VIEW
   const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
+    if (appIsReady && fontsLoaded) {
       await SplashScreen.hideAsync();
     } // Clsoe if
-  }, [appIsReady]);
+  }, [appIsReady, fontsLoaded]);
 
   // If !appIsReady
-  if (!appIsReady) {
+  if (!appIsReady || !fontsLoaded) {
     return null;
   } // close if
 

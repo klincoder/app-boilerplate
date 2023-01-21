@@ -3,6 +3,7 @@ import React from "react";
 import { View } from "react-native";
 import tw from "twrnc";
 import { useRecoilValue } from "recoil";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Import custom files
 import routes from "./routes";
@@ -34,7 +35,7 @@ const OnboardingScreen = () => {
       <CustomBgImage isLink image={appImages?.onboarding}>
         {/** Overlay */}
         <View
-          style={tw`absolute top-0 right-0 bottom-0 left-0 bg-white opacity-95`}
+          style={tw`absolute top-0 right-0 bottom-0 left-0 bg-white opacity-99`}
         />
 
         {/** MAIN CONTAINER */}
@@ -49,24 +50,23 @@ const OnboardingScreen = () => {
           {/** COL 2 - HEADING */}
           <View style={tw`mb-6`}>
             <CustomText style={[tw`text-4xl`, twStyles?.fontBold]}>
-              A simple app boilerplate.
+              Shop gadgets at the best prices.
             </CustomText>
           </View>
 
           {/** COL 3 - BUTTONS */}
-          <View style={tw`mb-1`}>
-            {/** Login */}
+          <View style={tw`flex items-start mb-1`}>
             <CustomButton
               isNormal
-              title="Login"
-              onPress={() => navigation.navigate(routes.LOGIN)}
-              styleNormalButton={tw`w-40 mb-4`}
-            />
-            {/** Register */}
-            <CustomButton
-              isText
-              title="Not a member? Register"
-              onPress={() => navigation.navigate(routes.REGISTER)}
+              iconRight
+              title="Go Shopping"
+              icon={{ type: "ant-design", name: "arrowright", color: "white" }}
+              styleNormalButton={tw`py-4 px-6 mb-4`}
+              iconContainerStyle={tw`pl-3 text-white`}
+              onPress={async () => {
+                await AsyncStorage.setItem("show_onboarding", "false");
+                navigation.replace(routes.HOME_NAVIGATOR);
+              }}
             />
           </View>
         </View>

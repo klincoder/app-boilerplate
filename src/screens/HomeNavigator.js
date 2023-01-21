@@ -9,9 +9,6 @@ import twStyles from "../config/twStyles";
 import CustomIcon from "../components/CustomIcon";
 import CustomText from "../components/CustomText";
 import HomeScreen from "../screens/HomeScreen";
-import SearchScreen from "./SearchScreen";
-import CartScreen from "./CartScreen";
-import SavedScreen from "./SavedScreen";
 import AccountScreen from "./AccountScreen";
 import { appColors, appFonts } from "../config/data";
 
@@ -29,30 +26,6 @@ const HomeNavigator = () => {
       iconName: "home-outline",
       iconNameActive: "home",
       label: "Home",
-    },
-    {
-      name: "SearchScreen",
-      component: SearchScreen,
-      iconType: "feather",
-      iconName: "search",
-      iconNameActive: "search",
-      label: "Search",
-    },
-    {
-      name: "CartScreen",
-      component: CartScreen,
-      iconType: "materialCommunityIcons",
-      iconName: "cart-outline",
-      iconNameActive: "cart",
-      label: "Cart",
-    },
-    {
-      name: "SavedScreen",
-      component: SavedScreen,
-      iconType: "ionIcons",
-      iconName: "bookmark-outline",
-      iconNameActive: "bookmark",
-      label: "Saved",
     },
     {
       name: "AccountScreen",
@@ -95,16 +68,18 @@ const HomeNavigator = () => {
               >
                 {item?.label}
               </CustomText>
-            ),
+            ), // close label
             tabBarIcon: ({ focused, color, size }) => (
-              <CustomIcon
-                size={size}
-                type={item?.iconType}
-                name={focused ? item?.iconNameActive : item?.iconName}
-                color={focused ? appColors?.primary : color}
-                style={tw`mt-1`}
-              />
-            ),
+              <View>
+                <CustomIcon
+                  size={size}
+                  type={item?.iconType}
+                  name={focused ? item?.iconNameActive : item?.iconName}
+                  color={focused ? appColors?.primary : color}
+                  style={tw`mt-1`}
+                />
+              </View>
+            ), // close icon
           }}
         />
       ))}

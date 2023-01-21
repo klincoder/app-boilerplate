@@ -26,7 +26,7 @@ const CustomAlertMsg = ({
 }) => {
   // Define variables
   title = title || "No Result";
-  titleColor = titleColor || `text-[${appColors?.primary}]`;
+  titleColor = titleColor || appColors?.primary;
   iconType = iconType || "antDesign";
   iconName = iconName || "warning";
   iconSize = iconSize || 50;
@@ -54,7 +54,7 @@ const CustomAlertMsg = ({
         <CustomText
           style={[
             styleTitleText,
-            tw`text-xl text-center ${titleColor}`,
+            tw`text-xl text-center text-[${titleColor}]`,
             twStyles?.fontBold,
           ]}
         >

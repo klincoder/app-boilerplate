@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "AppBoilerplate",
+    "slug": "app-boilerplate",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "description": "A faster way to launch any app.",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": ""
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.appboilerplate.user",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.appboilerplate.user"
+    },
+    "web": {
+      "favicon": "./src/assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    }
+  }
+}

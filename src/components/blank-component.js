@@ -14,7 +14,7 @@ const BlankComponent = () => {
   const { navigation } = useAppSettings();
 
   // Define state
-  const { user } = useAuthState();
+  const { userID } = useAuthState();
 
   // Debug
   //console.log("Debug blankComponent: ",)

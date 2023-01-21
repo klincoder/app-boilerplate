@@ -3,10 +3,11 @@ import axios from "axios";
 import dayjs from "dayjs";
 import dayjsUTC from "dayjs/plugin/utc";
 dayjs.extend(dayjsUTC);
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Import custom files
 import { appColors, baseUrl } from "./data";
-import { doc, fireDB, getDoc } from "./firebase";
+import { doc, fireDB, getDoc, handleGetDocs } from "./firebase";
 
 // VARIABLES
 // FUNCTIONS
@@ -64,12 +65,10 @@ export const handleRandomString = (val) => {
   val = Number(val);
   // Switch
   switch (val) {
-    case 6:
-      return Math.random().toString(36).slice(2, 3);
     case 10:
-      return Math.random().toString(36).slice(2, 3);
+      return Math.random().toString(36).slice(2, 12);
     default:
-      return Math.random().toString(36).slice(2, 3);
+      return Math.random().toString(36).slice(2, 8);
   } // close switch
 }; // close fxn
 
@@ -305,7 +304,7 @@ export const handleFormSelectItems = (objArr) => {
 // HANDLE GENERATE TRANX REFERENCE
 export const handleGenTranxRef = (prefix) => {
   // Define variables
-  const prefixFinal = prefix || "BA";
+  const prefixFinal = prefix || "KC";
   const randomCode = handleRandomCode(6);
   const randomStr = handleRandomString(6);
   const result = prefixFinal + randomStr.toUpperCase() + randomCode;
@@ -581,4 +580,36 @@ export const handleHashVal = async (val, action, hashedVal) => {
   }).then((res) => {
     return res?.data;
   }); // close return
+}; // close fxn
+
+// HANDLE SUM CART SUBTOTAL
+export const handleSumCartSubTotal = (cartArr) => {
+  // If empty args, return
+  if (!cartArr) return 0;
+  let totalArr = [];
+  cartArr?.map((i) => {
+    totalArr?.push(i?.subTotal);
+  });
+  const sumValue = totalArr?.reduce((a, b) => {
+    return a + b;
+  }, 0);
+  return sumValue;
+}; // close fxn
+
+// HANDLE GET USER ADDRESS
+export const hanadleGetUserAddr = async (userID) => {
+  // Define result
+  let result;
+  // If userID
+  if (userID) {
+    // Get user address from db
+    const getAddrRef = collection(fireDB, "users", userID, "addresses");
+    result = await handleGetDocs(getAddrRef);
+  } else {
+    // Get address from async storage
+    const guestAddr = await AsyncStorage.getItem("guestAddr");
+    result = guestAddr !== null ? JSON.parse(guestAddr) : [];
+  } // close if
+  // console.log("Debug fxnGetUserAddr: ", result);
+  return result;
 }; // close fxn

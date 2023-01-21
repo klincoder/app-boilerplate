@@ -1,5 +1,4 @@
 // Import resources
-import Constants from "expo-constants";
 import { Dimensions } from "react-native";
 import { createTheme } from "@rneui/themed";
 import tw from "twrnc";
@@ -14,9 +13,19 @@ import mastercard from "../assets/images/mastercard.png";
 import verve from "../assets/images/verve.png";
 import mtnMomo from "../assets/images/mtn-momo.jpg";
 import bankTransfer from "../assets/images/bank-transfer.jpg";
+// Import custom files
+import {
+  PAYSTACK_DEV_PUBLIC_KEY, // Dev
+  PAYSTACK_DEV_SECRET_KEY,
+  PAYSTACK_PROD_PUBLIC_KEY, // Prod
+  PAYSTACK_PROD_SECRET_KEY,
+} from "@env";
 
 // BASE URL
-export const baseUrl = "https://klincoder.com";
+export const baseUrl = "https://klinstore.netlify.app";
+
+// IS PROD ENVIRONMENT
+export const isProdEnv = process.env.NODE_ENV === "production";
 
 // CURRENCY SYMBOL
 export const currSymbol = { ng: "₦", btc: "₿", usd: "$", gh: "₵" };
@@ -53,22 +62,22 @@ export const appColors = {
   success: "#198754",
   danger: "#ff5252",
   info: "#0dcaf0",
+  warning: "#ffc107",
   error: "#dc3545",
   white: "#ffffff",
   black: "#000000",
-  gray: "#888888",
-  warning: "#ffc107",
-  lightPrimary: "#6069d2", //"#4c57cd",
-  veryLightPrimary: "#afb4e9", //"#747cd8",
-  lightSecondary: "#1c2163", //"#222777",
-  veryLightSecondary: "#272e8b", //"#218ec4",
+  gray: "#9ca3af",
   lightDanger: "#ff8080",
   veryLightDanger: "#ffb3b3",
   lightSuccess: "#24c278",
   veryLightSuccess: "#68e3aa",
-  lightGray: "#dddddd",
+  lightGray: "#f3f4f6",
   veryLightGray: "#f4f4f4",
   lightBlack: "#333333",
+  lightPrimary: "#6069d2", // Light primary
+  veryLightPrimary: "#afb4e9",
+  lightSecondary: "#1c2163",
+  veryLightSecondary: "#272e8b",
 };
 
 // APP FONTS
@@ -131,9 +140,6 @@ export const appTheme = createTheme({
         fontFamily: appFonts?.medium,
       },
     },
-    // Button: {
-    //   titleStyle: { fontFamily: appFonts?.medium },
-    // },
   },
 });
 
@@ -159,8 +165,9 @@ export const alertMsg = {
   verifyEmailSucc: "Email address verified 👍",
   userExistSucc: "User already exist 👍",
   paymentSucc: "Payment successful 👍",
-  logoutConfirm: "Are you sure you want to logout? 🤔",
-  generalErr: "internal error. Please contact support 😔", // Error
+  cartSucc: "Added to cart 👍",
+  logoutConfirm: "Are you sure you want to logout? 🤔", // Error
+  generalErr: "internal error. Please contact support 😔",
   isRequiredAll: "All fields are required 😔",
   inValidCred: "Invalid credentials 😔",
   otpSentErr: "Failed to send OTP. Try again 😔",
@@ -168,14 +175,8 @@ export const alertMsg = {
   authActionErr: "Authentication failed 😔",
   userExistErr: "User not found 😔",
   paymentErr: "Payment failed 😔",
-};
-
-// APP ENV VARIABLES
-export const appEnv = {
-  paystackDevPublic: Constants.manifest?.extra?.paystackDevPublic,
-  paystackDevSecret: Constants.manifest?.extra?.paystackDevSecret,
-  paystackProdPublic: Constants.manifest?.extra?.paystackProdPublic,
-  paystackProdSecret: Constants.manifest?.extra?.paystackProdSecret,
+  loginErr: "Login Required 😔",
+  cartErr: "Removed from cart 😔",
 };
 
 // API ROUTES
@@ -211,6 +212,12 @@ export const screenInfo = {
   height: Dimensions.get("window").height,
   scale: Dimensions.get("window").scale,
   fontScale: Dimensions.get("window").fontScale,
+};
+
+// PAYSTACK CONFIG
+export const paystackConfig = {
+  public: isProdEnv ? PAYSTACK_PROD_PUBLIC_KEY : PAYSTACK_DEV_PUBLIC_KEY,
+  secret: isProdEnv ? PAYSTACK_PROD_SECRET_KEY : PAYSTACK_DEV_SECRET_KEY,
 };
 
 /*************

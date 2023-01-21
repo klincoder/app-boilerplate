@@ -43,6 +43,7 @@ const CustomSelect = ({
         styleContainer={tw`border`}
         leftIconName={leftIconName || "arrowright"}
         onPress={onPress}
+        dis
       />
 
       {/** Helper text */}

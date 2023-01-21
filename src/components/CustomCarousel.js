@@ -1,5 +1,5 @@
 // Import resources
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import tw from "twrnc";
 
@@ -9,15 +9,23 @@ import CustomIcon from "./CustomIcon";
 import { appColors, screenInfo } from "../config/data";
 
 // Component
-const CustomCarousel = ({ data, height, styleContainer }) => {
+const CustomCarousel = ({
+  data,
+  width,
+  height,
+  styleContainer,
+  styleImage,
+  ...rest
+}) => {
   // Define state
   const [activeSlide, setActiveSlide] = useState(0);
 
   // STYLES
   const styles = StyleSheet.create({
     wrap: {
-      width: screenInfo?.width,
+      width: screenInfo?.width * Number(width || 1),
       height: screenInfo?.height * Number(height || 0.25),
+      borderRadius: 10,
     },
   });
 
@@ -30,39 +38,47 @@ const CustomCarousel = ({ data, height, styleContainer }) => {
     // If event
     if (e) {
       const slide = Math.ceil(e.contentOffset.x / e.layoutMeasurement.width);
-      // If slide
       if (slide != activeSlide) {
-        // Set slide
         setActiveSlide(slide);
       } // close if
     } // close if
   }; // close fxn
 
+  // SIDE EFFECTS
+  // HANDLE AUTO SCROLL
+  // useEffect(() => {
+  //   if (currTimer === 0) return;
+  //   const interval = setInterval(() => handleCurrTimer(), 1000);
+  //   return () => clearInterval(interval);
+  // }, [handleCurrTimer]);
+
   // Return component
   return (
-    <View style={[styles.wrap, styleContainer]}>
-      {/** Scroll view */}
-      <ScrollView
-        horizontal
-        pagingEnabled
-        onScroll={({ nativeEvent }) => handleSlideOnChange(nativeEvent)}
-        showsHorizontalScrollIndicator={false}
-        style={styles.wrap}
-      >
-        {/** Loop data */}
-        {data?.map((item) => (
-          <CustomImage
-            isLink
-            key={item}
-            image={item}
-            style={[tw``, styles.wrap]}
-          />
-        ))}
-      </ScrollView>
+    <>
+      <View style={[styles.wrap, styleContainer]}>
+        {/** Scroll view */}
+        <ScrollView
+          horizontal
+          pagingEnabled
+          scrollEnabled
+          onScroll={({ nativeEvent }) => handleSlideOnChange(nativeEvent)}
+          showsHorizontalScrollIndicator={false}
+          style={styles.wrap}
+        >
+          {/** Loop data */}
+          {data?.map((item) => (
+            <CustomImage
+              {...rest}
+              isLink
+              key={item}
+              image={item}
+              style={[styles.wrap, styleImage]}
+            />
+          ))}
+        </ScrollView>
 
-      {/** Indicators */}
-      <View style={tw`absolute bottom-0 flex flex-row self-center`}>
-        {/** Loop data */}
+        {/** Indicators */}
+        {/* <View style={tw`absolute bottom-0 flex flex-row self-center`}>
         {data?.length > 1 &&
           data?.map((item, index) => (
             <CustomIcon
@@ -78,8 +94,28 @@ const CustomCarousel = ({ data, height, styleContainer }) => {
               ]}
             />
           ))}
+      </View> */}
       </View>
-    </View>
+
+      {/** Indicators */}
+      <View style={tw`flex flex-row self-center`}>
+        {data?.length > 1 &&
+          data?.map((item, index) => (
+            <CustomIcon
+              key={item}
+              type="octIcons"
+              name="dot-fill"
+              size={20}
+              style={[
+                tw`mx-1 mt-2`,
+                activeSlide === index
+                  ? tw`text-[${appColors?.primary}]`
+                  : tw`text-[${appColors?.gray}]`,
+              ]}
+            />
+          ))}
+      </View>
+    </>
   ); // close return
 }; // close component
 

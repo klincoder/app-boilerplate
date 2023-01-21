@@ -1,5 +1,4 @@
 // Import resources
-import Constants from "expo-constants";
 import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   getAuth,
@@ -40,42 +39,93 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
+// Import custom files
+import { isProdEnv } from "./data";
+import {
+  FIREBASE_DEV_API_KEY, // Dev
+  FIREBASE_DEV_AUTH_DOMAIN,
+  FIREBASE_DEV_PROJECT_ID,
+  FIREBASE_DEV_STORAGE_BUCKET,
+  FIREBASE_DEV_MESSAGING_SENDER_ID,
+  FIREBASE_DEV_APP_ID,
+  FIREBASE_DEV_MEASUREMENT_ID,
+  FIREBASE_PROD_API_KEY, // Prod
+  FIREBASE_PROD_AUTH_DOMAIN,
+  FIREBASE_PROD_PROJECT_ID,
+  FIREBASE_PROD_STORAGE_BUCKET,
+  FIREBASE_PROD_MESSAGING_SENDER_ID,
+  FIREBASE_PROD_APP_ID,
+  FIREBASE_PROD_MEASUREMENT_ID,
+} from "@env";
+
 // VARIABLES
 // DEV CONFIG
 const devConfig = {
-  apiKey: Constants.manifest?.extra?.fireDevApiKey,
-  authDomain: Constants.manifest?.extra?.fireDevAuthDomain,
-  projectId: Constants.manifest?.extra?.fireDevProjectId,
-  storageBucket: Constants.manifest?.extra?.fireDevStorageBucket,
-  messagingSenderId: Constants.manifest?.extra?.fireDevMsgSenderId,
-  appId: Constants.manifest?.extra?.fireDevAppId,
+  apiKey: FIREBASE_DEV_API_KEY,
+  authDomain: FIREBASE_DEV_AUTH_DOMAIN,
+  projectId: FIREBASE_DEV_PROJECT_ID,
+  storageBucket: FIREBASE_DEV_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_DEV_MESSAGING_SENDER_ID,
+  appId: FIREBASE_DEV_APP_ID,
+  measurementId: FIREBASE_DEV_MEASUREMENT_ID,
 };
 
 // PROD CONFIG
 const prodConfig = {
-  apiKey: Constants.manifest?.extra?.fireDevApiKey,
-  authDomain: Constants.manifest?.extra?.fireDevAuthDomain,
-  projectId: Constants.manifest?.extra?.fireDevProjectId,
-  storageBucket: Constants.manifest?.extra?.fireDevStorageBucket,
-  messagingSenderId: Constants.manifest?.extra?.fireDevMsgSenderId,
-  appId: Constants.manifest?.extra?.fireDevAppId,
+  apiKey: FIREBASE_PROD_API_KEY,
+  authDomain: FIREBASE_PROD_AUTH_DOMAIN,
+  projectId: FIREBASE_PROD_PROJECT_ID,
+  storageBucket: FIREBASE_PROD_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_PROD_MESSAGING_SENDER_ID,
+  appId: FIREBASE_PROD_APP_ID,
+  measurementId: FIREBASE_PROD_MEASUREMENT_ID,
 };
+
+// FINAL CONFIG
+const finalConfig = isProdEnv ? prodConfig : devConfig;
 
 // INITIALZE APP
 // Check app initialzation
-const app = getApps().length > 0 ? getApp() : initializeApp(devConfig);
+const app = getApps().length > 0 ? getApp() : initializeApp(finalConfig);
 
 // Define firebase services
 const fireDB = getFirestore(app);
 const fireAuth = getAuth(app);
 const fireStorage = getStorage(app);
 
+// FUNCTIONS
+// HANDLE GET DOCS
+const handleGetDocs = async (docRef) => {
+  // If empty args, return
+  if (!docRef) return;
+  const docSnap = await getDocs(docRef);
+  const docData =
+    docSnap.size > 0
+      ? docSnap.docs.map((doc) => {
+          return doc.data();
+        })
+      : [];
+  return docData;
+}; // close fxn
+
+// HANDLE GET DOC
+const handleGetDoc = async (docRef) => {
+  // If empty args, return
+  if (!docRef) return;
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.exists() ? docSnap.data() : null;
+  return docData;
+}; // close fxn
+
 // Export
 export {
-  fireDB,
+  fireDB, // Services
   fireAuth,
   fireStorage,
-  onAuthStateChanged,
+  devConfig,
+  prodConfig,
+  finalConfig,
+  onAuthStateChanged, // Auth
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
@@ -85,9 +135,9 @@ export {
   confirmPasswordReset,
   applyActionCode,
   signOut,
+  doc, // Database
   collection,
   collectionGroup,
-  doc,
   onSnapshot,
   getDoc,
   getDocs,
@@ -101,7 +151,9 @@ export {
   increment,
   arrayUnion,
   serverTimestamp,
-  ref,
+  ref, // Storage
   uploadBytesResumable,
   getDownloadURL,
+  handleGetDocs, // Functions
+  handleGetDoc,
 };

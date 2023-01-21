@@ -5,6 +5,7 @@ import tw from "twrnc";
 
 // Import custom files
 import CustomText from "./CustomText";
+import { appColors } from "../config/data";
 
 // Component
 const StickyBottomView = ({ styleContainer, children, ...rest }) => {
@@ -17,7 +18,7 @@ const StickyBottomView = ({ styleContainer, children, ...rest }) => {
       {...rest}
       style={[
         styleContainer,
-        tw`absolute z-1 bottom-0 right-0 left-0 px-2 p-3 bg-white opacity-90`,
+        tw`absolute z-1 bottom-0 right-0 left-0 px-4 py-3`,
       ]}
     >
       {children}

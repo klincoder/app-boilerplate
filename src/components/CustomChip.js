@@ -6,17 +6,22 @@ import tw from "twrnc";
 
 // Import custom files
 import twStyles from "../config/twStyles";
-import { appColors, appFonts } from "../config/data";
+import { appColors } from "../config/data";
 
 // Component
 const CustomChip = ({
   title,
   onPress,
   isSolid,
+  bgColor,
+  styleButton,
   styleContainer,
   styleTitle,
   ...rest
 }) => {
+  // Define variables
+  bgColor = bgColor || appColors?.primary;
+
   // Debug
   //console.log("Debug customChip: ", { isSolidType, type });
 
@@ -30,7 +35,7 @@ const CustomChip = ({
           type="solid"
           title={title || "Title"}
           onPress={onPress}
-          buttonStyle={tw`bg-[${appColors?.primary}]`}
+          buttonStyle={[styleButton, tw`bg-[${bgColor}]`]}
           titleStyle={[styleTitle, tw`text-white`, twStyles?.fontBold]}
           containerStyle={[styleContainer, tw`border-[${appColors?.primary}]`]}
         />
@@ -40,6 +45,7 @@ const CustomChip = ({
           type="outline"
           title={title || "Title"}
           onPress={onPress}
+          buttonStyle={styleButton}
           titleStyle={[
             styleTitle,
             tw`text-[${appColors?.black}]`,

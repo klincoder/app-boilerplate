@@ -25,12 +25,6 @@ export const userSavedAtom = atom({
   default: [],
 });
 
-// USER ORDERS ATOM
-export const userOrdersAtom = atom({
-  key: "userOrdersAtom",
-  default: [],
-});
-
 /**********************
   OTHERS
 **********************/

@@ -13,7 +13,7 @@ import CustomText from "../components/CustomText";
 import { userSavedAtom } from "../recoil/atoms";
 
 // Component
-const SavedScreen = () => {
+const MySavedScreen = () => {
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
 
@@ -25,26 +25,24 @@ const SavedScreen = () => {
   const userSavedLen = userSaved?.length;
 
   // Debug
-  //console.log("Debug savedScreen: ",);
+  //console.log("Debug mySavedScreen: ",);
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
   useLayoutEffect(() => {
     // On mount
     isMounted.current = true;
-
     // Set screen options
     navigation.setOptions({
-      headerTitleAlign: "left",
       headerShown: true,
       headerTitle: "Saved",
-      headerRight: () => (
-        <View style={tw`flex flex-row pr-5`}>
-          <CustomText>Right Text</CustomText>
-        </View>
-      ), // close header right
+      headerTitleAlign: "center",
+      // headerRight: () => (
+      //   <View style={tw`flex flex-row pr-5`}>
+      //     <CustomText>Right Text</CustomText>
+      //   </View>
+      // ), // close header right
     }); // close navigation
-
     // Clean up
     return () => {
       isMounted.current = false;
@@ -75,4 +73,4 @@ const SavedScreen = () => {
 }; // close component
 
 // Export
-export default SavedScreen;
+export default MySavedScreen;

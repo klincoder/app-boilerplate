@@ -34,7 +34,6 @@ const ProfileScreen = () => {
   useLayoutEffect(() => {
     // On mount
     isMounted.current = true;
-
     // Set screen options
     navigation.setOptions({
       headerTitleAlign: "left",
@@ -45,7 +44,6 @@ const ProfileScreen = () => {
         </View>;
       }, // close header right
     }); // close navigation
-
     // Clean up
     return () => {
       isMounted.current = false;

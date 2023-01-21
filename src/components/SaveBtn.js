@@ -8,25 +8,25 @@ import CustomIcon from "./CustomIcon";
 import { appColors } from "../config/data";
 
 // Component
-const SaveBtn = ({ status, onPress, styleIcon, styleBtn, ...rest }) => {
+const SaveBtn = ({ isSaved, onPress, styleIcon, styleBtn, ...rest }) => {
   // Define state
-  const [isSaved, setIsSaved] = useState(status);
+  const [clickedState, setClickedState] = useState(isSaved);
 
   // Debug
-  //console.log("Debug saveBtn: ", { status, isSaved });
+  //console.log("Debug saveBtn: ", isSaved);
 
   // FUNCTIONS
   // HANDLE CLICKED
   const handleClicked = () => {
-    setIsSaved(!isSaved);
+    setClickedState(!clickedState);
     onPress();
   }; // close fxn
 
   // SIDE EFFECTS
   // SET IS SAVED STATE
   useEffect(() => {
-    setIsSaved(status);
-  }, [status]);
+    setClickedState(isSaved);
+  }, [isSaved]);
 
   // Return component
   return (
@@ -39,8 +39,8 @@ const SaveBtn = ({ status, onPress, styleIcon, styleBtn, ...rest }) => {
       <CustomIcon
         {...rest}
         type="antDesign"
-        name={isSaved ? "heart" : "hearto"}
-        color={isSaved ? appColors?.primary : appColors?.black}
+        name={clickedState ? "heart" : "hearto"}
+        color={clickedState ? appColors?.primary : appColors?.black}
         style={styleIcon}
       />
     </CustomButton>

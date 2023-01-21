@@ -25,17 +25,15 @@ const SupportScreen = () => {
   useLayoutEffect(() => {
     // On mount
     isMounted.current = true;
-
     // Set screen options
     navigation.setOptions({
-      headerTitleAlign: "left",
-      headerRight: () => (
-        <View style={tw`flex flex-row pr-5`}>
-          <CustomText>Right Text</CustomText>
-        </View>
-      ), // close header right
+      headerTitleAlign: "center",
+      // headerRight: () => (
+      //   <View style={tw`flex flex-row pr-5`}>
+      //     <CustomText>Right Text</CustomText>
+      //   </View>
+      // ), // close header right
     }); // close navigation
-
     // Clean up
     return () => {
       isMounted.current = false;
@@ -46,9 +44,9 @@ const SupportScreen = () => {
   return (
     <CustomSafeView style={tw`px-4`}>
       {/** MAIN CONTAINER */}
-      <View style={tw`flex-1 items-center justify-center`}>
+      {/* <View style={tw`flex-1 items-center justify-center`}>
         <CustomText>SupportScreen</CustomText>
-      </View>
+      </View> */}
     </CustomSafeView>
   ); // close return
 }; // close component

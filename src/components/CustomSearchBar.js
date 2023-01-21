@@ -6,6 +6,8 @@ import tw from "twrnc";
 
 // Import custom files
 import CustomText from "./CustomText";
+import twStyles from "../config/twStyles";
+import { appColors } from "../config/data";
 
 // Component
 const CustomSearchBar = ({ value, onChangeText, placeholder, ...rest }) => {
@@ -19,8 +21,10 @@ const CustomSearchBar = ({ value, onChangeText, placeholder, ...rest }) => {
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder || "Search..."}
-      inputContainerStyle={tw`px-2 rounded-lg bg-white`}
-      containerStyle={tw`p-0 mx-3 border-white w-11/12 bg-transparent`}
+      inputStyle={[tw``, twStyles?.fontBold]}
+      inputContainerStyle={tw`rounded-lg bg-white border-white`}
+      containerStyle={tw`p-0 m-0 bg-white border-white`}
+      disabledInputStyle={tw`bg-[${appColors?.lightGray}]`}
     />
   ); // close return
 }; // close component

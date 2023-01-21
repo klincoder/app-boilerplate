@@ -5,12 +5,7 @@ import { useSetRecoilState } from "recoil";
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
-import {
-  allUsersAtom,
-  userSavedAtom,
-  appSettingsAtom,
-  userOrdersAtom,
-} from "../recoil/atoms";
+import { allUsersAtom, userSavedAtom, appSettingsAtom } from "../recoil/atoms";
 import {
   fireDB,
   doc,
@@ -26,16 +21,15 @@ import {
 
 // Component
 const GetDatabaseContent = () => {
-  // Define auth context
-  const { userID } = useAuthState();
-
   // Define app settings
   const { isMounted } = useAppSettings();
+
+  // Define auth
+  const { userID } = useAuthState();
 
   // Define state
   const setAllUsersAtom = useSetRecoilState(allUsersAtom); // All
   const setUserSavedAtom = useSetRecoilState(userSavedAtom); // User
-  const setUserOrdersAtom = useSetRecoilState(userOrdersAtom);
   const setAppSettingsAtom = useSetRecoilState(appSettingsAtom); // Others
 
   // SIDE EFFECTS
@@ -57,7 +51,6 @@ const GetDatabaseContent = () => {
   useEffect(() => {
     // On mount
     isMounted.current = true;
-
     // LISTEN TO APP SETTINGS
     const appSettingsRef = collection(fireDB, "app_settings");
     onSnapshot(appSettingsRef, (snapshot) => {
@@ -76,7 +69,9 @@ const GetDatabaseContent = () => {
       setAllUsersAtom(data);
     });
 
-    // IF USERID
+    /************
+      IF USERID
+    *************/
     if (userID) {
       // LISTEN TO USER SAVED
       const userSavedRef = query(
@@ -89,32 +84,12 @@ const GetDatabaseContent = () => {
         }); // close data
         setUserSavedAtom(data);
       });
-
-      // LISTEN TO USER ORDERS
-      const userOrdersRef = query(
-        collection(fireDB, "users", userID, "orders"),
-        orderBy("date_created", "desc")
-      );
-      onSnapshot(userOrdersRef, (snapshot) => {
-        const data = snapshot.docs.map((doc) => {
-          return doc.data();
-        }); // close data
-        setUserOrdersAtom(data);
-      });
     } // close if
-
     // Clean up
     return () => {
       isMounted.current = false;
     };
-  }, [
-    isMounted,
-    userID,
-    setAllUsersAtom,
-    setUserSavedAtom,
-    setUserOrdersAtom,
-    setAppSettingsAtom,
-  ]);
+  }, [isMounted, userID, setAllUsersAtom, setUserSavedAtom]);
 
   // Return component
   return null;

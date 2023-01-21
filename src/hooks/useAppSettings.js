@@ -40,11 +40,13 @@ const useAppSettings = () => {
     adminEmail: general?.admin_email,
     workingHours: general?.working_hours,
     location: general?.location,
+    vat: general?.vat || 0,
     android: links?.android, // Links
     ios: links?.ios,
     github: links?.github,
     instagram: links?.instagram,
     tiktok: links?.tiktok,
+    home_carousel: slides?.app_home_carousel, // Slides
   };
   const networkInfo = {
     bssID: networkState?.details?.bssid,

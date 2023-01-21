@@ -10,10 +10,10 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import PasswordRecoveryScreen from "../screens/PasswordRecoveryScreen";
 import HomeNavigator from "../screens/HomeNavigator";
-import EditProfileScreen from "../screens/EditProfileScreen";
-import NotificationsScreen from "./NotificationsScreen";
+import MyProfileScreenEdit from "../screens/MyProfileScreenEdit";
 import SupportScreen from "./SupportScreen";
 import SettingsScreen from "./SettingsScreen";
+import NotificationsScreen from "./NotificationsScreen";
 
 // Create stack navigator object
 const Stack = createStackNavigator();
@@ -28,14 +28,9 @@ const AppNavigator = ({ userID }) => {
       options: { headerShown: false },
     },
     {
-      name: "EditProfileScreen",
-      component: EditProfileScreen,
+      name: "MyProfileScreenEdit",
+      component: MyProfileScreenEdit,
       options: { headerTitle: "Edit Profile" },
-    },
-    {
-      name: "NotificationsScreen",
-      component: NotificationsScreen,
-      options: { headerTitle: "Notifications" },
     },
     {
       name: "SupportScreen",
@@ -46,6 +41,11 @@ const AppNavigator = ({ userID }) => {
       name: "SettingsScreen",
       component: SettingsScreen,
       options: { headerTitle: "Settings" },
+    },
+    {
+      name: "NotificationsScreen",
+      component: NotificationsScreen,
+      options: { headerTitle: "Notifications" },
     },
   ];
 
@@ -72,6 +72,9 @@ const AppNavigator = ({ userID }) => {
       options: { headerShown: false },
     },
   ];
+
+  // Debug
+  //console.log("Debug appNavigator: ", );
 
   // Return component
   // Screens to hide bottom tab

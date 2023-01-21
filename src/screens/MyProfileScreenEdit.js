@@ -11,7 +11,7 @@ import FormEditProfile from "../components/FormEditProfile";
 import useAuthState from "../hooks/useAuthState";
 
 // Component
-const EditProfileScreen = () => {
+const MyProfileScreenEdit = () => {
   // Define app settings
   const { navigation, isMounted, todaysDate } = useAppSettings();
 
@@ -19,7 +19,7 @@ const EditProfileScreen = () => {
   const { user } = useAuthState();
 
   // Debug
-  //console.log("Debug editProfileScreen: ",);
+  //console.log("Debug myProfileScreenEdit: ",);
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
@@ -55,4 +55,4 @@ const EditProfileScreen = () => {
 }; // close component
 
 // Export
-export default EditProfileScreen;
+export default MyProfileScreenEdit;

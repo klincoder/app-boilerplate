@@ -37,6 +37,7 @@ const CustomListItem = ({
       {...rest}
       bottomDivider={showDivider}
       onPress={onPress}
+      disabledStyle={tw`opacity-50`}
       containerStyle={[
         styleContainer,
         tw`rounded-lg`,
