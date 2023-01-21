@@ -35,7 +35,7 @@ const OnboardingScreen = () => {
       <CustomBgImage isLink image={appImages?.onboarding}>
         {/** Overlay */}
         <View
-          style={tw`absolute top-0 right-0 bottom-0 left-0 bg-white opacity-99`}
+          style={tw`absolute top-0 right-0 bottom-0 left-0 bg-white opacity-95`}
         />
 
         {/** MAIN CONTAINER */}
@@ -48,25 +48,28 @@ const OnboardingScreen = () => {
           />
 
           {/** COL 2 - HEADING */}
-          <View style={tw`mb-6`}>
+          <View style={tw`mb-5`}>
             <CustomText style={[tw`text-4xl`, twStyles?.fontBold]}>
-              Shop gadgets at the best prices.
+              A faster way to launch any app.
             </CustomText>
           </View>
 
           {/** COL 3 - BUTTONS */}
-          <View style={tw`flex items-start mb-1`}>
+          <View style={tw`flex mb-1`}>
+            {/** Login */}
             <CustomButton
               isNormal
-              iconRight
-              title="Go Shopping"
-              icon={{ type: "ant-design", name: "arrowright", color: "white" }}
-              styleNormalButton={tw`py-4 px-6 mb-4`}
-              iconContainerStyle={tw`pl-3 text-white`}
-              onPress={async () => {
-                await AsyncStorage.setItem("show_onboarding", "false");
-                navigation.replace(routes.HOME_NAVIGATOR);
-              }}
+              title="Login"
+              onPress={() => navigation.navigate(routes.LOGIN)}
+              styleNormalButton={tw`w-45 mb-3`}
+            />
+
+            {/** Register */}
+            <CustomButton
+              isText
+              title="Not a member? Register"
+              onPress={() => navigation.navigate(routes.REGISTER)}
+              styleText={tw`mt-6`}
             />
           </View>
         </View>

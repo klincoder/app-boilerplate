@@ -4,8 +4,8 @@ import { FlatList, View } from "react-native";
 import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import routes from "./routes";
+import twStyles from "../config/twStyles";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomSafeView from "../components/CustomSafeView";
 import useAuthState from "../hooks/useAuthState";

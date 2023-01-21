@@ -15,7 +15,7 @@ const SettingsScreen = () => {
   const { navigation, isMounted } = useAppSettings();
 
   // Define state
-  const { user } = useAuthState();
+  const { userID } = useAuthState();
 
   // Debug
   //console.log("Debug settingsScreen: ",);
@@ -25,7 +25,6 @@ const SettingsScreen = () => {
   useLayoutEffect(() => {
     // On mount
     isMounted.current = true;
-
     // Set screen options
     navigation.setOptions({
       headerTitleAlign: "left",
@@ -35,7 +34,6 @@ const SettingsScreen = () => {
         </View>
       ), // close header right
     }); // close navigation
-
     // Clean up
     return () => {
       isMounted.current = false;
