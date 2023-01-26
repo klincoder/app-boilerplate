@@ -41,32 +41,44 @@ const CustomListItem = ({
       containerStyle={[
         styleContainer,
         tw`rounded-lg`,
-        isSelected && tw`border border-[${appColors?.primary}]`,
+        isSelected && tw`border-l-4 border-[${appColors?.primary}]`,
       ]}
     >
       {/** COL 1 - IMAGE, CHECKBOX, ICON */}
-      {/** Left image */}
-      {leftImage && (
-        <CustomImage
-          isLink
-          image={leftImage}
-          style={styleLeftImage || tw`w-5 h-5 rounded-full`}
-        />
-      )}
-
-      {/** Checkbox */}
-      {onPressChecked && (
-        <ListItem.CheckBox checked={checkedVal} onPress={onPressChecked} />
-      )}
-
-      {/** Left icon name */}
-      {leftIconName && (
+      {/** IF IS SELECTED */}
+      {isSelected ? (
         <CustomIcon
           size={24}
-          type={leftIconType || "antDesign"}
-          name={leftIconName || "pluscircleo"}
-          style={tw`text-[${appColors?.lightBlack}]`}
+          type="feather"
+          name="check-circle"
+          color={appColors?.primary}
         />
+      ) : (
+        <>
+          {/** Left image */}
+          {leftImage && (
+            <CustomImage
+              isLink
+              image={leftImage}
+              style={styleLeftImage || tw`w-5 h-5 rounded-full`}
+            />
+          )}
+
+          {/** Checkbox */}
+          {onPressChecked && (
+            <ListItem.CheckBox checked={checkedVal} onPress={onPressChecked} />
+          )}
+
+          {/** Left icon name */}
+          {leftIconName && (
+            <CustomIcon
+              size={24}
+              type={leftIconType || "antDesign"}
+              name={leftIconName || "pluscircleo"}
+              style={tw`text-[${appColors?.lightBlack}]`}
+            />
+          )}
+        </>
       )}
 
       {/** COL 2 - CONTENT */}

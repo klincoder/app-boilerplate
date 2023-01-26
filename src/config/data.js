@@ -13,11 +13,10 @@ import mastercard from "../assets/images/mastercard.png";
 import verve from "../assets/images/verve.png";
 import mtnMomo from "../assets/images/mtn-momo.jpg";
 import bankTransfer from "../assets/images/bank-transfer.jpg";
-// Import custom files
 import {
-  PAYSTACK_DEV_PUBLIC_KEY, // Dev
+  PAYSTACK_DEV_PUBLIC_KEY,
   PAYSTACK_DEV_SECRET_KEY,
-  PAYSTACK_PROD_PUBLIC_KEY, // Prod
+  PAYSTACK_PROD_PUBLIC_KEY,
   PAYSTACK_PROD_SECRET_KEY,
 } from "@env";
 
@@ -218,6 +217,13 @@ export const screenInfo = {
 export const paystackConfig = {
   public: isProdEnv ? PAYSTACK_PROD_PUBLIC_KEY : PAYSTACK_DEV_PUBLIC_KEY,
   secret: isProdEnv ? PAYSTACK_PROD_SECRET_KEY : PAYSTACK_DEV_SECRET_KEY,
+};
+
+// LOCAL STORAGE KEYS
+export const localKeys = {
+  cart: "klinStoreCart",
+  address: "klinStoreAddr",
+  isSlides: "isKlinStoreSlides",
 };
 
 /*************
