@@ -1,12 +1,14 @@
 // Import resources
 import axios from "axios";
 import dayjs from "dayjs";
-import dayjsUTC from "dayjs/plugin/utc";
-dayjs.extend(dayjsUTC);
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import dayjsUTC from "dayjs/plugin/utc";
+import dayjsRelativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(dayjsUTC);
+dayjs.extend(dayjsRelativeTime);
 
 // Import custom files
-import { appColors, baseUrl } from "./data";
+import { baseUrl } from "./data";
 import { doc, fireDB, getDoc, handleGetDocs } from "./firebase";
 
 // VARIABLES
@@ -320,31 +322,30 @@ export const handleStatusColor = (status) => {
   // Switch status
   switch (status) {
     case "active":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "success":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "approved":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "paid":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "pending":
-      color = `bg-[${appColors?.warning}]`;
+      color = `bg-warning`;
       break;
     case "processing":
-      color = `bg-[${appColors?.warning}]`;
+      color = `bg-warning`;
       break;
     case "completed":
-      color = `bg-[${appColors?.black}]`;
+      color = `bg-black`;
       break;
     default:
-      color = `bg-[${appColors?.danger}]`;
+      color = `bg-danger`;
       break;
   } // close switch
-  // Return
   return color;
 }; // close fxn
 
@@ -439,6 +440,21 @@ export const handleDayJsDiff = (date1, date2, unit) => {
   unit = unit || "day";
   const result = date2?.diff(date1, unit);
   return result;
+}; // close fxn
+
+// HANDLE DAYJS IS AFTER
+export const handleDayJsIsAfter = (date) => {
+  // If empty args, return
+  if (!date) return false;
+  return dayjs().isAfter(dayjs(date));
+}; // close fxn
+
+// HANDLE DAYJS FROM NOW
+export const handleDayJsFromNow = (date, isSuffix) => {
+  // If empty args, return
+  if (!date) return;
+  isSuffix = isSuffix || false;
+  return dayjs(date).fromNow(isSuffix);
 }; // close fxn
 
 // HANDLE DAYJS FORMAT
@@ -580,36 +596,4 @@ export const handleHashVal = async (val, action, hashedVal) => {
   }).then((res) => {
     return res?.data;
   }); // close return
-}; // close fxn
-
-// HANDLE SUM CART SUBTOTAL
-export const handleSumCartSubTotal = (cartArr) => {
-  // If empty args, return
-  if (!cartArr) return 0;
-  let totalArr = [];
-  cartArr?.map((i) => {
-    totalArr?.push(i?.subTotal);
-  });
-  const sumValue = totalArr?.reduce((a, b) => {
-    return a + b;
-  }, 0);
-  return sumValue;
-}; // close fxn
-
-// HANDLE GET USER ADDRESS
-export const hanadleGetUserAddr = async (userID) => {
-  // Define result
-  let result;
-  // If userID
-  if (userID) {
-    // Get user address from db
-    const getAddrRef = collection(fireDB, "users", userID, "addresses");
-    result = await handleGetDocs(getAddrRef);
-  } else {
-    // Get address from async storage
-    const guestAddr = await AsyncStorage.getItem("guestAddr");
-    result = guestAddr !== null ? JSON.parse(guestAddr) : [];
-  } // close if
-  // console.log("Debug fxnGetUserAddr: ", result);
-  return result;
 }; // close fxn

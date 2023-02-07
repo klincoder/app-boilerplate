@@ -1,15 +1,15 @@
 // Import resources
 import React from "react";
 import { ListItem } from "@rneui/themed";
-import tw from "twrnc";
 
 // Import custom files
 import CustomIcon from "./CustomIcon";
 import CustomImage from "./CustomImage";
-import { appColors, appFonts } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomListItem = ({
+  isSelected,
   title,
   description,
   checkedVal,
@@ -20,7 +20,6 @@ const CustomListItem = ({
   leftIconName,
   rightContent,
   hideDivider,
-  isSelected,
   styleContainer,
   styleLeftImage,
   ...rest
@@ -35,30 +34,29 @@ const CustomListItem = ({
   return (
     <ListItem
       {...rest}
-      bottomDivider={showDivider}
       onPress={onPress}
+      bottomDivider={showDivider}
       disabledStyle={tw`opacity-50`}
       containerStyle={[
         styleContainer,
         tw`rounded-lg`,
-        isSelected && tw`border-l-4 border-[${appColors?.primary}]`,
+        isSelected && tw`border-l-4 border-primary`,
       ]}
     >
       {/** COL 1 - IMAGE, CHECKBOX, ICON */}
       {/** IF IS SELECTED */}
       {isSelected ? (
         <CustomIcon
-          size={24}
           type="feather"
           name="check-circle"
-          color={appColors?.primary}
+          size={24}
+          style={tw`text-primary`}
         />
       ) : (
         <>
           {/** Left image */}
           {leftImage && (
             <CustomImage
-              isLink
               image={leftImage}
               style={styleLeftImage || tw`w-5 h-5 rounded-full`}
             />
@@ -72,10 +70,10 @@ const CustomListItem = ({
           {/** Left icon name */}
           {leftIconName && (
             <CustomIcon
-              size={24}
               type={leftIconType || "antDesign"}
               name={leftIconName || "pluscircleo"}
-              style={tw`text-[${appColors?.lightBlack}]`}
+              size={24}
+              style={tw`text-lightBlack`}
             />
           )}
         </>
@@ -84,19 +82,13 @@ const CustomListItem = ({
       {/** COL 2 - CONTENT */}
       <ListItem.Content>
         {/** Title */}
-        <ListItem.Title
-          numberOfLines={1}
-          style={[{ fontFamily: appFonts?.medium }]}
-        >
+        <ListItem.Title numberOfLines={1} style={tw`font-medium`}>
           {title || "ListItem"}
         </ListItem.Title>
 
         {/** Description */}
         {description && (
-          <ListItem.Subtitle
-            numberOfLines={2}
-            style={[{ fontFamily: appFonts?.regular }]}
-          >
+          <ListItem.Subtitle numberOfLines={2} style={tw`font-regular`}>
             {description}
           </ListItem.Subtitle>
         )}

@@ -1,14 +1,13 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
 import CustomSafeView from "../components/CustomSafeView";
 import FormRegister from "../components/FormRegister";
 import useAppSettings from "../hooks/useAppSettings";
 import AuthHeader from "../components/AuthHeader";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const RegisterScreen = () => {
@@ -20,16 +19,14 @@ const RegisterScreen = () => {
 
   // Return component
   return (
-    <CustomSafeView statusBg={appColors?.primary}>
+    <CustomSafeView styleStatusBar="light">
       {/** SECTION */}
-      <View style={tw`flex-1 bg-[${appColors?.primary}]`}>
+      <View style={tw`flex-1 bg-primary`}>
         {/** COL 1 - TITLE */}
         <AuthHeader title="Register" />
 
         {/** COL 2 - FORM */}
-        <View
-          style={tw`flex-1 px-3 py-5 rounded-t-3xl bg-[${appColors?.white}]`}
-        >
+        <View style={tw`flex-1 px-3 py-5 rounded-t-3xl bg-white`}>
           <FormRegister />
         </View>
       </View>

@@ -1,13 +1,12 @@
 // Import resources
 import React, { useState } from "react";
-import tw from "twrnc";
 import { View } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Import custom files
-import twStyles from "../config/twStyles";
+
 import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomAlertModal from "./CustomAlertModal";
@@ -16,7 +15,7 @@ import CustomText from "./CustomText";
 import useCustomAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
 import CustomInput from "./CustomInput";
-import { alertMsg, apiRoutes, appColors, appRegex } from "../config/data";
+import { tw, alertMsg, apiRoutes } from "../config/data";
 import { fireAuth, fireDB, setDoc, doc } from "../config/firebase";
 import { handleSendEmail, handleHashVal } from "../config/functions";
 
@@ -198,17 +197,12 @@ const FormRegister = () => {
       />
 
       {/** Terms */}
-      <CustomText
-        style={[
-          tw`my-2 text-center text-[${appColors?.gray}]`,
-          twStyles?.fontRegular,
-        ]}
-      >
+      <CustomText style={tw`my-2 text-center text-gray font-regular`}>
         By creating an account, I accept the{" "}
         <CustomButton
           isText
           title="terms of service & privacy policy"
-          styleTextTitle={tw`text-xs text-[${appColors?.gray}]`}
+          styleTextTitle={tw`text-xs text-gray`}
         />
       </CustomText>
 

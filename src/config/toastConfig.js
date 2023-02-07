@@ -1,11 +1,10 @@
 // Import resources
 import React from "react";
 import { BaseToast } from "react-native-toast-message";
-import tw from "twrnc";
 
 // Import custom files
 import CustomIcon from "../components/CustomIcon";
-import { appColors } from "./data";
+import { tw } from "./data";
 
 // Define toast config
 const toastConfig = {
@@ -13,30 +12,18 @@ const toastConfig = {
   success: ({ text1, text2, props, ...rest }) => (
     <BaseToast
       {...rest}
-      style={{
-        backgroundColor: appColors?.success,
-        borderLeftColor: appColors?.success,
-        //height: 80,
-      }}
-      contentContainerStyle={{ paddingHorizontal: 15 }}
-      text1Style={{
-        fontSize: 12,
-        fontWeight: "400",
-        color: "white",
-      }}
-      text2Style={{
-        fontSize: 18,
-        fontWeight: "600",
-        color: "white",
-      }}
       text1={text1}
       text2={text2}
+      text2NumberOfLines={1}
+      text1Style={tw`text-sm font-400 text-white font-regular`}
+      text2Style={tw`text-base font-600 text-white font-medium`}
+      style={tw`bg-success border-success h-20`}
       renderLeadingIcon={() => (
         <CustomIcon
           type="feather"
-          icon="check-circle"
+          name="check-circle"
           size={30}
-          style={tw`self-center pl-3 text-white`}
+          style={tw`text-white pl-5 self-center`}
         />
       )}
     />
@@ -45,30 +32,18 @@ const toastConfig = {
   error: ({ text1, text2, props, ...rest }) => (
     <BaseToast
       {...rest}
-      style={{
-        backgroundColor: appColors?.danger,
-        borderLeftColor: appColors?.danger,
-        //height: 120,
-      }}
-      contentContainerStyle={{ paddingHorizontal: 15 }}
-      text1Style={{
-        fontSize: 12,
-        fontWeight: "400",
-        color: "white",
-      }}
-      text2Style={{
-        fontSize: 18,
-        fontWeight: "600",
-        color: "white",
-      }}
       text1={text1}
       text2={text2}
+      text2NumberOfLines={1}
+      text1Style={tw`text-sm font-400 text-white font-regular`}
+      text2Style={tw`text-base font-600 text-white font-medium`}
+      style={tw`bg-danger border-danger h-20`}
       renderLeadingIcon={() => (
         <CustomIcon
-          type="ionIcons"
-          icon="warning"
+          type="antDesign"
+          name="warning"
           size={30}
-          style={tw`self-center pl-3 text-white`}
+          style={tw`text-white pl-5 self-center`}
         />
       )}
     />
@@ -77,30 +52,18 @@ const toastConfig = {
   info: ({ text1, text2, props, ...rest }) => (
     <BaseToast
       {...rest}
-      style={{
-        backgroundColor: appColors?.secondary,
-        borderLeftColor: appColors?.secondary,
-        //height: 120,
-      }}
-      contentContainerStyle={{ paddingHorizontal: 15 }}
-      text1Style={{
-        fontSize: 12,
-        fontWeight: "400",
-        color: "black",
-      }}
-      text2Style={{
-        fontSize: 18,
-        fontWeight: "600",
-        color: "black",
-      }}
       text1={text1}
       text2={text2}
+      text2NumberOfLines={1}
+      text1Style={tw`text-sm font-400 text-white font-regular`}
+      text2Style={tw`text-base font-600 text-white font-medium`}
+      style={tw`bg-secondary border-secondary h-20`}
       renderLeadingIcon={() => (
         <CustomIcon
           type="antDesign"
-          icon="infocirlce"
+          name="infocirlceo"
           size={30}
-          style={tw`self-center pl-3`}
+          style={tw`text-white pl-5 self-center`}
         />
       )}
     />

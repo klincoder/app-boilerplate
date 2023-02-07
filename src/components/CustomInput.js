@@ -2,15 +2,13 @@
 import React from "react";
 import { View } from "react-native";
 import { Input } from "@rneui/themed";
-import tw from "twrnc";
 import { Controller } from "react-hook-form";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomIcon from "./CustomIcon";
 import CustomHelperText from "./CustomHelperText";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomInput = ({
@@ -50,18 +48,16 @@ const CustomInput = ({
           placeholder={placeholder || `${label}`}
           containerStyle={[tw`-mb-3`, styleContainer]}
           errorStyle={(errMsg || helperText) && tw`mb-6`}
-          inputStyle={[twStyles?.fontRegular]}
+          inputStyle={tw`font-regular`}
           leftIconContainerStyle={tw`pr-3`}
           inputContainerStyle={[
             styleInputContainer,
             tw`px-2 -py-3 border rounded-lg`,
-            errMsg && tw`border-[${appColors?.danger}]`,
+            errMsg && tw`border-danger`,
           ]}
           label={
             label && (
-              <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>
-                {label}
-              </CustomText>
+              <CustomText style={tw`mb-1 font-medium`}>{label}</CustomText>
             )
           }
           errorMessage={
@@ -74,8 +70,9 @@ const CustomInput = ({
             <CustomIcon
               type={leftIconType || "antDesign"}
               name={leftIconName || "user"}
+              size={24}
               onPress={leftIconOnPress}
-              color={appColors?.lightBlack}
+              style={tw`text-lightBlack`}
             />
           }
           rightIcon={
@@ -83,8 +80,9 @@ const CustomInput = ({
               <CustomIcon
                 type={rightIconType || "antDesign"}
                 name={rightIconName || "user"}
+                size={24}
                 onPress={rightIconOnPress}
-                color={appColors?.lightBlack}
+                style={tw`text-lightBlack`}
               />
             )
           }
@@ -106,19 +104,17 @@ const CustomInput = ({
               placeholder={placeholder || `${label}`}
               containerStyle={[tw`-mb-3`, styleContainer]}
               errorStyle={(error?.message || helperText) && tw`mb-6`}
-              inputStyle={[tw`w-full`, twStyles?.fontRegular]}
+              inputStyle={tw`w-full font-regular`}
               leftIconContainerStyle={tw`pr-3`}
               disabledInputStyle={tw`opacity-50`}
               inputContainerStyle={[
                 styleInputContainer,
                 tw`px-2 border rounded-lg`,
-                error && tw`border-[${appColors?.danger}]`,
+                error && tw`border-danger`,
               ]}
               label={
                 label && (
-                  <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>
-                    {label}
-                  </CustomText>
+                  <CustomText style={tw`mb-1 font-medium`}>{label}</CustomText>
                 )
               }
               errorMessage={
@@ -135,8 +131,9 @@ const CustomInput = ({
                 <CustomIcon
                   type={leftIconType || "antDesign"}
                   name={leftIconName || "user"}
+                  size={24}
                   onPress={leftIconOnPress}
-                  color={appColors?.lightBlack}
+                  style={tw`text-lightBlack`}
                 />
               }
               rightIcon={
@@ -144,8 +141,9 @@ const CustomInput = ({
                   <CustomIcon
                     type={rightIconType || "antDesign"}
                     name={rightIconName || "user"}
+                    size={24}
                     onPress={rightIconOnPress}
-                    color={appColors?.lightBlack}
+                    style={tw`text-lightBlack`}
                   />
                 )
               }

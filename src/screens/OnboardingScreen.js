@@ -1,13 +1,10 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 import { useRecoilValue } from "recoil";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Import custom files
 import routes from "./routes";
-import twStyles from "../config/twStyles";
 import CustomSafeView from "../components/CustomSafeView";
 import CustomText from "../components/CustomText";
 import CustomButton from "../components/CustomButton";
@@ -15,7 +12,7 @@ import CustomBgImage from "../components/CustomBgImage";
 import CustomImage from "../components/CustomImage";
 import useAppSettings from "../hooks/useAppSettings";
 import { appOnboardingAtom } from "../recoil/atoms";
-import { appImages } from "../config/data";
+import { tw, appImages } from "../config/data";
 
 // Component
 const OnboardingScreen = () => {
@@ -32,7 +29,7 @@ const OnboardingScreen = () => {
   return (
     <CustomSafeView>
       {/** BACKGROUND IMAGE */}
-      <CustomBgImage isLink image={appImages?.onboarding}>
+      <CustomBgImage image={appImages?.onboarding}>
         {/** Overlay */}
         <View
           style={tw`absolute top-0 right-0 bottom-0 left-0 bg-white opacity-95`}
@@ -42,14 +39,14 @@ const OnboardingScreen = () => {
         <View style={tw`flex-1 justify-center px-6`}>
           {/**  COL 1 - LOGO */}
           <CustomImage
+            isNormal
             image={appImages?.logo}
-            resizeMode="contain"
             style={tw`w-15 h-15 mb-25`}
           />
 
           {/** COL 2 - HEADING */}
           <View style={tw`mb-5`}>
-            <CustomText style={[tw`text-4xl`, twStyles?.fontBold]}>
+            <CustomText style={tw`text-4xl font-medium`}>
               A faster way to launch any app.
             </CustomText>
           </View>

@@ -1,34 +1,33 @@
 // Import resources
 import React from "react";
 import { View, ImageBackground } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
-import { appImages } from "../config/data";
+import { tw, appImages } from "../config/data";
 
 // Component
-const CustomBgImage = ({ image, isLink, styleBg, children, ...rest }) => {
+const CustomBgImage = ({ image, isNormal, styleBg, children, ...rest }) => {
   // Debug
   //console.log("Debug customBgImage: ",)
 
   // Return component
   return (
     <View style={tw`flex-1`}>
-      {isLink ? (
+      {isNormal ? (
         <ImageBackground
-          source={{ uri: image || appImages?.general }}
-          resizeMode="cover"
-          style={[tw`flex-1 justify-center`, styleBg]}
           {...rest}
+          source={image}
+          resizeMode="cover"
+          style={tw`flex-1 justify-center`}
         >
           {children}
         </ImageBackground>
       ) : (
         <ImageBackground
-          source={image}
-          resizeMode="cover"
-          style={tw`flex-1 justify-center`}
           {...rest}
+          source={{ uri: image || appImages?.general }}
+          resizeMode="cover"
+          style={[styleBg, tw`flex-1 justify-center`]}
         >
           {children}
         </ImageBackground>

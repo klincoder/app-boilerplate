@@ -1,5 +1,5 @@
 // Import resources
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { useNavigation } from "@react-navigation/native";
 
@@ -18,6 +18,16 @@ const useAppSettings = () => {
 
   // Define navigaion
   const navigation = useNavigation();
+
+  // Define use memo
+  const snaps = useMemo(
+    () => ({
+      full: ["75%"],
+      half: ["50%"],
+      small: ["35%"],
+    }),
+    []
+  );
 
   // Define settings
   const general = handleGetInfoById(appSettings, "general")?.data;
@@ -73,6 +83,7 @@ const useAppSettings = () => {
     networkInfo,
     isMounted,
     navigation,
+    snaps,
   }; // close return
 }; // close component
 

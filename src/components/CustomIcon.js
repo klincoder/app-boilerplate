@@ -24,16 +24,15 @@ const CustomIcon = ({ type, name, size, ...rest }) => {
   // Return component
   return (
     <>
-      {/** ICONS */}
-      {/** MaterialIcons */}
+      {/** Material Icons */}
       {type === "materialIcons" && (
         <MaterialIcons {...rest} name={name} size={size} />
       )}
 
-      {/** AntDesign */}
+      {/** Ant Design */}
       {type === "antDesign" && <AntDesign {...rest} name={name} size={size} />}
 
-      {/** FontAwesome5 */}
+      {/** Font Awesome5 */}
       {type === "fontAwesome5" && (
         <FontAwesome5 {...rest} name={name} size={size} />
       )}
@@ -41,26 +40,26 @@ const CustomIcon = ({ type, name, size, ...rest }) => {
       {/** Entypo */}
       {type === "entypo" && <Entypo {...rest} name={name} size={size} />}
 
-      {/** Ionicons */}
+      {/** Ion Icons */}
       {type === "ionIcons" && <Ionicons {...rest} name={name} size={size} />}
 
-      {/** Evilicons */}
+      {/** Evil Icons */}
       {type === "evilIcons" && <EvilIcons {...rest} name={name} size={size} />}
-
-      {/** Material community icons */}
-      {type === "materialCommunityIcons" && (
-        <MaterialCommunityIcons {...rest} name={name} size={size} />
-      )}
 
       {/** Feather */}
       {type === "feather" && <Feather {...rest} name={name} size={size} />}
 
-      {/** Octicons */}
+      {/** Oct Icons */}
       {type === "octIcons" && <Octicons {...rest} name={name} size={size} />}
 
-      {/** FontAwesome */}
+      {/** Font Awesome */}
       {type === "fontAwesome" && (
         <FontAwesome {...rest} name={name} size={size} />
+      )}
+
+      {/** Material Community Icons */}
+      {type === "materialCommunityIcons" && (
+        <MaterialCommunityIcons {...rest} name={name} size={size} />
       )}
     </>
   ); // return component

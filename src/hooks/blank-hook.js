@@ -1,5 +1,5 @@
 // Import resources
-import React from "react";
+import { useState } from "react";
 
 // Import custom files
 

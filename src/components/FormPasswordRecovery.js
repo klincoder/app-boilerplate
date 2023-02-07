@@ -1,6 +1,5 @@
 // Import resources
 import React from "react";
-import tw from "twrnc";
 import { View } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,7 +14,7 @@ import CustomButton from "./CustomButton";
 import useAlertState from "../hooks/useAlertState";
 import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
-import { alertMsg } from "../config/data";
+import { tw, alertMsg } from "../config/data";
 import { fireAuth } from "../config/firebase";
 
 // Component

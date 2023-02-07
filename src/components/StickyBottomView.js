@@ -1,11 +1,9 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
-import CustomText from "./CustomText";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const StickyBottomView = ({ styleContainer, children, ...rest }) => {

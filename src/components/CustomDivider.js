@@ -1,10 +1,9 @@
 // Import resources
 import React from "react";
 import { Divider } from "@rneui/themed";
-import tw from "twrnc";
 
 // Import custom files
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomDivider = ({ style, ...rest }) => {

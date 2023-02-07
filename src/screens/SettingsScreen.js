@@ -1,13 +1,13 @@
 // Import resources
 import React, { useLayoutEffect } from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
 import CustomSafeView from "../components/CustomSafeView";
 import CustomText from "../components/CustomText";
 import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
+import { tw } from "../config/data";
 
 // Component
 const SettingsScreen = () => {
@@ -27,12 +27,12 @@ const SettingsScreen = () => {
     isMounted.current = true;
     // Set screen options
     navigation.setOptions({
-      headerTitleAlign: "left",
-      headerRight: () => (
-        <View style={tw`flex flex-row pr-5`}>
-          <CustomText>Right Text</CustomText>
-        </View>
-      ), // close header right
+      // headerTitleAlign: "center",
+      // headerRight: () => (
+      //   <View style={tw`flex flex-row pr-5`}>
+      //     <CustomText>Right Text</CustomText>
+      //   </View>
+      // ), // close header right
     }); // close navigation
     // Clean up
     return () => {

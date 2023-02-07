@@ -1,12 +1,11 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
 import CustomSafeView from "../components/CustomSafeView";
 import CustomAlertMsg from "../components/CustomAlertMsg";
-import { appColors, appFonts } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const NoInternetScreen = () => {

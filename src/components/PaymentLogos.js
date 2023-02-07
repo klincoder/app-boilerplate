@@ -9,28 +9,31 @@ import CustomIcon from "./CustomIcon";
 import { tw } from "../config/data";
 
 // Component
-const AuthHeader = ({ title }) => {
+const PaymentLogos = () => {
   // Define app settings
   const { navigation } = useAppSettings();
 
   // Debug
-  //console.log("Debug authHeader: ",)
+  //console.log("Debug paymentLogos: ",)
 
   // Return component
   return (
-    <View style={tw`flex-row py-12 pt-20 items-center justify-center`}>
+    <View style={tw`flex flex-row items-center justify-center mt-1`}>
+      {/** Icon */}
       <CustomIcon
-        type="ionIcons"
-        name="chevron-back"
-        onPress={() => navigation.goBack()}
-        style={tw`text-primary mr-5 p-2 rounded-full bg-accent`}
+        type="feather"
+        name="lock"
+        size={14}
+        style={tw`mr-1 text-gray`}
       />
-      <CustomText style={tw`text-4xl text-white font-medium`}>
-        {title || "Title"}
+
+      {/** Secured by */}
+      <CustomText style={tw`text-xs uppercase text-gray font-medium`}>
+        Secured by Paystack
       </CustomText>
     </View>
   ); // close return
 }; // close component
 
 // Export
-export default AuthHeader;
+export default PaymentLogos;

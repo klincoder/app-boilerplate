@@ -1,6 +1,5 @@
 // Import resources
 import React, { useState } from "react";
-import tw from "twrnc";
 import { View } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,7 +15,7 @@ import CustomInput from "./CustomInput";
 import useAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
 import { handleSendEmail } from "../config/functions";
-import { alertMsg, apiRoutes } from "../config/data";
+import { tw, alertMsg, apiRoutes } from "../config/data";
 import { fireAuth } from "../config/firebase";
 
 // Component
@@ -25,9 +24,9 @@ const FormLogin = () => {
   const { navigation, siteInfo, todaysDate1 } = useAppSettings();
 
   // Define state
+  const [hidePass, setHidePass] = useState(true);
   const { handleLogin, handleUserExist, handleSendVerifyEmailLink } =
     useAuthState();
-  const [hidePass, setHidePass] = useState(true);
 
   // Define alert
   const alert = useAlertState();
@@ -93,7 +92,6 @@ const FormLogin = () => {
       if (currUser?.emailVerified) {
         // Alert succ
         alert.success(alertMsg?.loginSucc);
-
         // Send email
         const emailMsg = { toName: username, toEmail: userEmail };
         await handleSendEmail(emailMsg, apiRoutes?.login);
@@ -105,7 +103,7 @@ const FormLogin = () => {
       } // close if
     } catch (err) {
       alert.showAlert(alertMsg?.inValidCred);
-      console.error("Debug submitForm: ", err.message);
+      //console.error("Debug submitForm: ", err.message);
     } // close try catch
   }; // close submit form
 
@@ -122,9 +120,9 @@ const FormLogin = () => {
       <CustomAlertModal
         visible={alert.visible}
         hideDialog={alert.hideAlert}
-        cancelAction={alert.hideAlert}
         cancelText="Close"
         content={alert.message}
+        onCancel={alert.hideAlert}
       />
 
       {/** Email Address */}
@@ -178,18 +176,16 @@ const FormLogin = () => {
 
       {/** TEST BUTTON */}
       {/* <CustomButton
-              isText
-              styleText={[tw`mt-12`, twStyles?.linkBtn]}
-              onPress={() => {
-                alert.showAlert("Test!");
-                //alert.showLoading();
-                // setTimeout(() => {
-                //   alert.hideLoading();
-                // }, 5000);
-              }}
-            >
-              TEST BUTTON
-            </CustomButton> */}
+        isNormal
+        title="TEST BUTTON"
+        styleNormalButton={tw`mt-12`}
+        onPress={() => {
+          alert.showLoading();
+          setTimeout(() => {
+            alert.hideLoading();
+          }, 5000);
+        }}
+      /> */}
     </KeyboardAvoidWrapper>
   ); // close return
 }; // close component

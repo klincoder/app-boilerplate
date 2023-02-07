@@ -1,13 +1,13 @@
 // Import resources
 import React, { useLayoutEffect } from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
 import CustomSafeView from "../components/CustomSafeView";
 import CustomText from "../components/CustomText";
 import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
+import { tw } from "../config/data";
 
 // Component
 const BlankScreen = () => {
@@ -27,12 +27,12 @@ const BlankScreen = () => {
     isMounted.current = true;
     // Set screen options
     navigation.setOptions({
-      headerTitleAlign: "left",
-      headerRight: () => (
-        <View style={tw`flex flex-row pr-4`}>
-          <CustomText>Right Text</CustomText>
-        </View>
-      ), // close header right
+      // headerTitleAlign: "left",
+      // headerRight: () => (
+      //   <View style={tw`flex flex-row pr-4`}>
+      //     <CustomText>Right Text</CustomText>
+      //   </View>
+      // ), // close header right
     }); // close navigation
     // Clean up
     return () => {
@@ -42,7 +42,7 @@ const BlankScreen = () => {
 
   // Return component
   return (
-    <CustomSafeView style={tw`px-4`}>
+    <CustomSafeView styleContainer={tw`px-4`}>
       {/** MAIN CONTAINER */}
       <View style={tw`flex-1 items-center justify-center`}>
         <CustomText>BlankScreen</CustomText>

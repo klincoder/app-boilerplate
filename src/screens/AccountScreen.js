@@ -1,7 +1,6 @@
 // Import resources
 import React, { useLayoutEffect } from "react";
 import { ScrollView, View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
 import routes from "./routes";
@@ -13,7 +12,7 @@ import CustomImage from "../components/CustomImage";
 import useAuthState from "../hooks/useAuthState";
 import CustomAlertModal from "../components/CustomAlertModal";
 import useAlertState from "../hooks/useAlertState";
-import { accountList, alertMsg, appColors } from "../config/data";
+import { tw, accountList, alertMsg } from "../config/data";
 
 // Component
 const ProfileScreen = () => {
@@ -52,14 +51,14 @@ const ProfileScreen = () => {
 
   // Return component
   return (
-    <CustomSafeView>
+    <CustomSafeView styleStatusBar="light">
       {/** Alert modal */}
       <CustomAlertModal
         visible={alert.visible}
-        content={alert.message}
         hideDialog={alert.hideAlert}
-        cancelAction={alert.hideAlert}
-        confirmAction={async () => {
+        content={alert.message}
+        onCancel={alert.hideAlert}
+        onConfirm={async () => {
           alert.hideAlert();
           await handleLogout();
         }}
@@ -68,7 +67,7 @@ const ProfileScreen = () => {
       {/** SCROLL VIEW */}
       <ScrollView showsVerticalScrollIndicator={false}>
         {/** Avatar color background */}
-        <View style={tw`p-15 bg-[${appColors?.primary}]`}></View>
+        <View style={tw`p-15 bg-primary`}></View>
 
         {/** AVATAR CONTAINER */}
         <View style={tw`items-center mt-[-60]`}>
@@ -90,6 +89,7 @@ const ProfileScreen = () => {
               leftIconType={item?.leftIconType}
               leftIconName={item?.leftIconName}
               styleContainer={tw`py-5`}
+              disabled={item?.isLogout && !user?.id}
               onPress={() => {
                 if (item?.isLink) {
                   navigation.navigate(item?.link);

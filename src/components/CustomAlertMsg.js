@@ -1,36 +1,30 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomIcon from "./CustomIcon";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomAlertMsg = ({
   title,
-  titleColor,
   iconType,
   iconName,
   iconSize,
-  iconColor,
   hideIcon,
   description,
   actions,
   styleTitleText,
   styleDescText,
-  styleActionsContainer,
+  styleIcon,
 }) => {
   // Define variables
   title = title || "No Result";
-  titleColor = titleColor || appColors?.primary;
   iconType = iconType || "antDesign";
   iconName = iconName || "warning";
   iconSize = iconSize || 50;
-  iconColor = iconColor || appColors?.primary;
 
   // Debug
   //console.log("Debug customAlertMsg: ",)
@@ -44,8 +38,7 @@ const CustomAlertMsg = ({
           type={iconType}
           name={iconName}
           size={iconSize}
-          color={iconColor}
-          style={tw`mb-3`}
+          style={[styleIcon || tw`text-primary`, tw`mb-3`]}
         />
       )}
 
@@ -53,9 +46,8 @@ const CustomAlertMsg = ({
       <View style={tw`mb-2 w-65`}>
         <CustomText
           style={[
-            styleTitleText,
-            tw`text-xl text-center text-[${titleColor}]`,
-            twStyles?.fontBold,
+            styleTitleText || tw`text-primary`,
+            tw`text-xl text-center font-medium`,
           ]}
         >
           {title}
@@ -67,9 +59,8 @@ const CustomAlertMsg = ({
         <View style={tw`mb-6 w-65`}>
           <CustomText
             style={[
-              styleDescText,
-              tw`text-center text-sm`,
-              twStyles?.fontRegular,
+              styleDescText || tw`text-black`,
+              tw`text-center text-sm font-regular`,
             ]}
           >
             {description}
@@ -78,7 +69,7 @@ const CustomAlertMsg = ({
       )}
 
       {/** Actions */}
-      {actions && <View style={styleActionsContainer}>{actions}</View>}
+      {actions && <>{actions}</>}
     </View>
   ); // close return
 }; // close component

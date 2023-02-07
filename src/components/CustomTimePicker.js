@@ -1,13 +1,12 @@
 // Import resources
 import React, { useState } from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 // Import custom files
 import CustomText from "./CustomText";
 import CustomListItem from "./CustomListItem";
-import { appColors, appFonts } from "../config/data";
+import { tw } from "../config/data";
 import { handleDayJsFormat } from "../config/functions";
 
 // Component
@@ -58,9 +57,7 @@ const CustomTimePicker = ({
     <View style={[tw`mb-3`, styleContainer]}>
       {/** Label */}
       {label && (
-        <CustomText style={[tw`mb-1 mx-1`, { fontFamily: appFonts?.medium }]}>
-          {label}
-        </CustomText>
+        <CustomText style={tw`mb-1 mx-1 font-medium`}>{label}</CustomText>
       )}
 
       {/** Time picker */}

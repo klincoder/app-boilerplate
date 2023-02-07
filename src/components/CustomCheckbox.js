@@ -1,13 +1,12 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomHelperText from "./CustomHelperText";
 import CustomChip from "./CustomChip";
+import { tw } from "../config/data";
 import { handleItemIsInArr, handleItemIsInObjArr } from "../config/functions";
 
 // Component
@@ -29,9 +28,7 @@ const CustomCheckbox = ({
     <View style={tw`mb-3`}>
       {/** Label */}
       {label && (
-        <CustomText style={[tw`mb-1 mx-3`, twStyles?.fontBold]}>
-          {label}
-        </CustomText>
+        <CustomText style={tw`mb-1 mx-3 font-medium`}>{label}</CustomText>
       )}
 
       {/** Data */}

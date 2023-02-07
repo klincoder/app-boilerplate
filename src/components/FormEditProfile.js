@@ -4,7 +4,6 @@ import { View } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import tw from "twrnc";
 
 // Import custom files
 import routes from "../screens/routes";
@@ -15,7 +14,7 @@ import CustomButton from "./CustomButton";
 import CustomInput from "./CustomInput";
 import useAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
-import { alertMsg, apiRoutes, appRegex } from "../config/data";
+import { tw, alertMsg, apiRoutes, appRegex } from "../config/data";
 import { handleSendEmail, handleUppercaseFirst } from "../config/functions";
 import {
   fireDB,
@@ -92,7 +91,6 @@ const FormEditProfile = () => {
     try {
       // Update fireAuth display name
       await updateProfile(fireAuth.currentUser, { displayName: finalUsername });
-
       // Edit user profile
       const editUserRef = doc(fireDB, "users", user?.id);
       await setDoc(
@@ -109,7 +107,6 @@ const FormEditProfile = () => {
       // Send email
       const emailMsg = { toName: user?.username, toEmail: user?.email };
       await handleSendEmail(emailMsg, apiRoutes?.profileChange);
-
       // Alert succ
       alert.success(alertMsg?.profileSucc);
       navigation.navigate(routes.ACCOUNT);
@@ -131,9 +128,9 @@ const FormEditProfile = () => {
       {/** Alert modal */}
       <CustomAlertModal
         visible={alert.visible}
-        content={alert.message}
         hideDialog={alert.hideAlert}
         cancelAction={alert.hideAlert}
+        content={alert.message}
       />
 
       {/** Full name */}

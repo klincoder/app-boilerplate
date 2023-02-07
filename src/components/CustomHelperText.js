@@ -1,11 +1,9 @@
 // Import resources
 import React from "react";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomHelperText = ({ title, visible, isError, styleText, ...rest }) => {
@@ -22,11 +20,8 @@ const CustomHelperText = ({ title, visible, isError, styleText, ...rest }) => {
       visible={visible}
       style={[
         styleText,
-        tw`text-xs`,
-        twStyles?.fontBold,
-        isError
-          ? tw`text-[${appColors?.danger}]`
-          : tw`mt-0.5 text-[${appColors?.gray}]`,
+        tw`text-xs font-medium`,
+        isError ? tw`text-danger` : tw`mt-0.5 text-gray`,
       ]}
     >
       {title}

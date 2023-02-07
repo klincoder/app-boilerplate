@@ -1,17 +1,15 @@
 // Import resources
 import React from "react";
 import { ScrollView, View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomHelperText from "./CustomHelperText";
 import CustomButton from "./CustomButton";
 import CustomIcon from "./CustomIcon";
 import CustomImage from "./CustomImage";
 import useFilePickerState from "../hooks/useFilePickerState";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomFilePicker = ({
@@ -35,9 +33,7 @@ const CustomFilePicker = ({
   return (
     <View style={tw`mb-3 mx-3`}>
       {/** Label */}
-      {label && (
-        <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>{label}</CustomText>
-      )}
+      {label && <CustomText style={tw`font-medium mb-1`}>{label}</CustomText>}
 
       {/** Input */}
       <View style={tw`flex flex-row`}>
@@ -45,13 +41,14 @@ const CustomFilePicker = ({
         <CustomButton
           isTouchable
           onPress={onPress}
-          styleTouchable={tw`p-3 mr-2 w-12 rounded-full bg-[${appColors?.primary}]`}
+          styleTouchable={tw`p-3 mr-2 w-12 rounded-full bg-primary`}
         >
-          <CustomIcon type="antDesign" name="plus" color={appColors?.white} />
+          <CustomIcon type="antDesign" name="plus" style={tw`text-white`} />
         </CustomButton>
 
         {/** Files */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {/** Loop data */}
           {value?.map((item) => (
             <View key={item?.assetId}>
               {/** Image */}
@@ -65,8 +62,7 @@ const CustomFilePicker = ({
                 type="antDesign"
                 name="close"
                 size={20}
-                color={appColors?.primary}
-                style={tw`absolute z-10 top-0 right-0`}
+                style={tw`absolute z-10 top-0 right-0 text-primary`}
                 onPress={() => {
                   const newArr = handleRemoveFile(value, item?.assetId);
                   onPressRemove(newArr);

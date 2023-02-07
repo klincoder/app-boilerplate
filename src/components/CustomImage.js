@@ -6,19 +6,19 @@ import { Image } from "react-native";
 import { appImages } from "../config/data";
 
 // Component
-const CustomImage = ({ isLink, image, resizeMode, ...rest }) => {
+const CustomImage = ({ isNormal, image, resizeMode, ...rest }) => {
   // Return component
   return (
     <>
       {/** Image */}
-      {isLink ? (
+      {isNormal ? (
+        <Image {...rest} source={image} resizeMode={resizeMode || "cover"} />
+      ) : (
         <Image
           {...rest}
           source={{ uri: image || appImages?.general }}
           resizeMode={resizeMode || "cover"}
         />
-      ) : (
-        <Image {...rest} source={image} resizeMode={resizeMode || "cover"} />
       )}
     </>
   ); // cloe return

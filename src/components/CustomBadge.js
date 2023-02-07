@@ -1,10 +1,9 @@
 // Import resources
 import React from "react";
 import { Badge } from "@rneui/themed";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
+import { tw } from "../config/data";
 
 // Component
 const CustomBadge = ({ title, status, styleContainer, styleText, ...rest }) => {
@@ -13,11 +12,11 @@ const CustomBadge = ({ title, status, styleContainer, styleText, ...rest }) => {
     <Badge
       {...rest}
       value={title}
-      status={status || "primary"}
+      status={status || "error"}
       containerStyle={styleContainer}
-      textStyle={[styleText, twStyles?.fontBold]}
+      textStyle={[styleText, tw`font-medium`]}
     />
-  );
+  ); // close return
 }; // close component
 
 // Export

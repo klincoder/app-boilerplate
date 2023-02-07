@@ -1,19 +1,23 @@
 // Import resources
 import React from "react";
-import { SafeAreaView, StatusBar } from "react-native";
-import tw from "twrnc";
-//import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 // Import custom files
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
-const CustomSafeView = ({ style, children, ...rest }) => {
+const CustomSafeView = ({
+  styleContainer,
+  styleStatusBar,
+  children,
+  ...rest
+}) => {
   // Return component
   return (
-    <SafeAreaView style={[tw`flex-1 bg-[${appColors?.white}]`, style]}>
+    <SafeAreaView style={[styleContainer, tw`flex-1 bg-white`]}>
       {/** Status bar */}
-      <StatusBar {...rest} style="dark" />
+      <StatusBar {...rest} style={styleStatusBar || "auto"} />
       {/** Children */}
       {children}
     </SafeAreaView>

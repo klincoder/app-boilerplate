@@ -1,14 +1,13 @@
 // Import resources
 import React from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomText from "./CustomText";
 import CustomListItem from "./CustomListItem";
 import CustomBottomSheet from "./CustomBottomSheet";
 import CustomHelperText from "./CustomHelperText";
+import { tw } from "../config/data";
 
 // Component
 const CustomSelect = ({
@@ -30,9 +29,7 @@ const CustomSelect = ({
   return (
     <View style={tw`mb-3 mx-3`}>
       {/** Label */}
-      {label && (
-        <CustomText style={[tw`mb-1`, twStyles?.fontBold]}>{label}</CustomText>
-      )}
+      {label && <CustomText style={tw`mb-1 font-medium`}>{label}</CustomText>}
 
       {/** Input */}
       <CustomListItem
@@ -43,7 +40,6 @@ const CustomSelect = ({
         styleContainer={tw`border`}
         leftIconName={leftIconName || "arrowright"}
         onPress={onPress}
-        dis
       />
 
       {/** Helper text */}

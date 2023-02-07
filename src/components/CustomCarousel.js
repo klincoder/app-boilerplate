@@ -1,12 +1,11 @@
 // Import resources
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import tw from "twrnc";
 
 // Import custom files
 import CustomImage from "./CustomImage";
 import CustomIcon from "./CustomIcon";
-import { appColors, screenInfo } from "../config/data";
+import { tw, screenInfo } from "../config/data";
 
 // Component
 const CustomCarousel = ({
@@ -76,25 +75,6 @@ const CustomCarousel = ({
             />
           ))}
         </ScrollView>
-
-        {/** Indicators */}
-        {/* <View style={tw`absolute bottom-0 flex flex-row self-center`}>
-        {data?.length > 1 &&
-          data?.map((item, index) => (
-            <CustomIcon
-              key={item}
-              type="octIcons"
-              name="dot-fill"
-              size={20}
-              style={[
-                tw`mx-2 mb-1`,
-                activeSlide === index
-                  ? tw`text-[${appColors?.primary}]`
-                  : tw`text-white`,
-              ]}
-            />
-          ))}
-      </View> */}
       </View>
 
       {/** Indicators */}
@@ -108,9 +88,7 @@ const CustomCarousel = ({
               size={20}
               style={[
                 tw`mx-1 mt-2`,
-                activeSlide === index
-                  ? tw`text-[${appColors?.primary}]`
-                  : tw`text-[${appColors?.gray}]`,
+                activeSlide === index ? tw`text-primary` : tw`text-gray`,
               ]}
             />
           ))}

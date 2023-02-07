@@ -43,9 +43,9 @@ const useAlertState = () => {
       position: "top",
       text1: "Success",
       text2: msg,
-      visibilityTime: 3000,
+      visibilityTime: 5000,
       autoHide: true,
-      topOffset: 20,
+      topOffset: 30,
       bottomOffset: 50,
     });
   }; // close fxn
@@ -57,9 +57,9 @@ const useAlertState = () => {
       position: "top",
       text1: "Error",
       text2: msg,
-      visibilityTime: 3000,
+      visibilityTime: 5000,
       autoHide: true,
-      topOffset: 20,
+      topOffset: 30,
       bottomOffset: 50,
     });
   }; // close fxn
@@ -71,9 +71,9 @@ const useAlertState = () => {
       position: "top",
       text1: "Info",
       text2: msg,
-      visibilityTime: 3000,
+      visibilityTime: 5000,
       autoHide: true,
-      topOffset: 20,
+      topOffset: 30,
       bottomOffset: 50,
     });
   }; // close fxn

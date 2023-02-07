@@ -1,31 +1,30 @@
 // Import resources
 import React, { useEffect, useState } from "react";
-import tw from "twrnc";
 
 // Import custom files
 import CustomButton from "./CustomButton";
 import CustomIcon from "./CustomIcon";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const SaveBtn = ({ isSaved, onPress, styleIcon, styleBtn, ...rest }) => {
   // Define state
-  const [clickedState, setClickedState] = useState(isSaved);
+  const [isClicked, setIsClicked] = useState(isSaved);
 
   // Debug
   //console.log("Debug saveBtn: ", isSaved);
 
   // FUNCTIONS
-  // HANDLE CLICKED
-  const handleClicked = () => {
-    setClickedState(!clickedState);
+  // HANDLE IS CLICKED
+  const handleIsClicked = () => {
+    setIsClicked(!isClicked);
     onPress();
   }; // close fxn
 
   // SIDE EFFECTS
   // SET IS SAVED STATE
   useEffect(() => {
-    setClickedState(isSaved);
+    setIsClicked(isSaved);
   }, [isSaved]);
 
   // Return component
@@ -33,15 +32,14 @@ const SaveBtn = ({ isSaved, onPress, styleIcon, styleBtn, ...rest }) => {
     <CustomButton
       {...rest}
       isTouchable
-      onPress={handleClicked}
+      onPress={handleIsClicked}
       styleTouchable={styleBtn}
     >
       <CustomIcon
         {...rest}
         type="antDesign"
-        name={clickedState ? "heart" : "hearto"}
-        color={clickedState ? appColors?.primary : appColors?.black}
-        style={styleIcon}
+        name={isClicked ? "heart" : "hearto"}
+        style={[styleIcon, isClicked ? tw`text-primary` : tw`text-black`]}
       />
     </CustomButton>
   ); // close return

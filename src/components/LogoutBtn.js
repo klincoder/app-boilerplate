@@ -1,6 +1,5 @@
 // Import resources
 import React from "react";
-import tw from "twrnc";
 
 // Import custom files
 import CustomButton from "./CustomButton";
@@ -9,7 +8,7 @@ import CustomText from "./CustomText";
 import CustomIcon from "./CustomIcon";
 import useAlertState from "../hooks/useAlertState";
 import useAuthState from "../hooks/useAuthState";
-import { alertMsg, appColors, appFonts } from "../config/data";
+import { tw, alertMsg } from "../config/data";
 
 // Component
 function LogoutBtn({ title, styleTitle, styleIcon, styleContainer }) {
@@ -47,7 +46,7 @@ function LogoutBtn({ title, styleTitle, styleIcon, styleContainer }) {
       <CustomButton
         isTouchable
         onPress={handleConfirmLogout}
-        styleTouchable={[tw`flex-row items-center`, styleContainer]}
+        styleTouchable={[styleContainer, tw`flex-row items-center`]}
       >
         {/** Icon */}
         <CustomIcon
@@ -59,13 +58,7 @@ function LogoutBtn({ title, styleTitle, styleIcon, styleContainer }) {
 
         {/** Title */}
         {title && (
-          <CustomText
-            style={[
-              styleTitle,
-              tw`text-lg text-[${appColors?.black}]`,
-              { fontFamily: appFonts?.regular },
-            ]}
-          >
+          <CustomText style={[styleTitle, tw`text-lg text-black font-regular`]}>
             {title}
           </CustomText>
         )}

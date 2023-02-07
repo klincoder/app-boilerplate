@@ -1,7 +1,6 @@
 // Import resources
 import React, { useCallback, useRef, useState, useMemo } from "react";
 import { View } from "react-native";
-import tw from "twrnc";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -21,7 +20,7 @@ import CustomTimePicker from "./CustomTimePicker";
 import CustomCheckbox from "./CustomCheckbox";
 import CustomAlertModal from "./CustomAlertModal";
 import useAlertState from "../hooks/useAlertState";
-import { genderList, paymentMethodList } from "../config/data";
+import { tw, genderList, paymentMethodList } from "../config/data";
 import { handleAddItemToArr } from "../config/functions";
 
 // Component
@@ -114,8 +113,18 @@ const FormTest = () => {
   const handleOpenSheet = useCallback((val) => {
     // Switch val
     switch (val) {
-      case "brand":
+      case "payment_method":
         paymentMethodRef.current?.present();
+        break;
+    } // close switch
+  }, []); // close fxn
+
+  // HANDLE CLOSE SHEET
+  const handleCloseSheet = useCallback((val) => {
+    // Switch val
+    switch (val) {
+      case "payment_method":
+        paymentMethodRef.current?.close();
         break;
     } // close switch
   }, []); // close fxn
@@ -255,7 +264,7 @@ const FormTest = () => {
         value={formVal?.paymentMethod?.title}
         leftIconType="antDesign"
         leftIconName="creditcard"
-        onPress={handlePaymentMethodSheet}
+        onPress={handleOpenSheet("payment_method")}
         errMsg={errors?.paymentMethod?.message}
         sheetRef={paymentMethodRef}
         snapPoints={paymentMethodSnap}
@@ -269,7 +278,7 @@ const FormTest = () => {
                 leftImage={item?.image}
                 isSelected={formVal?.paymentMethod?.slug === item?.slug}
                 onPress={() => {
-                  paymentMethodRef.current.close();
+                  handleCloseSheet("payment_method");
                   setValue("paymentMethod", item);
                   trigger("paymentMethod");
                 }}

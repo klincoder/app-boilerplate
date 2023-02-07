@@ -1,12 +1,9 @@
 // Import resources
 import React from "react";
-import {
-  View,
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
+
+// Import custom files
+import { tw } from "../config/data";
 
 // Component
 const KeyboardAvoidWrapper = ({ children }) => {
@@ -15,12 +12,7 @@ const KeyboardAvoidWrapper = ({ children }) => {
     <KeyboardAvoidingView>
       {/** Scroll view */}
       <ScrollView showsVerticalScrollIndicator={false}>
-        <>
-          {/** Form - children */}
-          <View>{children}</View>
-          {/** Bottom space */}
-          <View style={{ height: 10 }} />
-        </>
+        <>{children}</>
       </ScrollView>
     </KeyboardAvoidingView>
   ); // close return

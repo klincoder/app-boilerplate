@@ -1,10 +1,9 @@
 // Import resources
 import React, { useMemo, forwardRef, useCallback } from "react";
-import tw from "twrnc";
 import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 
 // Import custom files
-import { appColors, screenInfo } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomBottomSheet = forwardRef(

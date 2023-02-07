@@ -2,28 +2,22 @@
 import React from "react";
 import { View } from "react-native";
 import { Chip } from "@rneui/themed";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomChip = ({
   title,
   onPress,
   isSolid,
-  bgColor,
   styleButton,
   styleContainer,
   styleTitle,
   ...rest
 }) => {
-  // Define variables
-  bgColor = bgColor || appColors?.primary;
-
   // Debug
-  //console.log("Debug customChip: ", { isSolidType, type });
+  //console.log("Debug customChip: ",);
 
   // Return component
   return (
@@ -35,9 +29,9 @@ const CustomChip = ({
           type="solid"
           title={title || "Title"}
           onPress={onPress}
-          buttonStyle={[styleButton, tw`bg-[${bgColor}]`]}
-          titleStyle={[styleTitle, tw`text-white`, twStyles?.fontBold]}
-          containerStyle={[styleContainer, tw`border-[${appColors?.primary}]`]}
+          buttonStyle={styleButton || tw`bg-primary`}
+          titleStyle={styleTitle || tw`text-white font-medium`}
+          containerStyle={styleContainer || tw`border-primary`}
         />
       ) : (
         <Chip
@@ -46,15 +40,8 @@ const CustomChip = ({
           title={title || "Title"}
           onPress={onPress}
           buttonStyle={styleButton}
-          titleStyle={[
-            styleTitle,
-            tw`text-[${appColors?.black}]`,
-            twStyles?.fontBold,
-          ]}
-          containerStyle={[
-            styleContainer,
-            tw`border border-[${appColors?.lightGray}]`,
-          ]}
+          titleStyle={[styleTitle, tw`text-black font-medium`]}
+          containerStyle={[styleContainer, tw`border border-lightGray`]}
         />
       )}
     </>

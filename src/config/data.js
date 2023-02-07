@@ -1,7 +1,7 @@
 // Import resources
 import { Dimensions } from "react-native";
 import { createTheme } from "@rneui/themed";
-import tw from "twrnc";
+import { create } from "twrnc";
 import * as Application from "expo-application";
 
 // Import custom files
@@ -20,8 +20,14 @@ import {
   PAYSTACK_PROD_SECRET_KEY,
 } from "@env";
 
+/**************************
+  CONSTANTS
+****************************/
+// CUSTOM TAILWIND STYLES
+export const tw = create(require("../../tailwind.config.js"));
+
 // BASE URL
-export const baseUrl = "https://klinstore.netlify.app";
+export const baseUrl = "https://klincoder.com";
 
 // IS PROD ENVIRONMENT
 export const isProdEnv = process.env.NODE_ENV === "production";
@@ -38,54 +44,39 @@ export const otpDefaultTimer = 59;
 // JAVASCRIPT DATE
 export const jsDate = new Date();
 
-// ACTION SETTINGS
-export const actionSettings = {
-  url: `${baseUrl}/login`,
-  // iOS: {
-  //   bundleId: "com.example.klincoder",
-  // },
-  // android: {
-  //   packageName: "com.example.klincoder",
-  //   installApp: true,
-  //   minimumVersion: "12",
-  // },
-  //handleCodeInApp: false,
-  //dynamicLinkDomain: 'custom.page.link'
-};
-
-// APP COLORS
-export const appColors = {
-  primary: "#313bac",
-  secondary: "#11143c",
-  accent: "#f9f871",
-  success: "#198754",
-  danger: "#ff5252",
-  info: "#0dcaf0",
-  warning: "#ffc107",
-  error: "#dc3545",
-  white: "#ffffff",
-  black: "#000000",
-  gray: "#9ca3af",
-  lightDanger: "#ff8080",
-  veryLightDanger: "#ffb3b3",
-  lightSuccess: "#24c278",
-  veryLightSuccess: "#68e3aa",
-  lightGray: "#f3f4f6",
-  veryLightGray: "#f4f4f4",
-  lightBlack: "#333333",
-  lightPrimary: "#6069d2", // Light primary
-  veryLightPrimary: "#afb4e9",
-  lightSecondary: "#1c2163",
-  veryLightSecondary: "#272e8b",
-};
-
-// APP FONTS
-export const appFonts = {
-  regular: "Montserrat-Regular",
-  medium: "Montserrat-Medium",
-  light: "Montserrat-Light",
-  thin: "Montserrat-Thin",
-};
+// APP THEME
+export const appTheme = createTheme({
+  mode: "light",
+  lightColors: {
+    primary: tw`text-primary`,
+    background: tw`bg-white`,
+  },
+  darkColors: {
+    primary: tw`text-black`,
+  },
+  components: {
+    DialogLoading: {
+      loadingStyle: tw`text-primary p-0 m-0 rounded-full`,
+    },
+    Chip: {
+      buttonStyle: tw`border-black`,
+    },
+    Text: {
+      h1Style: {
+        fontFamily: tw`font-medium`,
+      },
+      h2Style: {
+        fontFamily: tw`font-medium`,
+      },
+      h3Style: {
+        fontFamily: tw`font-medium`,
+      },
+      h4Style: {
+        fontFamily: tw`font-medium`,
+      },
+    },
+  },
+});
 
 // APP IMAGES
 export const appImages = {
@@ -107,40 +98,6 @@ export const appImages = {
   globe:
     "https://firebasestorage.googleapis.com/v0/b/klincoder-dev.appspot.com/o/globe-image.png?alt=media&token=4089539c-690b-437d-95e5-62c5ebdbfbce",
 };
-
-// APP THEME
-export const appTheme = createTheme({
-  mode: "light",
-  lightColors: {
-    primary: appColors?.primary,
-    background: appColors?.white,
-  },
-  darkColors: {
-    primary: appColors?.black,
-  },
-  components: {
-    DialogLoading: {
-      color: appColors?.primary,
-    },
-    Chip: {
-      buttonStyle: tw`border-black`,
-    },
-    Text: {
-      h1Style: {
-        fontFamily: appFonts?.medium,
-      },
-      h2Style: {
-        fontFamily: appFonts?.medium,
-      },
-      h3Style: {
-        fontFamily: appFonts?.medium,
-      },
-      h4Style: {
-        fontFamily: appFonts?.medium,
-      },
-    },
-  },
-});
 
 // APP REGEX
 export const appRegex = {
@@ -196,13 +153,9 @@ export const apiRoutes = {
 // GLOBAL SCREEN OPTIONS
 export const globalScreenOptions = {
   headerTintColor: "black",
-  //headerTitleAlign: "center",
-  headerTitleStyle: { color: "black", fontFamily: appFonts?.medium },
-  headerStyle: {
-    backgroundColor: appColors?.white,
-    elevation: 0,
-    shadowOpacity: 0,
-  },
+  headerBackTitleVisible: false,
+  headerTitleStyle: tw`text-black font-medium`,
+  headerStyle: { backgroundColor: "white", elevation: 0, shadowOpacity: 0 },
 };
 
 // SCREEN INFO
@@ -221,14 +174,27 @@ export const paystackConfig = {
 
 // LOCAL STORAGE KEYS
 export const localKeys = {
-  cart: "klinStoreCart",
-  address: "klinStoreAddr",
-  isSlides: "isKlinStoreSlides",
+  cart: "klinCoderCart",
 };
 
-/*************
+// ACTION SETTINGS
+export const actionSettings = {
+  url: `${baseUrl}/login`,
+  // iOS: {
+  //   bundleId: "com.example.klincoder",
+  // },
+  // android: {
+  //   packageName: "com.example.klincoder",
+  //   installApp: true,
+  //   minimumVersion: "12",
+  // },
+  //handleCodeInApp: false,
+  //dynamicLinkDomain: 'custom.page.link'
+};
+
+/**************************
   DATA
-**************/
+****************************/
 // ACCOUNT LIST
 export const accountList = [
   {

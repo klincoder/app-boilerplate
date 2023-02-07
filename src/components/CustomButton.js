@@ -2,13 +2,11 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomIcon from "./CustomIcon";
-import { appColors } from "../config/data";
 import CustomText from "./CustomText";
+import { tw } from "../config/data";
 
 // Component
 const CustomButton = ({
@@ -44,16 +42,13 @@ const CustomButton = ({
           onPress={onPress}
           titleStyle={[
             styleNormalTitle,
-            tw`text-xl`,
-            twStyles?.fontBold,
-            isOutline ? tw`text-[${appColors?.primary}]` : tw`text-white`,
+            tw`text-lg font-medium`,
+            isOutline ? tw`text-primary` : tw`text-white`,
           ]}
           buttonStyle={[
             styleNormalButton,
-            tw`mt-3 rounded-lg`,
-            isOutline
-              ? tw`border-[${appColors?.primary}]`
-              : tw`bg-[${appColors?.primary}]`,
+            tw`rounded-lg`,
+            isOutline ? tw`border-primary` : tw`bg-primary`,
           ]}
         />
       )}
@@ -82,25 +77,19 @@ const CustomButton = ({
 
       {/** isText */}
       {isText && (
-        <>
-          {/* <TouchableOpacity
+        <TouchableOpacity
           {...rest}
           activeOpacity={0.8}
           onPress={onPress}
           style={styleTextButton}
-        > */}
+        >
           <CustomText
-            onPress={onPress}
-            style={[
-              tw`text-base underline`,
-              twStyles?.fontBold,
-              styleTextTitle,
-            ]}
+            {...rest}
+            style={[styleTextTitle, tw`text-base underline`]}
           >
             {title || "Text Button"}
           </CustomText>
-          {/* </TouchableOpacity> */}
-        </>
+        </TouchableOpacity>
       )}
     </>
   ); // close return component

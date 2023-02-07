@@ -1,11 +1,10 @@
 // Import resources
 import React from "react";
-import { Switch, View } from "react-native";
-import tw from "twrnc";
+import { Switch } from "react-native";
 
 // Import custom files
 import CustomListItem from "./CustomListItem";
-import { appColors } from "../config/data";
+import { tw } from "../config/data";
 
 // Component
 const CustomSwitch = ({
@@ -27,13 +26,13 @@ const CustomSwitch = ({
       {...rest}
       hideDivider
       title={label || "Switch"}
-      styleContainer={[tw`mb-3 mx-3 p-0`, styleContainer]}
+      styleContainer={[styleContainer, tw`mb-3 mx-3 p-0`]}
       rightContent={
         <Switch
           value={value}
           onValueChange={onValueChange}
-          trackColor={{ true: appColors?.primary, false: appColors?.disabled }}
-          thumbColor={appColors?.primary}
+          trackColor={{ true: "#8d3f72", false: "#9ca3af" }}
+          thumbColor={"#8d3f72"}
         />
       }
     />

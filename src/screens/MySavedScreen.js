@@ -2,15 +2,14 @@
 import React, { useLayoutEffect } from "react";
 import { FlatList, View } from "react-native";
 import { useRecoilValue } from "recoil";
-import tw from "twrnc";
 
 // Import custom files
 import CustomSafeView from "../components/CustomSafeView";
 import useAppSettings from "../hooks/useAppSettings";
 import useAuthState from "../hooks/useAuthState";
 import CustomAlertMsg from "../components/CustomAlertMsg";
-import CustomText from "../components/CustomText";
 import { userSavedAtom } from "../recoil/atoms";
+import { tw } from "../config/data";
 
 // Component
 const MySavedScreen = () => {

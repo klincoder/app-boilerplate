@@ -2,15 +2,13 @@
 import React from "react";
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import tw from "twrnc";
 
 // Import custom files
-import twStyles from "../config/twStyles";
 import CustomIcon from "../components/CustomIcon";
 import CustomText from "../components/CustomText";
 import HomeScreen from "../screens/HomeScreen";
-import AccountScreen from "./AccountScreen";
-import { appColors, appFonts } from "../config/data";
+import AccountNavigator from "./AccountNavigator";
+import { tw } from "../config/data";
 
 // Create bottom nav object
 const Tab = createBottomTabNavigator();
@@ -28,8 +26,8 @@ const HomeNavigator = () => {
       label: "Home",
     },
     {
-      name: "AccountScreen",
-      component: AccountScreen,
+      name: "AccountNavigator",
+      component: AccountNavigator,
       iconType: "fontAwesome5",
       iconName: "user",
       iconNameActive: "user-alt",
@@ -44,7 +42,7 @@ const HomeNavigator = () => {
       initialRouteName="HomeScreen"
       screenOptions={{
         headerShown: false, // Header
-        headerTitleStyle: { color: "black", fontFamily: appFonts?.medium },
+        headerTitleStyle: tw`text-black font-medium`,
         tabBarStyle: tw`pb-1`, // Tab
         tabBarShowLabel: false,
       }}
@@ -59,11 +57,8 @@ const HomeNavigator = () => {
             tabBarLabel: ({ focused, color, position }) => (
               <CustomText
                 style={[
-                  tw`text-xs`,
-                  twStyles?.fontRegular,
-                  focused
-                    ? tw`text-[${appColors?.primary}]`
-                    : `text-[${color}]`,
+                  tw`text-xs font-regular`,
+                  focused ? tw`text-primary` : `text-[${color}]`,
                 ]}
               >
                 {item?.label}
@@ -75,9 +70,15 @@ const HomeNavigator = () => {
                   size={size}
                   type={item?.iconType}
                   name={focused ? item?.iconNameActive : item?.iconName}
-                  color={focused ? appColors?.primary : color}
-                  style={tw`mt-1`}
+                  style={[tw`mt-1`, focused ? tw`text-primary` : color]}
                 />
+                {item?.name === "CartScreen" && cartLen > 0 && (
+                  <CustomBadge
+                    title={cartLen}
+                    styleContainer={tw`absolute z-10 -top-1 -right-2`}
+                    styleText={tw`text-xs`}
+                  />
+                )}
               </View>
             ), // close icon
           }}
