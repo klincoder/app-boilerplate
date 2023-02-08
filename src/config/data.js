@@ -114,7 +114,7 @@ export const alertMsg = {
   linkSentSucc: "We sent your verification link. Check your inbox or spam 👍",
   otpSentSucc: "We sent your OTP code. Check your inbox or spam 👍",
   loginSucc: "Login successful 👍",
-  registerSucc: "Account created. Login 👍",
+  registerSucc: "Account created. Welcome 👋",
   passRecoverySucc: "Password recovery successful 👍",
   passResetSucc: "Password reset successful. Login 👍",
   logoutSucc: "Logout successful 👍",

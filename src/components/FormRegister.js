@@ -6,7 +6,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Import custom files
-
 import KeyboardAvoidWrapper from "./KeyboardAvoidWrapper";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomAlertModal from "./CustomAlertModal";
