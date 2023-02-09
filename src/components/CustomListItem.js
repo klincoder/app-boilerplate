@@ -18,10 +18,12 @@ const CustomListItem = ({
   leftImage,
   leftIconType,
   leftIconName,
+  leftIconSize,
   rightContent,
   hideDivider,
   styleContainer,
   styleLeftImage,
+  styleLeftIcon,
   ...rest
 }) => {
   // Define variables
@@ -72,8 +74,8 @@ const CustomListItem = ({
             <CustomIcon
               type={leftIconType || "antDesign"}
               name={leftIconName || "pluscircleo"}
-              size={24}
-              style={tw`text-lightBlack`}
+              size={leftIconSize}
+              style={styleLeftIcon || tw`text-black`}
             />
           )}
         </>
@@ -88,7 +90,7 @@ const CustomListItem = ({
 
         {/** Description */}
         {description && (
-          <ListItem.Subtitle numberOfLines={2} style={tw`font-regular`}>
+          <ListItem.Subtitle numberOfLines={1} style={tw`font-regular`}>
             {description}
           </ListItem.Subtitle>
         )}

@@ -196,13 +196,22 @@ const FormRegister = () => {
       />
 
       {/** Terms */}
-      <CustomText style={tw`my-2 text-center text-gray font-regular`}>
-        By creating an account, I accept the{" "}
-        <CustomButton
-          isText
-          title="terms of service & privacy policy"
-          styleTextTitle={tw`text-xs text-gray`}
-        />
+      <CustomText style={tw`text-sm text-center font-regular my-2`}>
+        By clicking on the create account button, I agree to the{" "}
+        <CustomText
+          style={tw`font-medium underline`}
+          onPress={() => console.log("Clicked privacy!")}
+        >
+          privacy
+        </CustomText>{" "}
+        and{" "}
+        <CustomText
+          style={tw`font-medium underline`}
+          onPress={() => console.log("Clicked terms!")}
+        >
+          terms
+        </CustomText>{" "}
+        policy.
       </CustomText>
 
       {/** TEST BUTTON */}

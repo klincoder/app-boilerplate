@@ -50,9 +50,10 @@ const CustomInput = ({
           errorStyle={(errMsg || helperText) && tw`mb-6`}
           inputStyle={tw`font-regular`}
           leftIconContainerStyle={tw`pr-3`}
+          disabledInputStyle={tw`opacity-50`}
           inputContainerStyle={[
             styleInputContainer,
-            tw`px-2 -py-3 border rounded-lg`,
+            tw`px-2 -py-3 border border-gray rounded-lg`,
             errMsg && tw`border-danger`,
           ]}
           label={
@@ -70,9 +71,8 @@ const CustomInput = ({
             <CustomIcon
               type={leftIconType || "antDesign"}
               name={leftIconName || "user"}
-              size={24}
               onPress={leftIconOnPress}
-              style={tw`text-lightBlack`}
+              style={tw`text-gray`}
             />
           }
           rightIcon={
@@ -80,9 +80,8 @@ const CustomInput = ({
               <CustomIcon
                 type={rightIconType || "antDesign"}
                 name={rightIconName || "user"}
-                size={24}
                 onPress={rightIconOnPress}
-                style={tw`text-lightBlack`}
+                style={tw`text-gray`}
               />
             )
           }
@@ -109,7 +108,7 @@ const CustomInput = ({
               disabledInputStyle={tw`opacity-50`}
               inputContainerStyle={[
                 styleInputContainer,
-                tw`px-2 border rounded-lg`,
+                tw`px-2 border border-gray rounded-lg`,
                 error && tw`border-danger`,
               ]}
               label={
@@ -131,9 +130,8 @@ const CustomInput = ({
                 <CustomIcon
                   type={leftIconType || "antDesign"}
                   name={leftIconName || "user"}
-                  size={24}
                   onPress={leftIconOnPress}
-                  style={tw`text-lightBlack`}
+                  style={tw`text-gray`}
                 />
               }
               rightIcon={
@@ -141,9 +139,8 @@ const CustomInput = ({
                   <CustomIcon
                     type={rightIconType || "antDesign"}
                     name={rightIconName || "user"}
-                    size={24}
                     onPress={rightIconOnPress}
-                    style={tw`text-lightBlack`}
+                    style={tw`text-gray`}
                   />
                 )
               }
