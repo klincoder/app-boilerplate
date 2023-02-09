@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./HomeScreen";
 import { globalScreenOptions } from "../config/data";
 
-// Create stack navigator object
+// Create navigator
 const Stack = createStackNavigator();
 
 // Component

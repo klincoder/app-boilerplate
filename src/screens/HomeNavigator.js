@@ -10,13 +10,13 @@ import HomeScreen from "../screens/HomeScreen";
 import AccountNavigator from "./AccountNavigator";
 import { tw } from "../config/data";
 
-// Create bottom nav object
+// Create navigator
 const Tab = createBottomTabNavigator();
 
 // Component
 const HomeNavigator = () => {
-  // Define tabScreenList
-  const tabScreenList = [
+  // Define screenList
+  const screenList = [
     {
       name: "HomeScreen",
       component: HomeScreen,
@@ -47,8 +47,8 @@ const HomeNavigator = () => {
         tabBarShowLabel: false,
       }}
     >
-      {/** Loop tabScreenList */}
-      {tabScreenList?.map((item, index) => (
+      {/** Loop screenList */}
+      {screenList?.map((item, index) => (
         <Tab.Screen
           key={`tabs-${index + 1}`}
           name={item?.name}

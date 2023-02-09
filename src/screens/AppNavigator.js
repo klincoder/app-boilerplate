@@ -1,7 +1,6 @@
 // Import resources
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import tw from "twrnc";
 
 // Import custom files
 import { globalScreenOptions } from "../config/data";
@@ -15,7 +14,7 @@ import SupportScreen from "./SupportScreen";
 import SettingsScreen from "./SettingsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 
-// Create stack navigator object
+// Create navigator
 const Stack = createStackNavigator();
 
 // Component

@@ -15,7 +15,7 @@ import useAlertState from "../hooks/useAlertState";
 import { tw, accountList, alertMsg } from "../config/data";
 
 // Component
-const ProfileScreen = () => {
+const AccountScreen = () => {
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
 
@@ -26,7 +26,7 @@ const ProfileScreen = () => {
   const alert = useAlertState();
 
   // Debug
-  //console.log("Debug profileScreen: ", );
+  //console.log("Debug accountScreen: ", );
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
@@ -106,4 +106,4 @@ const ProfileScreen = () => {
 }; // close component
 
 // Export
-export default ProfileScreen;
+export default AccountScreen;
