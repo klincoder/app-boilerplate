@@ -47,7 +47,7 @@ const AccountScreen = () => {
     return () => {
       isMounted.current = false;
     };
-  }, [navigation, user?.usernameFormat]);
+  }, [isMounted, user?.usernameFormat]);
 
   // Return component
   return (

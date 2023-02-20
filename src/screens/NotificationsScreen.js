@@ -38,7 +38,7 @@ const NotificationsScreen = () => {
     return () => {
       isMounted.current = false;
     };
-  }, [navigation, isMounted]);
+  }, [isMounted]);
 
   // Return component
   return (

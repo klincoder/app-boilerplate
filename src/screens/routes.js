@@ -11,6 +11,6 @@ export default Object.freeze({
   NOTIFICATIONS: "NotificationsScreen",
   SETTINGS: "SettingsScreen",
   SUPPORT: "SupportScreen",
-  MY_SAVED: "MySavedScreen", // My Screens
-  MY_PROFILE_EDIT: "MyProfileScreenEdit",
+  SAVED: "SavedScreen",
+  PROFILE_EDIT: "ProfileScreenEdit",
 });

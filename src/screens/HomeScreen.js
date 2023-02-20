@@ -10,7 +10,7 @@ import useAuthState from "../hooks/useAuthState";
 import CustomText from "../components/CustomText";
 import CustomButton from "../components/CustomButton";
 import useAlertState from "../hooks/useAlertState";
-import { alertMsg, tw } from "../config/data";
+import { tw, alertMsg } from "../config/data";
 
 // Component
 const HomeScreen = () => {

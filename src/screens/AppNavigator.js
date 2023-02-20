@@ -9,7 +9,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import PasswordRecoveryScreen from "../screens/PasswordRecoveryScreen";
 import HomeNavigator from "../screens/HomeNavigator";
-import MyProfileScreenEdit from "../screens/MyProfileScreenEdit";
+import ProfileScreenEdit from "../screens/ProfileScreenEdit";
 import SupportScreen from "./SupportScreen";
 import SettingsScreen from "./SettingsScreen";
 import NotificationsScreen from "./NotificationsScreen";
@@ -27,8 +27,8 @@ const AppNavigator = ({ userID }) => {
       options: { headerShown: false },
     },
     {
-      name: "MyProfileScreenEdit",
-      component: MyProfileScreenEdit,
+      name: "ProfileScreenEdit",
+      component: ProfileScreenEdit,
       options: { headerTitle: "Edit Profile" },
     },
     {

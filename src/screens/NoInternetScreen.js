@@ -14,8 +14,8 @@ const NoInternetScreen = () => {
     <CustomSafeView>
       {/** Alert msg */}
       <CustomAlertMsg
-        title="No Internet Connection"
-        description="Please connect to a wifi or cellular data network to continue."
+        title="No Internet"
+        description="Connect to a wifi or cellular data network to continue."
         iconType="materialIcons"
         iconName="wifi-off"
       />

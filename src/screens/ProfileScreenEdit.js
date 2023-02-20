@@ -10,7 +10,7 @@ import useAuthState from "../hooks/useAuthState";
 import { tw } from "../config/data";
 
 // Component
-const MyProfileScreenEdit = () => {
+const ProfileScreenEdit = () => {
   // Define app settings
   const { navigation, isMounted, todaysDate } = useAppSettings();
 
@@ -18,7 +18,7 @@ const MyProfileScreenEdit = () => {
   const { user } = useAuthState();
 
   // Debug
-  //console.log("Debug myProfileScreenEdit: ",);
+  //console.log("Debug profileScreenEdit: ",);
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
@@ -39,7 +39,7 @@ const MyProfileScreenEdit = () => {
     return () => {
       isMounted.current = false;
     };
-  }, [navigation, isMounted]);
+  }, [isMounted]);
 
   // Return component
   return (
@@ -54,4 +54,4 @@ const MyProfileScreenEdit = () => {
 }; // close component
 
 // Export
-export default MyProfileScreenEdit;
+export default ProfileScreenEdit;

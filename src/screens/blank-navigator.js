@@ -16,7 +16,7 @@ const BlankNavigator = () => {
     {
       name: "HomeScreen",
       component: HomeScreen,
-      options: { headerTitle: "Blank Navigator" },
+      options: { headerTitle: "BlankNavigator", headerShown: false },
     },
   ];
 

@@ -12,7 +12,7 @@ import { userSavedAtom } from "../recoil/atoms";
 import { tw } from "../config/data";
 
 // Component
-const MySavedScreen = () => {
+const SavedScreen = () => {
   // Define app settings
   const { navigation, isMounted } = useAppSettings();
 
@@ -24,7 +24,7 @@ const MySavedScreen = () => {
   const userSavedLen = userSaved?.length;
 
   // Debug
-  //console.log("Debug mySavedScreen: ",);
+  //console.log("Debug savedScreen: ",);
 
   // SIDE EFFECTS
   // SCREEN LAYOUT
@@ -46,7 +46,7 @@ const MySavedScreen = () => {
     return () => {
       isMounted.current = false;
     };
-  }, [navigation, isMounted]);
+  }, [isMounted]);
 
   // Return component
   return (
@@ -72,4 +72,4 @@ const MySavedScreen = () => {
 }; // close component
 
 // Export
-export default MySavedScreen;
+export default SavedScreen;
